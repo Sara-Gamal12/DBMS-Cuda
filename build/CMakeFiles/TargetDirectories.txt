@@ -1,0 +1,3 @@
+/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles/execute_duckdb.dir
+/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles/edit_cache.dir
+/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles/rebuild_cache.dir

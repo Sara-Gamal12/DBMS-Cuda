@@ -17,7 +17,7 @@
 #include "duckdb/planner/filter/conjunction_filter.hpp"
 #include "duckdb/planner/operator/logical_order.hpp"
 #include "duckdb/execution/executor.hpp"
-#include "duckdb/main/client_context.hpp"
+
 
 #include "duckdb/common/common.hpp"
 #include "duckdb/common/enums/pending_execution_result.hpp"
@@ -30,6 +30,11 @@
 #include "duckdb/parallel/pipeline.hpp"
 
 #include <iostream>
+#include <cuda_runtime.h>
+#include<cuda.h>
+
+#include "./kernels/agg.cuh"
+#include "./utilities/schema_utilities.hpp"
 
 using namespace std;
 using namespace duckdb;
@@ -131,96 +136,82 @@ void traverse_plan(LogicalOperator *op)
     }
 }
 
-int main()
-{
-    using namespace duckdb;
-    //    Initialize DuckDB instance
+// int main()
+// {
+//     using namespace duckdb;
+//     //    Initialize DuckDB instance
+//     DuckDB db(nullptr);
+//     Connection con(db);
+// 
+//     ClientContext &context = *con.context;
+//     con.Query("PRAGMA force_compression='uncompressed';");
+//     con.Query("PRAGMA disable_compression;");
+//     con.Query("PRAGMA disabled_compression_methods='patas,fors,pfor,bitpacking,fsst';"); // disable known ones
+//     con.Query("SET disabled optimizens = fIlter pushdown, statistics propagation';");
+//     con.Query("SET force_compression='uncompressed';");
+//     con.Query("PRAGMA force_compression='uncompressed';");
+//     con.Query("PRAGMA disabled_compression_methods='patas,fsst,bitpacking,rle,dictionary';");
+// 
+//     // Example SQL query
+//     string sql = "CREATE TABLE student (id INTEGER, name VARCHAR, age INTEGER) ;";
+//     string sql2 = "CREATE TABLE course (id INTEGER, name VARCHAR, credits INTEGER);";
+// 
+//     // Execute the SQL query to create a table
+//     con.Query(sql);
+//     con.Query(sql2);
+//     // Insert some data into the table
+//     sql = "INSERT INTO student VALUES (1, 'Alice', 30), (2, 'Bob', 25), (3, 'Charlie', 35);";
+//     sql2 = "INSERT INTO course VALUES (1, 'Math', 3), (2, 'Science', 4), (3, 'History', 2);";
+//     con.Query(sql);
+//     con.Query(sql2);
+// 
+//     string query = "SELECT age from student,course where student.id=course.id";
+//         // Parse the query
+//     Parser parser;
+//     parser.ParseQuery(query);
+//     auto statements = std::move(parser.statements);
+//     for (size_t i = 0; i < statements.size(); i++)
+//     {
+//         cout << "Statement " << i + 1 << ":\n";
+//         cout << statements[i]->ToString() << "\n";
+//     }
+//     // Start a transaction
+//     con.BeginTransaction(); // Start transaction using Connection
+// 
+//     // Create a planner and plan the query
+//     Planner planner(context);
+//     planner.CreatePlan(std::move(statements[0]));
+// 
+//     // Now you can proceed with further processing or optimization
+//     cout << "Planning successful!" << endl;
+//     cout << "Unoptimized Logical Plan:\n"
+//          << planner.plan->ToString() << endl;
+// 
+//     Optimizer optimizer(*planner.binder, context);
+//     auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+//     cout << "Optimized Logical Plan:\n";
+//     cout << logical_plan->ToString() << endl;
+// 
+//     traverse_plan(logical_plan.get());
+// 
+//     // Commit the transaction after planning
+//     con.Commit(); // Commit transaction using Connection
+// }
+
+
+
+
+std::unordered_map<std::string, std::vector<ColumnInfo>> schema;
+
+
+int main(){
+    
     DuckDB db(nullptr);
-    Connection con(db);
+    Connection connect(db);
 
-    ClientContext &context = *con.context;
-    con.Query("PRAGMA force_compression='uncompressed';");
-    con.Query("PRAGMA disable_compression;");
-    con.Query("PRAGMA disabled_compression_methods='patas,fors,pfor,bitpacking,fsst';"); // disable known ones
-    con.Query("SET disabled optimizens = fIlter pushdown, statistics propagation';");
-    con.Query("SET force_compression='uncompressed';");
-    con.Query("PRAGMA force_compression='uncompressed';");
-    con.Query("PRAGMA disabled_compression_methods='patas,fsst,bitpacking,rle,dictionary';");
+    ClientContext &context = *connect.context;
+    get_schema(&connect, schema);
+    print_schema(schema);
 
-    // Example SQL query
-    string sql = "CREATE TABLE student (id INTEGER, name VARCHAR, age INTEGER) ;";
-    string sql2 = "CREATE TABLE course (id INTEGER, name VARCHAR, credits INTEGER);";
-
-    // Execute the SQL query to create a table
-    con.Query(sql);
-    con.Query(sql2);
-    // Insert some data into the table
-    sql = "INSERT INTO student VALUES (1, 'Alice', 30), (2, 'Bob', 25), (3, 'Charlie', 35);";
-    sql2 = "INSERT INTO course VALUES (1, 'Math', 3), (2, 'Science', 4), (3, 'History', 2);";
-    con.Query(sql);
-    con.Query(sql2);
-
-    string query = "SELECT 42 AS value";
-        // Parse the query
-    Parser parser;
-    parser.ParseQuery(query);
-    auto statements = std::move(parser.statements);
-    for (size_t i = 0; i < statements.size(); i++)
-    {
-        cout << "Statement " << i + 1 << ":\n";
-        cout << statements[i]->ToString() << "\n";
-    }
-    // Start a transaction
-    con.BeginTransaction(); // Start transaction using Connection
-
-    // Create a planner and plan the query
-    Planner planner(context);
-    planner.CreatePlan(std::move(statements[0]));
-
-    // Now you can proceed with further processing or optimization
-    cout << "Planning successful!" << endl;
-    cout << "Unoptimized Logical Plan:\n"
-         << planner.plan->ToString() << endl;
-
-    Optimizer optimizer(*planner.binder, context);
-    auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-    cout << "Optimized Logical Plan:\n";
-    cout << logical_plan->ToString() << endl;
-
-    // traverse_plan(logical_plan.get());
-
-    // Execute the query
-
-    // Step 5: Execute the physical plan
-   // Step 5: Execute the physical plan
-Executor executor(context);
-auto physical_plan = PhysicalPlanGenerator(context).CreatePlan(*logical_plan);
-
-// Initialize with the plan directly (no move needed)
-executor.Initialize(*physical_plan);
-
-// Execute and pull results
-// Step 5: Execute the physical plan
-Executor executor(context);
-
-// Generate the physical plan (no need to move, just pass the raw pointer)
-auto physical_plan = PhysicalPlanGenerator(context).CreatePlan(*logical_plan);
-
-// Initialize the executor with the plan
-executor.Initialize(*physical_plan);
-
-// Execute and fetch results
-try {
-    while (true) {
-        auto chunk = executor.FetchChunk(); // Fetch results incrementally
-        if (!chunk || chunk->size() == 0) {
-            break; // No more data
-        }
-        chunk->Print(); // Print each chunk of results
-    }
-} catch (std::exception &e) {
-    std::cerr << "Execution Error: " << e.what() << std::endl;
-}
-    // Commit the transaction after planning
-    con.Commit(); // Commit transaction using Connection
+    
 }
