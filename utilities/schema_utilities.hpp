@@ -6,21 +6,24 @@
 #include <vector>
 #include <string>
 #include <filesystem>
-#include "duckdb.hpp"
+#include <fstream>
 
 
-// Use DuckDB's namespace
-using namespace duckdb;
-
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include<string>
+#include <vector>
 
 struct ColumnInfo {
     std::string type;
+    int size_in_bytes;
     std::string name;
     bool is_primary = false;
     std::string foreign_table;
 };
-
-void print_schema(std::unordered_map<std::string, std::vector<ColumnInfo>> schema);
-void get_schema(Connection *con, std::unordered_map<std::string, std::vector<ColumnInfo>> &schema);
+typedef std::unordered_map<std::string, std::pair<std::shared_ptr<std::ifstream>,std::vector<ColumnInfo>>> Schema;
+void print_schema(Schema schema);
+void get_schema( Schema &schema);
 
 #endif // AGG_KERNELS_H

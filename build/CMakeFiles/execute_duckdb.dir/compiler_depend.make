@@ -706,7 +706,11 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/codecvt \
   /usr/include/c++/11/bits/fs_dir.h \
-  /usr/include/c++/11/bits/fs_ops.h
+  /usr/include/c++/11/bits/fs_ops.h \
+  /usr/include/c++/11/fstream \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc
 
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/stdc-predef.h \
@@ -1163,350 +1167,15 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   /usr/include/c++/11/bits/refwrap.h \
   /usr/include/c++/11/bits/fs_dir.h \
   /usr/include/c++/11/bits/fs_ops.h \
-  ../duckdb/src/include/duckdb.hpp \
-  ../duckdb/src/include/duckdb/main/connection.hpp \
-  ../duckdb/src/include/duckdb/common/enums/profiler_format.hpp \
-  ../duckdb/src/include/duckdb/common/constants.hpp \
-  /usr/include/c++/11/memory \
-  /usr/include/c++/11/bits/stl_tempbuf.h \
-  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
-  /usr/include/c++/11/bits/align.h \
-  /usr/include/c++/11/bit \
-  /usr/include/c++/11/bits/shared_ptr_atomic.h \
-  /usr/include/c++/11/bits/atomic_base.h \
-  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
-  /usr/include/c++/11/backward/auto_ptr.h \
-  /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /usr/include/c++/11/pstl/execution_defs.h \
-  ../duckdb/src/include/duckdb/common/string.hpp \
-  ../duckdb/src/include/duckdb/common/winapi.hpp \
-  ../duckdb/src/include/duckdb/common/unique_ptr.hpp \
-  ../duckdb/src/include/duckdb/common/exception.hpp \
-  ../duckdb/src/include/duckdb/common/assert.hpp \
-  /usr/include/assert.h \
-  ../duckdb/src/include/duckdb/common/exception_format_value.hpp \
-  ../duckdb/src/include/duckdb/common/hugeint.hpp \
-  ../duckdb/src/include/duckdb/common/typedefs.hpp \
-  ../duckdb/src/include/duckdb/common/unordered_map.hpp \
-  ../duckdb/src/include/duckdb/common/likely.hpp \
-  ../duckdb/src/include/duckdb/common/memory_safety.hpp \
-  ../duckdb/src/include/duckdb/common/serializer/buffered_file_writer.hpp \
-  ../duckdb/src/include/duckdb/common/serializer/write_stream.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry.hpp \
-  ../duckdb/src/include/duckdb/common/common.hpp \
-  ../duckdb/src/include/duckdb/common/helper.hpp \
-  ../duckdb/src/include/duckdb/common/shared_ptr.hpp \
-  ../duckdb/src/include/duckdb/common/shared_ptr_ipp.hpp \
-  ../duckdb/src/include/duckdb/common/weak_ptr_ipp.hpp \
-  ../duckdb/src/include/duckdb/common/enable_shared_from_this_ipp.hpp \
-  /usr/include/string.h \
-  /usr/include/strings.h \
-  ../duckdb/src/include/duckdb/common/vector.hpp \
-  ../duckdb/src/include/duckdb/common/enums/catalog_type.hpp \
-  ../duckdb/src/include/duckdb/common/atomic.hpp \
-  /usr/include/c++/11/atomic \
-  ../duckdb/src/include/duckdb/common/optional_ptr.hpp \
-  ../duckdb/src/include/duckdb/common/exception/catalog_exception.hpp \
-  ../duckdb/src/include/duckdb/parser/query_error_context.hpp \
-  ../duckdb/src/include/duckdb/common/optional_idx.hpp \
-  ../duckdb/src/include/duckdb/common/types/value.hpp \
-  ../duckdb/src/include/duckdb/common/types.hpp \
-  ../duckdb/src/include/duckdb/common/uhugeint.hpp \
-  ../duckdb/src/include/duckdb/common/types/timestamp.hpp \
-  ../duckdb/src/include/duckdb/common/limits.hpp \
-  ../duckdb/src/include/duckdb/common/string_util.hpp \
-  ../duckdb/src/include/duckdb/common/numeric_utils.hpp \
-  ../duckdb/src/include/duckdb/common/pair.hpp \
-  ../duckdb/src/include/duckdb/common/set.hpp \
-  /usr/include/c++/11/set \
-  /usr/include/c++/11/bits/stl_tree.h \
-  /usr/include/c++/11/bits/stl_set.h \
-  /usr/include/c++/11/bits/stl_multiset.h \
-  ../duckdb/src/include/duckdb/common/complex_json.hpp \
-  /usr/include/c++/11/cstring \
-  /usr/include/c++/11/functional \
-  /usr/include/c++/11/bits/std_function.h \
-  /usr/include/c++/11/bits/stl_algo.h \
-  /usr/include/c++/11/bits/algorithmfwd.h \
-  /usr/include/c++/11/bits/stl_heap.h \
-  /usr/include/c++/11/bits/uniform_int_dist.h \
-  ../duckdb/src/include/duckdb/common/types/date.hpp \
-  ../duckdb/src/include/duckdb/common/types/string_type.hpp \
-  ../duckdb/src/include/duckdb/common/types/hash.hpp \
-  ../duckdb/src/include/duckdb/common/types/datetime.hpp \
-  /usr/include/c++/11/algorithm \
-  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
-  ../duckdb/src/include/duckdb/common/types/interval.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_transaction.hpp \
-  ../duckdb/src/include/duckdb/common/enums/catalog_lookup_behavior.hpp \
-  ../duckdb/src/include/duckdb/common/enums/on_entry_not_found.hpp \
-  ../duckdb/src/include/duckdb/common/error_data.hpp \
-  ../duckdb/src/include/duckdb/common/map.hpp \
-  /usr/include/c++/11/map \
-  /usr/include/c++/11/bits/stl_map.h \
-  /usr/include/c++/11/bits/stl_multimap.h \
-  ../duckdb/src/include/duckdb/common/mutex.hpp \
-  /usr/include/c++/11/mutex \
-  /usr/include/c++/11/bits/std_mutex.h \
-  /usr/include/c++/11/bits/unique_lock.h \
-  ../duckdb/src/include/duckdb/common/reference_map.hpp \
-  ../duckdb/src/include/duckdb/common/unordered_set.hpp \
-  /usr/include/c++/11/unordered_set \
-  /usr/include/c++/11/bits/unordered_set.h \
-  ../duckdb/src/include/duckdb/catalog/entry_lookup_info.hpp \
-  ../duckdb/src/include/duckdb/common/file_system.hpp \
-  ../duckdb/src/include/duckdb/common/enums/file_compression_type.hpp \
-  ../duckdb/src/include/duckdb/common/file_buffer.hpp \
-  ../duckdb/src/include/duckdb/common/enums/debug_initialize.hpp \
-  ../duckdb/src/include/duckdb/common/enums/file_glob_options.hpp \
-  ../duckdb/src/include/duckdb/common/file_open_flags.hpp \
-  ../duckdb/src/include/duckdb/common/open_file_info.hpp \
-  ../duckdb/src/include/duckdb/function/udf_function.hpp \
-  ../duckdb/src/include/duckdb/function/scalar_function.hpp \
-  ../duckdb/src/include/duckdb/common/vector_operations/binary_executor.hpp \
-  ../duckdb/src/include/duckdb/common/types/vector.hpp \
-  ../duckdb/src/include/duckdb/common/bitset.hpp \
-  /usr/include/c++/11/bitset \
-  ../duckdb/src/include/duckdb/common/enums/vector_type.hpp \
-  ../duckdb/src/include/duckdb/common/types/selection_vector.hpp \
-  ../duckdb/src/include/duckdb/common/allocator.hpp \
-  ../duckdb/src/include/duckdb/common/vector_size.hpp \
-  ../duckdb/src/include/duckdb/common/types/validity_mask.hpp \
-  ../duckdb/src/include/duckdb/common/to_string.hpp \
-  ../duckdb/src/include/duckdb/common/types/vector_buffer.hpp \
-  ../duckdb/src/include/duckdb/common/types/string_heap.hpp \
-  ../duckdb/src/include/duckdb/storage/arena_allocator.hpp \
-  ../duckdb/src/include/duckdb/storage/buffer/buffer_handle.hpp \
-  ../duckdb/src/include/duckdb/storage/storage_info.hpp \
-  ../duckdb/src/include/duckdb/common/vector_operations/vector_operations.hpp \
-  ../duckdb/src/include/duckdb/common/types/data_chunk.hpp \
-  ../duckdb/src/include/duckdb/common/arrow/arrow_wrapper.hpp \
-  ../duckdb/src/include/duckdb/common/arrow/arrow.hpp \
-  ../duckdb/src/include/duckdb/common/vector_operations/ternary_executor.hpp \
-  ../duckdb/src/include/duckdb/common/vector_operations/unary_executor.hpp \
-  ../duckdb/src/include/duckdb/common/enums/function_errors.hpp \
-  ../duckdb/src/include/duckdb/execution/expression_executor_state.hpp \
-  ../duckdb/src/include/duckdb/function/function.hpp \
-  ../duckdb/src/include/duckdb/common/named_parameter_map.hpp \
-  ../duckdb/src/include/duckdb/common/case_insensitive_map.hpp \
-  ../duckdb/src/include/duckdb/main/external_dependencies.hpp \
-  ../duckdb/src/include/duckdb/parser/column_definition.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_expression.hpp \
-  ../duckdb/src/include/duckdb/parser/base_expression.hpp \
-  ../duckdb/src/include/duckdb/common/enums/expression_type.hpp \
-  ../duckdb/src/include/duckdb/parser/qualified_name.hpp \
-  ../duckdb/src/include/duckdb/common/exception/parser_exception.hpp \
-  ../duckdb/src/include/duckdb/parser/keyword_helper.hpp \
-  ../duckdb/src/include/duckdb/parser/simplified_token.hpp \
-  ../duckdb/src/include/duckdb/planner/binding_alias.hpp \
-  ../duckdb/src/include/duckdb/parser/expression_util.hpp \
-  ../duckdb/src/include/duckdb/common/enums/compression_type.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry/table_column_type.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/base_statistics.hpp \
-  ../duckdb/src/include/duckdb/common/operator/comparison_operators.hpp \
-  ../duckdb/src/include/duckdb/common/types/hugeint.hpp \
-  ../duckdb/src/include/duckdb/common/type_util.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/numeric_stats.hpp \
-  ../duckdb/src/include/duckdb/common/enums/filter_propagate_result.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/numeric_stats_union.hpp \
-  ../duckdb/src/include/duckdb/common/array_ptr.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/string_stats.hpp \
-  ../duckdb/src/include/duckdb/function/aggregate_function.hpp \
-  ../duckdb/src/include/duckdb/common/array.hpp \
-  ../duckdb/src/include/duckdb/common/vector_operations/aggregate_executor.hpp \
-  ../duckdb/src/include/duckdb/function/aggregate_state.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/node_statistics.hpp \
-  ../duckdb/src/include/duckdb/planner/bound_result_modifier.hpp \
-  ../duckdb/src/include/duckdb/parser/result_modifier.hpp \
-  ../duckdb/src/include/duckdb/common/enums/order_type.hpp \
-  ../duckdb/src/include/duckdb/planner/bound_statement.hpp \
-  ../duckdb/src/include/duckdb/planner/expression.hpp \
-  ../duckdb/src/include/duckdb/main/materialized_query_result.hpp \
-  ../duckdb/src/include/duckdb/common/types/column/column_data_collection.hpp \
-  ../duckdb/src/include/duckdb/common/types/column/column_data_collection_iterators.hpp \
-  ../duckdb/src/include/duckdb/common/types/column/column_data_scan_states.hpp \
-  ../duckdb/src/include/duckdb/main/query_result.hpp \
-  ../duckdb/src/include/duckdb/common/enums/statement_type.hpp \
-  ../duckdb/src/include/duckdb/main/client_properties.hpp \
-  ../duckdb/src/include/duckdb/main/pending_query_result.hpp \
-  ../duckdb/src/include/duckdb/common/enums/pending_execution_result.hpp \
-  ../duckdb/src/include/duckdb/execution/executor.hpp \
-  ../duckdb/src/include/duckdb/execution/task_error_manager.hpp \
-  ../duckdb/src/include/duckdb/execution/progress_data.hpp \
-  ../duckdb/src/include/duckdb/parallel/pipeline.hpp \
-  ../duckdb/src/include/duckdb/execution/physical_operator.hpp \
-  ../duckdb/src/include/duckdb/common/enums/operator_result_type.hpp \
-  ../duckdb/src/include/duckdb/common/enums/physical_operator_type.hpp \
-  ../duckdb/src/include/duckdb/common/enums/explain_format.hpp \
-  ../duckdb/src/include/duckdb/execution/execution_context.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/join_node.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/join_relation.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/query_graph.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/relation_manager.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/cardinality_estimator.hpp \
-  ../duckdb/src/include/duckdb/planner/column_binding_map.hpp \
-  ../duckdb/src/include/duckdb/planner/column_binding.hpp \
-  ../duckdb/src/include/duckdb/optimizer/join_order/relation_statistics_helper.hpp \
-  ../duckdb/src/include/duckdb/planner/filter/conjunction_filter.hpp \
-  ../duckdb/src/include/duckdb/planner/table_filter.hpp \
-  ../duckdb/src/include/duckdb/common/column_index.hpp \
-  ../duckdb/src/include/duckdb/planner/logical_operator.hpp \
-  ../duckdb/src/include/duckdb/common/enums/logical_operator_type.hpp \
-  ../duckdb/src/include/duckdb/planner/logical_operator_visitor.hpp \
-  ../duckdb/src/include/duckdb/planner/bound_tokens.hpp \
-  ../duckdb/src/include/duckdb/planner/logical_tokens.hpp \
-  ../duckdb/src/include/duckdb/common/insertion_order_preserving_map.hpp \
-  ../duckdb/src/include/duckdb/parser/expression_map.hpp \
-  ../duckdb/src/include/duckdb/execution/physical_operator_states.hpp \
-  ../duckdb/src/include/duckdb/parallel/interrupt.hpp \
-  ../duckdb/src/include/duckdb/parallel/task.hpp \
-  /usr/include/c++/11/condition_variable \
-  ../duckdb/src/include/duckdb/execution/partition_info.hpp \
-  ../duckdb/src/include/duckdb/common/enums/order_preservation_type.hpp \
-  ../duckdb/src/include/duckdb/function/table_function.hpp \
-  ../duckdb/src/include/duckdb/common/table_column.hpp \
-  ../duckdb/src/include/duckdb/function/partition_stats.hpp \
-  ../duckdb/src/include/duckdb/common/exception/binder_exception.hpp \
-  ../duckdb/src/include/duckdb/parallel/task_scheduler.hpp \
-  ../duckdb/src/include/duckdb/parallel/executor_task.hpp \
-  ../duckdb/src/include/duckdb/main/prepared_statement.hpp \
-  ../duckdb/src/include/duckdb/planner/expression/bound_parameter_data.hpp \
-  ../duckdb/src/include/duckdb/main/relation.hpp \
-  ../duckdb/src/include/duckdb/common/enums/join_type.hpp \
-  ../duckdb/src/include/duckdb/common/enums/relation_type.hpp \
-  ../duckdb/src/include/duckdb/common/enums/joinref_type.hpp \
-  ../duckdb/src/include/duckdb/main/client_context.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry/schema_catalog_entry.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_set.hpp \
-  ../duckdb/src/include/duckdb/catalog/default/default_generator.hpp \
-  ../duckdb/src/include/duckdb/transaction/transaction.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry/sequence_catalog_entry.hpp \
-  ../duckdb/src/include/duckdb/catalog/standard_entry.hpp \
-  ../duckdb/src/include/duckdb/catalog/dependency_list.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry_map.hpp \
-  ../duckdb/src/include/duckdb/catalog/dependency.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/create_sequence_info.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/create_info.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/parse_info.hpp \
-  ../duckdb/src/include/duckdb/common/enum_util.hpp \
-  ../duckdb/src/include/duckdb/common/enums/on_create_conflict.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/alter_table_info.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/alter_info.hpp \
-  ../duckdb/src/include/duckdb/parser/constraint.hpp \
-  ../duckdb/src/include/duckdb/transaction/transaction_data.hpp \
-  ../duckdb/src/include/duckdb/catalog/similar_catalog_entry.hpp \
-  ../duckdb/src/include/duckdb/common/deque.hpp \
-  /usr/include/c++/11/deque \
-  /usr/include/c++/11/bits/stl_deque.h \
-  /usr/include/c++/11/bits/deque.tcc \
-  ../duckdb/src/include/duckdb/common/enums/prepared_statement_mode.hpp \
-  ../duckdb/src/include/duckdb/main/client_config.hpp \
-  ../duckdb/src/include/duckdb/common/enums/output_type.hpp \
-  ../duckdb/src/include/duckdb/common/progress_bar/progress_bar.hpp \
-  ../duckdb/src/include/duckdb.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
-  ../duckdb/src/include/duckdb/common/profiler.hpp \
-  ../duckdb/src/include/duckdb/common/chrono.hpp \
-  ../duckdb/src/include/duckdb/common/progress_bar/progress_bar_display.hpp \
-  ../duckdb/src/include/duckdb/main/profiling_info.hpp \
-  ../duckdb/src/include/duckdb/common/enums/metric_type.hpp \
-  ../duckdb/src/include/duckdb/common/enums/optimizer_type.hpp \
-  ../duckdb/src/include/duckdb/main/client_context_state.hpp \
-  ../duckdb/src/include/duckdb/common/exception/transaction_exception.hpp \
-  ../duckdb/src/include/duckdb/main/config.hpp \
-  ../duckdb/src/include/duckdb/common/arrow/arrow_type_extension.hpp \
-  ../duckdb/src/include/duckdb/main/chunk_scan_state.hpp \
-  ../duckdb/src/include/duckdb/function/table/arrow/arrow_duck_schema.hpp \
-  ../duckdb/src/include/duckdb/function/table/arrow/arrow_type_info.hpp \
-  ../duckdb/src/include/duckdb/function/table/arrow/enum/arrow_type_info_type.hpp \
-  ../duckdb/src/include/duckdb/function/table/arrow/enum/arrow_datetime_type.hpp \
-  ../duckdb/src/include/duckdb/function/table/arrow/enum/arrow_variable_size_type.hpp \
-  ../duckdb/src/include/duckdb/common/cgroups.hpp \
-  ../duckdb/src/include/duckdb/common/encryption_state.hpp \
-  ../duckdb/src/include/duckdb/common/enums/access_mode.hpp \
-  ../duckdb/src/include/duckdb/common/enums/set_scope.hpp \
-  ../duckdb/src/include/duckdb/common/enums/window_aggregation_mode.hpp \
-  ../duckdb/src/include/duckdb/execution/index/index_type_set.hpp \
-  ../duckdb/src/include/duckdb/execution/index/index_type.hpp \
-  ../duckdb/src/include/duckdb/execution/physical_plan_generator.hpp \
-  ../duckdb/src/include/duckdb/planner/joinside.hpp \
-  ../duckdb/src/include/duckdb/function/cast/default_casts.hpp \
-  ../duckdb/src/include/duckdb/function/replacement_scan.hpp \
-  ../duckdb/src/include/duckdb/optimizer/optimizer_extension.hpp \
-  ../duckdb/src/include/duckdb/parser/parser_extension.hpp \
-  ../duckdb/src/include/duckdb/planner/operator_extension.hpp \
-  ../duckdb/src/include/duckdb/planner/binder.hpp \
-  ../duckdb/src/include/duckdb/parser/query_node.hpp \
-  ../duckdb/src/include/duckdb/parser/common_table_expression_info.hpp \
-  ../duckdb/src/include/duckdb/parser/statement/select_statement.hpp \
-  ../duckdb/src/include/duckdb/parser/sql_statement.hpp \
-  ../duckdb/src/include/duckdb/common/printer.hpp \
-  ../duckdb/src/include/duckdb/parser/tableref.hpp \
-  ../duckdb/src/include/duckdb/common/enums/tableref_type.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/sample_options.hpp \
-  ../duckdb/src/include/duckdb/common/enums/cte_materialize.hpp \
-  ../duckdb/src/include/duckdb/parser/tableref/delimgetref.hpp \
-  ../duckdb/src/include/duckdb/parser/tokens.hpp \
-  ../duckdb/src/include/duckdb/planner/bind_context.hpp \
-  ../duckdb/src/include/duckdb/parser/expression/columnref_expression.hpp \
-  ../duckdb/src/include/duckdb/parser/qualified_name_set.hpp \
-  ../duckdb/src/include/duckdb/planner/expression_binder.hpp \
-  ../duckdb/src/include/duckdb/common/stack_checker.hpp \
-  ../duckdb/src/include/duckdb/parser/expression/bound_expression.hpp \
-  ../duckdb/src/include/duckdb/parser/expression/lambdaref_expression.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_entry_retriever.hpp \
-  ../duckdb/src/include/duckdb/catalog/catalog_search_path.hpp \
-  ../duckdb/src/include/duckdb/planner/expression/bound_lambda_expression.hpp \
-  ../duckdb/src/include/duckdb/parser/expression/lambda_expression.hpp \
-  ../duckdb/src/include/duckdb/common/enums/collation_type.hpp \
-  ../duckdb/src/include/duckdb/planner/table_binding.hpp \
-  ../duckdb/src/include/duckdb/planner/expression/bound_columnref_expression.hpp \
-  ../duckdb/src/include/duckdb/parser/expression/star_expression.hpp \
-  ../duckdb/src/include/duckdb/planner/bound_constraint.hpp \
-  ../duckdb/src/include/duckdb/planner/tableref/bound_delimgetref.hpp \
-  ../duckdb/src/include/duckdb/planner/bound_tableref.hpp \
-  ../duckdb/src/include/duckdb/storage/compression/bitpacking.hpp \
-  ../duckdb/src/include/duckdb/function/encoding_function.hpp \
-  ../duckdb/src/include/duckdb/storage/data_pointer.hpp \
-  ../duckdb/src/include/duckdb/storage/block.hpp \
-  ../duckdb/src/include/duckdb/storage/table/row_group.hpp \
-  ../duckdb/src/include/duckdb/storage/table/chunk_info.hpp \
-  ../duckdb/src/include/duckdb/storage/statistics/segment_statistics.hpp \
-  ../duckdb/src/include/duckdb/common/enums/scan_options.hpp \
-  ../duckdb/src/include/duckdb/parser/column_list.hpp \
-  ../duckdb/src/include/duckdb/storage/table/segment_base.hpp \
-  ../duckdb/src/include/duckdb/common/enums/checkpoint_type.hpp \
-  ../duckdb/src/include/duckdb/storage/storage_index.hpp \
-  ../duckdb/src/include/duckdb/logging/log_manager.hpp \
-  ../duckdb/src/include/duckdb/logging/logger.hpp \
-  ../duckdb/src/include/duckdb/logging/logging.hpp \
-  ../duckdb/src/include/duckdb/common/enums/debug_vector_verification.hpp \
-  ../duckdb/src/include/duckdb/main/valid_checker.hpp \
-  ../duckdb/src/include/duckdb/transaction/meta_transaction.hpp \
-  ../duckdb/src/include/duckdb/transaction/transaction_manager.hpp \
-  ../duckdb/src/include/duckdb/main/database_manager.hpp \
-  ../duckdb/src/include/duckdb/parser/parsed_data/attach_info.hpp \
-  ../duckdb/src/include/duckdb/storage/storage_options.hpp \
-  ../duckdb/src/include/duckdb/main/settings.hpp \
-  ../duckdb/src/include/duckdb/main/stream_query_result.hpp \
-  ../duckdb/src/include/duckdb/common/queue.hpp \
-  /usr/include/c++/11/queue \
-  /usr/include/c++/11/bits/stl_queue.h \
-  ../duckdb/src/include/duckdb/common/enums/stream_execution_result.hpp \
-  ../duckdb/src/include/duckdb/main/buffered_data/simple_buffered_data.hpp \
-  ../duckdb/src/include/duckdb/main/buffered_data/buffered_data.hpp \
-  ../duckdb/src/include/duckdb/main/table_description.hpp \
-  ../duckdb/src/include/duckdb/transaction/transaction_context.hpp \
-  ../duckdb/src/include/duckdb/main/client_context_wrapper.hpp \
-  ../duckdb/src/include/duckdb/parser/statement/explain_statement.hpp \
-  ../duckdb/src/include/duckdb/main/profiling_node.hpp \
-  ../duckdb/src/include/duckdb/main/database.hpp \
-  ../duckdb/src/include/duckdb/main/capi/extension_api.hpp \
-  ../duckdb/src/include/duckdb/main/extension.hpp \
-  ../duckdb/src/include/duckdb/main/extension_install_info.hpp \
-  ../duckdb/src/include/duckdb/main/appender.hpp
+  /usr/include/c++/11/fstream \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc
 
+
+/usr/include/c++/11/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
 /usr/include/c++/11/bits/fs_dir.h:
 
@@ -1515,6 +1184,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/bits/fs_path.h:
 
 /usr/include/c++/11/bits/fs_fwd.h:
+
+/usr/include/c++/11/fstream:
 
 ../kernels/agg.cuh:
 
@@ -2805,6 +2476,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/bits/basic_ios.tcc:
 
 ../duckdb/src/include/duckdb/common/enums/statement_type.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
 
 ../duckdb/src/include/duckdb/main/client_properties.hpp:
 
