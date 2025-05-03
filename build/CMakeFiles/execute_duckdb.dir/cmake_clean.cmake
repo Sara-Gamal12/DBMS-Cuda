@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o"
   "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d"
+  "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o"
+  "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o"
   "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o.d"
   "execute_duckdb"

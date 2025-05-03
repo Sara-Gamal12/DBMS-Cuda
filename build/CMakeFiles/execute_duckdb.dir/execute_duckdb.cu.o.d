@@ -687,6 +687,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/iostream \
     /usr/include/cuda.h \
     /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/agg.cuh \
+    /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/get.cuh \
     /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/schema_utilities.hpp \
     /usr/include/c++/11/fstream \
     /usr/include/c++/11/bits/codecvt.h \

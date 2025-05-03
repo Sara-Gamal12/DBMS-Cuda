@@ -177,6 +177,30 @@ kernels/agg.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/agg.cu.s
 .PHONY : kernels/agg.cu.s
 
+kernels/get.o: kernels/get.cu.o
+.PHONY : kernels/get.o
+
+# target to build an object file
+kernels/get.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
+.PHONY : kernels/get.cu.o
+
+kernels/get.i: kernels/get.cu.i
+.PHONY : kernels/get.i
+
+# target to preprocess a source file
+kernels/get.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/get.cu.i
+.PHONY : kernels/get.cu.i
+
+kernels/get.s: kernels/get.cu.s
+.PHONY : kernels/get.s
+
+# target to generate assembly for a file
+kernels/get.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/get.cu.s
+.PHONY : kernels/get.cu.s
+
 utilities/schema_utilities.o: utilities/schema_utilities.cpp.o
 .PHONY : utilities/schema_utilities.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... kernels/agg.o"
 	@echo "... kernels/agg.i"
 	@echo "... kernels/agg.s"
+	@echo "... kernels/get.o"
+	@echo "... kernels/get.i"
+	@echo "... kernels/get.s"
 	@echo "... utilities/schema_utilities.o"
 	@echo "... utilities/schema_utilities.i"
 	@echo "... utilities/schema_utilities.s"

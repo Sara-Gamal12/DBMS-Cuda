@@ -72,7 +72,7 @@ std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_byte
         std::stringstream ss(line);
         std::string token;
 
-        std::cout << line << std::endl;
+        // std::cout << line << std::endl;
         for (const auto &col : cols)
         {
             if (!std::getline(ss, token, ',')) break;
@@ -99,7 +99,7 @@ std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_byte
 
     }
 
-    print_chunk(chunk, table_name);
+    // print_chunk(chunk, table_name);
     return chunk;
 }
 

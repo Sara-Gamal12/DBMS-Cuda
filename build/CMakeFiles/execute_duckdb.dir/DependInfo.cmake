@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nesma/CUDA-SQL/DBMS-Cuda/execute_duckdb.cu" "CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cu" "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d"
+  "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cu" "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/utilities/schema_utilities.cpp" "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o" "gcc" "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o.d"
   )
 
