@@ -8,4 +8,6 @@ __global__ void min_kernel( char *input_data, int row_size, int acc_col_size, do
 
 __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, double *max_element, int n);
 
+__host__ double call_agg_kernel(char *input_data, int row_size, int acc_col_size, char *op, int n);
+
 #endif // AGG_KERNELS_H

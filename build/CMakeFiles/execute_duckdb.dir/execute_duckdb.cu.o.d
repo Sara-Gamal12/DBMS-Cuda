@@ -708,4 +708,6 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/quoted_string.h \
     /usr/include/c++/11/codecvt \
     /usr/include/c++/11/bits/fs_dir.h \
-    /usr/include/c++/11/bits/fs_ops.h
+    /usr/include/c++/11/bits/fs_ops.h \
+    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/filter_utilities.hpp \
+    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/../kernels/get.cuh

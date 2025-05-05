@@ -3,9 +3,8 @@
 
 extern Schema schema;  // External declaration of schema
 
-void print_chunk(std::vector<char>chunk,std::string table_name){
-
-    std::vector<ColumnInfo> cols = schema.at(table_name).second;
+void print_chunk(std::vector<char>chunk,std::vector<ColumnInfo> cols){
+    
     int row_size = 0;
     for (const auto& col : cols) {
         row_size += col.size_in_bytes;
@@ -169,6 +168,20 @@ void create_tables_from_schema(duckdb::Connection& conn, const Schema& schema) {
 }
 
 
+std::string clean_column(const std::string& s) {
+    std::string result = s;
+    result.erase(remove_if(result.begin(), result.end(), ::isspace), result.end()); // remove spaces
+    result.erase(remove(result.begin(), result.end(), '\r'), result.end());         // remove \r
+    result.erase(remove(result.begin(), result.end(), '\n'), result.end());         // remove \n
+
+    if ((unsigned char)result[0] == 0xEF &&
+    (unsigned char)result[1] == 0xBB &&
+    (unsigned char)result[2] == 0xBF) {
+        result = result.substr(3);  // Remove BOM
+    }
+    return result;
+}
+
 // Function to get the schema of the tables
 void get_schema(Schema &schema) {
     int acc_col_size = 0;
@@ -189,6 +202,7 @@ void get_schema(Schema &schema) {
                 continue;
             }
 
+
             schema[table_name].first = file;
             // Reset file pointer to the beginning
 
@@ -198,6 +212,7 @@ void get_schema(Schema &schema) {
 
             while (std::getline(ss, column, ',')) {
                 ColumnInfo col;
+                column = clean_column(column);
                 col.name = column;
 
                 // Detect primary key
@@ -219,6 +234,7 @@ void get_schema(Schema &schema) {
                     col.type = "Numeric";
                     col.size_in_bytes = 8;
                     col.name.erase(col.name.find("(N)"), 3);
+
                 } else if (col.name.find("(T)") != std::string::npos) {
                     col.type = "Text";
                     col.size_in_bytes = 150;

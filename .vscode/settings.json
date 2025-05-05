@@ -73,5 +73,11 @@
         "variant": "cpp",
         "__nullptr": "cpp",
         "filesystem": "cpp"
+    },
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
     }
 }

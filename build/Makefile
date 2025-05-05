@@ -201,6 +201,30 @@ kernels/get.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/get.cu.s
 .PHONY : kernels/get.cu.s
 
+utilities/filter_utilities.o: utilities/filter_utilities.cpp.o
+.PHONY : utilities/filter_utilities.o
+
+# target to build an object file
+utilities/filter_utilities.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o
+.PHONY : utilities/filter_utilities.cpp.o
+
+utilities/filter_utilities.i: utilities/filter_utilities.cpp.i
+.PHONY : utilities/filter_utilities.i
+
+# target to preprocess a source file
+utilities/filter_utilities.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.i
+.PHONY : utilities/filter_utilities.cpp.i
+
+utilities/filter_utilities.s: utilities/filter_utilities.cpp.s
+.PHONY : utilities/filter_utilities.s
+
+# target to generate assembly for a file
+utilities/filter_utilities.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.s
+.PHONY : utilities/filter_utilities.cpp.s
+
 utilities/schema_utilities.o: utilities/schema_utilities.cpp.o
 .PHONY : utilities/schema_utilities.o
 
@@ -243,6 +267,9 @@ help:
 	@echo "... kernels/get.o"
 	@echo "... kernels/get.i"
 	@echo "... kernels/get.s"
+	@echo "... utilities/filter_utilities.o"
+	@echo "... utilities/filter_utilities.i"
+	@echo "... utilities/filter_utilities.s"
 	@echo "... utilities/schema_utilities.o"
 	@echo "... utilities/schema_utilities.i"
 	@echo "... utilities/schema_utilities.s"

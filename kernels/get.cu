@@ -58,9 +58,36 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
     return false;
 }
 
+
+__device__ bool eval_condition_tokens(char *row_ptr, int *acc_col_size, ConditionToken *tokens, int token_count)
+{
+    bool stack[16];  // adjust size if needed
+    int sp = 0;      // stack pointer
+
+    for (int i = 0; i < token_count; ++i) {
+        if (tokens[i].type == TOKEN_CONDITION) {
+            bool res = eval_condition(row_ptr, acc_col_size, tokens[i].condition);
+            stack[sp++] = res;
+        } else if (tokens[i].type == TOKEN_AND) {
+            if (sp < 2) return false;  // stack underflow
+            bool b = stack[--sp];
+            bool a = stack[--sp];
+            stack[sp++] = a && b;
+        } else if (tokens[i].type == TOKEN_OR) {
+            if (sp < 2) return false;
+            bool b = stack[--sp];
+            bool a = stack[--sp];
+            stack[sp++] = a || b;
+        }
+    }
+
+    return sp == 1 ? stack[0] : false;
+}
+
+
 __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
                            char *output_data, int *output_counter,
-                           Condition *conditions, int cond_count, int n)
+                           ConditionToken  *tokens, int token_count, int n)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= n)
@@ -69,15 +96,7 @@ __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
     // char *row_ptr = input_data + idx * row_size;
     char *row_ptr = &input_data[idx * row_size];
 
-    bool pass = true;
-    for (int i = 0; i < cond_count; ++i)
-    {
-        if (!eval_condition(row_ptr, acc_col_size, conditions[i]))
-        {
-            pass = false;
-            break;
-        }
-    }
+    bool pass = eval_condition_tokens(row_ptr, acc_col_size, tokens, token_count);
 
     if (pass)
     {
@@ -90,26 +109,30 @@ __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
     }
 }
 
-__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, Condition *conditions, int cond_count, int n, int &output_counter,int column_num)
+
+__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, std::vector<ConditionToken> condition_tokens, int cond_count, int n, int &output_counter,int column_num)
 {
+
     int *h_output_counter = (int *)malloc(sizeof(int));
     char *d_input_data;
     char *d_output_data;
     int *d_acc_col_size;
     int *d_output_counter;
-    Condition *d_conditions;
+    ConditionToken *d_conditions;
+    ConditionToken *conditions = condition_tokens.data();
+
 
     cudaMalloc(&d_input_data, n * row_size);
     cudaMalloc(&d_output_data, n * row_size);
     cudaMalloc(&d_acc_col_size, sizeof(int) * column_num);
     cudaMalloc(&d_output_counter, sizeof(int));
-    cudaMalloc(&d_conditions, sizeof(Condition) * cond_count);
+    cudaMalloc(&d_conditions, sizeof(ConditionToken) * cond_count);
 
     
 
     cudaMemcpy(d_input_data, input_data, n * row_size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_acc_col_size, acc_sums, sizeof(int) * column_num, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_conditions, conditions, sizeof(Condition) * cond_count, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_conditions, conditions, sizeof(ConditionToken) * cond_count, cudaMemcpyHostToDevice);
     
 
     cudaMemset(d_output_counter, 0, sizeof(int));
@@ -118,7 +141,6 @@ __host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, Co
     int blockSize = 256;
     int numBlocks = (n + blockSize - 1) / blockSize;
 
-    
     get_kernel<<<numBlocks, blockSize>>>(d_input_data, row_size,
                                          d_acc_col_size,
                                          d_output_data,

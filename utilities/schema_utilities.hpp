@@ -50,7 +50,7 @@ struct ColumnInfo
 typedef std::unordered_map<std::string, std::pair<std::shared_ptr<std::ifstream>, std::vector<ColumnInfo>>> Schema;
 
 void get_schema(Schema &schema);
-void print_chunk(std::vector<char> chunk, std::string table_name);
+void print_chunk(std::vector<char>chunk,std::vector<ColumnInfo> cols);
 std::string to_duckdb_type(const std::string &type);
 void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema);
 std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_bytes, int &row_size);
