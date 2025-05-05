@@ -9,6 +9,8 @@ enum Operator {
     OP_NEQ,   // !=
     OP_GTE,   // >=
     OP_LTE    // <=
+    // IS NOT NULL
+    // IS NULL
 };
 
 struct Condition {
@@ -24,5 +26,7 @@ struct Condition {
 __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
                            char *output_data, int *output_counter,
                            Condition *conditions, int cond_count, int n);
+
+__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, Condition *conditions, int cond_count, int n, int &output_counter,int column_num);
 
 #endif // GET_KERNELS_H

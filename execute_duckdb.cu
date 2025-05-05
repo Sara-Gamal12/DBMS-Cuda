@@ -45,6 +45,9 @@
 using namespace std;
 using namespace duckdb;
 
+long RAM = 4 * pow(1024, 3); // 4GB
+Schema schema;
+
 struct PlanNode
 {
     std::string name;
@@ -52,15 +55,17 @@ struct PlanNode
     std::vector<std::shared_ptr<PlanNode>> children;
 };
 
-void post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode> node)
+std::vector<char> post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode> node)
 {
     if (!node)
-        return;
+        return {};
 
     // 1. Traverse children first (post-order)
+    std::vector<std::vector<char>> child_results;
     for (auto &child : node->children)
     {
-        post_order_traverse_and_launch_kernel(child);
+        std::vector<char> data =post_order_traverse_and_launch_kernel(child);
+        child_results.push_back(data);
     }
 
     // 2. Process current node (e.g., launch kernel)
@@ -70,8 +75,85 @@ void post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode> node)
     if (node->name == "GET")
     {
 
+        string table_name = node->details[0];
+        int row_size ;
+        std::vector<char> chunk = read_csv_chunk(table_name, 0.5 * RAM, row_size);
+        if (node->details.size() > 1)
+        {
+            int  *acc_sums=new int [(schema[table_name].second.size())];
+
+            Condition *conditions=new Condition[node->details.size()-1];
+
+            for (size_t i = 1; i < node->details.size(); ++i)
+            {
+                std::string condition_str = node->details[i];
+                std::istringstream iss(condition_str);
+                std::string column, op, value;
+                iss >> column >> op >> value;  
+
+                for (int j = 0; j < schema[table_name].second.size(); ++j)
+                {
+                    if (schema[table_name].second[j].name == column)
+                    {
+                        conditions[i - 1].col_index = j;
+                        if (schema[table_name].second[j].type == "Numeric")
+                        {
+                            conditions[i-1].type = 0;
+                            conditions[i-1].f_value = std::stof(value);
+                        }
+                        else if (schema[table_name].second[j].type == "Text")
+                        {
+                            conditions[i-1].type = 1;
+                            strncpy(conditions[i-1].s_value, value.c_str(), sizeof(conditions[i-1].s_value));
+                        }
+                        // else if (schema[table_name].second[j].type == "DateTime")
+                        // {
+                        //     conditions[i-1].type = 2;
+                        // }
+                    }
+                    acc_sums[j] = schema[table_name].second[j].acc_col_size;
+                }
+
+                if(op=="EQUAL")
+                {
+                    conditions[i-1].op = OP_EQ;
+                }
+                else if(op=="GREATERTHAN")
+                {
+                    conditions[i-1].op = OP_GT;
+                }
+                else if(op=="LESSTHAN")
+                {
+                    conditions[i-1].op = OP_LT;
+                }
+                else if(op=="NOTEQUAL")
+                {
+                    conditions[i-1].op = OP_NEQ;
+                }
+                else if(op=="GREATERTHANOREQUALTO")
+                {
+                    conditions[i-1].op = OP_GTE;
+                }
+                else if(op=="LESSTHANOREQUALTO")
+                {
+                    conditions[i-1].op = OP_LTE;
+                }
+
+            }
+            
+            int n = chunk.size() / row_size;
+            int output_counter = 0;
+            char*data = call_get_kernel(chunk.data(), row_size, acc_sums, conditions, node->details.size()-1,n,output_counter,schema[table_name].second.size());
+            // std::cout << "Output counter: " << output_counter << std::endl;
+            return std::vector<char>(data, data +  output_counter* row_size);
+        }
+        else{
+            return chunk;
+        }
+
         // launch_get_kernel();  // Your kernel logic here
     }
+    
     else if (node->name == "JOIN")
     {
         // launch_join_kernel(); // Your kernel logic here
@@ -94,6 +176,9 @@ void post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode> node)
             // launch_avg_kernel(); // Your kernel logic here
         }
     }
+    else if (node->name == "PROJECTION"){
+        return child_results[0];
+    }
     else
     {
         std::cout << "No matching kernel for: " << node->name << std::endl;
@@ -113,7 +198,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
     {
         if (get_op->GetTable())
         {
-            node->details.push_back("Table: " + get_op->GetTable()->name);
+            node->details.push_back(get_op->GetTable()->name);
         }
         for (auto &[col_idx, filter] : get_op->table_filters.filters)
         {
@@ -143,7 +228,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
                 oss << "UNKNOWN";
                 break;
             }
-            node->details.push_back("Filter: " + oss.str());
+            node->details.push_back( oss.str());
         }
     }
 
@@ -183,10 +268,8 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
     return node;
 }
 
-long RAM = 4 * pow(1024, 3); // 4GB
-Schema schema;
-void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
-{
+
+void print_tree(std::shared_ptr<PlanNode> node, int indent = 0){
     if (!node)
         return;
     std::cout << std::string(indent, ' ') << "- " << node->name << std::endl;
@@ -200,156 +283,46 @@ void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
     }
 }
 
-// int main()
-// {
-//     using namespace duckdb;
-//     //    Initialize DuckDB instance
-//     DuckDB db(nullptr);
-//     Connection con(db);
-//     ClientContext &context = *con.context;
-//     get_schema(schema);
-//     create_tables_from_schema(con, schema);
-//     string query = "select name, id as total_count from (select s.name,s.id from student s  where s.id > 1) order by name Asc;";
-//     int row_size;
-//     std::vector<char> chunk = read_csv_chunk("student", 0.5 * RAM, row_size);
-//     // Example usage
-//     // const int n = 5;
-//     // char* d_input_data;
-//     // double* d_output_data;
-//     // double* h_output_data;
-
-//     // // Allocate device memory
-//     // cudaMalloc((void**)&d_input_data, n * row_size*sizeof(char));
-//     // cudaMemcpy(d_input_data, chunk.data(),  n * row_size*sizeof(char), cudaMemcpyHostToDevice);
-
-//     // // Launch kernel
-//     // int blockSize =1;
-//     // int numBlocks = (n + (blockSize*2) - 1) / (blockSize*2);
-//     // h_output_data = (double*)malloc(numBlocks * sizeof(double));
-//     // cudaMalloc((void**)&d_output_data, numBlocks * sizeof(double));
-//     // sum_kernel<<<numBlocks, blockSize,2*blockSize>>>(d_input_data,row_size,schema["student"].second[2].acc_col_size,d_output_data, n);
-//     // cudaMemcpy(h_output_data, d_output_data, numBlocks * sizeof(double), cudaMemcpyDeviceToHost);
-//     // // Print the result
-//     // for (int i = 0; i < numBlocks; i++) {
-//     //     std::cout << "Max element in block " << i << ": " << h_output_data[i] << std::endl;
-//     // }
-//     // // Cleanup
-//     // cudaFree(d_input_data);
-//     // cudaFree(d_output_data);
-
-//     Parser parser;
-//     parser.ParseQuery(query);
-//     auto statements = std::move(parser.statements);
-//     for (size_t i = 0; i < statements.size(); i++)
-//     {
-//         cout << "Statement " << i + 1 << ":\n";
-//         cout << statements[i]->ToString() << "\n";
-//     }
-//     // Start a transaction
-//     con.BeginTransaction(); // Start transaction using Connection
-
-//     // Create a planner and plan the query
-//     Planner planner(context);
-//     planner.CreatePlan(std::move(statements[0]));
-
-//     // Now you can proceed with further processing or optimization
-//     cout << "Planning successful!" << endl;
-//     cout << "Unoptimized Logical Plan:\n"
-//          << planner.plan->ToString() << endl;
-
-//     Optimizer optimizer(*planner.binder, context);
-//     auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-//     cout << "Optimized Logical Plan:\n";
-//     cout << logical_plan->ToString() << endl;
-
-//     auto tree_root = build_plan_tree(logical_plan.get());
-//     print_tree(tree_root);
-
-//     // Commit the transaction after planning
-//     con.Commit(); // Commit transaction using Connection
-// }
-
 int main()
 {
+    using namespace duckdb;
+    //    Initialize DuckDB instance
+    DuckDB db(nullptr);
+    Connection con(db);
+    ClientContext &context = *con.context;
     get_schema(schema);
+    create_tables_from_schema(con, schema);
+    string query = "select * from student where age>=25 and name !='ddd' ;";
     int row_size;
 
-    std::vector<char> chunk = read_csv_chunk("student", 0.5 * RAM, row_size);
+    Parser parser;
+    parser.ParseQuery(query);
+    auto statements = std::move(parser.statements);
+    // Start a transaction
+    con.BeginTransaction(); // Start transaction using Connection
 
-    Condition conds_host[2];
+    // Create a planner and plan the query
+    Planner planner(context);
+    planner.CreatePlan(std::move(statements[0]));
 
-    // WHERE age > 25
-    conds_host[0].col_index = 1;
-    conds_host[0].op = OP_NEQ;
-    conds_host[0].type = 1;
-    std::string fixed = "dds";
-    fixed.resize(150, '\0');
-    // conds_host[0].s_value = (char *)malloc(150*sizeof(char));
-    memcpy(conds_host[0].s_value, fixed.c_str(), 150*sizeof(char));
-    
+    // Now you can proceed with further processing or optimization
+    cout << "Planning successful!" << endl;
+    cout << "Unoptimized Logical Plan:\n"
+        << planner.plan->ToString() << endl;
 
-    conds_host[1].col_index = 2;
-    conds_host[1].op = OP_GT;
-    conds_host[1].type = 0;
-    conds_host[1].f_value = 25.0;
-    // Copy to device
-    Condition *d_conds;
-    cudaMalloc(&d_conds, 2* sizeof(Condition));
-    cudaMemcpy(d_conds, conds_host, 2 * sizeof(Condition), cudaMemcpyHostToDevice);
+    Optimizer optimizer(*planner.binder, context);
+    auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+    cout << "Optimized Logical Plan:\n";
+    cout << logical_plan->ToString() << endl;
 
-    // Launch kernel
-    const int n = chunk.size() / row_size;
-    char *d_input;
-    cudaMalloc((void**)&d_input, n * row_size*sizeof(char));
-    cudaMemcpy(d_input, chunk.data(), n * row_size*sizeof(char), cudaMemcpyHostToDevice);
-    char *d_output;
-    cudaMalloc((void**)&d_output, n * row_size*sizeof(char));
-    int *d_output_counter;
-    int *h_output_counter=(int*)malloc(sizeof(int));
-    cudaMalloc((void**)&d_output_counter, sizeof(int));
-    cudaMemset(d_output_counter, 0, sizeof(int));
+    auto tree_root = build_plan_tree(logical_plan.get());
+    print_tree(tree_root);
 
-    int * h_acc_col_size;
-    h_acc_col_size = (int *)malloc(schema["student"].second.size() * sizeof(int));
-    for (int i = 0; i < schema["student"].second.size(); i++)
-    {
-       
-            h_acc_col_size[i] = schema["student"].second[i].acc_col_size;
+    // Traverse the plan tree and launch kernels
+    std::vector<char> data_out =post_order_traverse_and_launch_kernel(tree_root);
 
-    }
-    int *d_acc_col_size;
-    cudaMalloc((void**)&d_acc_col_size, schema["student"].second.size() * sizeof(int));
-    cudaMemcpy(d_acc_col_size, h_acc_col_size, schema["student"].second.size() * sizeof(int), cudaMemcpyHostToDevice);
-    get_kernel<<<3, 256>>>(d_input, row_size, d_acc_col_size,
-                                    d_output, d_output_counter,
-                                    d_conds, 2, n);
-
-    cudaDeviceSynchronize();
-    cudaError_t err = cudaGetLastError();
-    if (err != cudaSuccess) {
-        printf("Kernel execution failed: %s\n", cudaGetErrorString(err));
-    }
-    // Copy result back to host
-    char* output_data = (char*)malloc(n * row_size*sizeof(char));
-
-    cudaMemcpy(output_data, d_output, n * row_size*sizeof(char), cudaMemcpyDeviceToHost);
-    
-    cudaMemcpy(h_output_counter, d_output_counter, sizeof(int), cudaMemcpyDeviceToHost);
-    // Print the output data
-    std::cout << "Filtered Output Data:" << std::endl;
-    std::cout << "Filtered Output h_output_counter:"<<(*h_output_counter) << std::endl;
-    for (int i = 0; i < (*h_output_counter) * row_size; i += row_size) {
-        for (int j = 0; j < row_size; ++j) {
-            std::cout << output_data[i + j];
-        }
-        std::cout << std::endl;
-    }
-
-    // Cleanup
-    cudaFree(d_input);
-    cudaFree(d_output);
-    cudaFree(d_output_counter);
-    cudaFree(d_conds);
-    cudaFree(d_acc_col_size);
-    free(h_acc_col_size);
+    print_chunk(data_out, "student");
+    // Commit the transaction after planning
+    con.Commit(); // Commit transaction using Connection
 }
+

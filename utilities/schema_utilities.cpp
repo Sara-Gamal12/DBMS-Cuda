@@ -228,6 +228,8 @@ void get_schema(Schema &schema) {
                     col.size_in_bytes = 8;
                     col.name.erase(col.name.find("(D)"), 3);
                 }
+                
+                col.name.erase(std::remove(col.name.begin(), col.name.end(), ' '), col.name.end());
                 col.acc_col_size = acc_col_size;
                 acc_col_size += col.size_in_bytes;
                 columns.push_back(col);
