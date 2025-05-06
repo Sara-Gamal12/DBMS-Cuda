@@ -1,5 +1,4 @@
-id (N) (P),name(T),#student_id  (N)
+id (N) (P),name(T),student_id  (N)
 1,sara,1
 2,nemsa,2
 3,eman,3
-4,youseg,4

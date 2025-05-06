@@ -23,6 +23,10 @@ struct Condition {
     };
 };
 
+__device__ int device_strcmp(const char *s1, const char *s2);
+
+__device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition &cond);
+
 __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
                            char *output_data, int *output_counter,
                            Condition *conditions, int cond_count, int n);

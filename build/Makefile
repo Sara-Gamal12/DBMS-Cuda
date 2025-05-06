@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nesma/CUDA-SQL/DBMS-Cuda
+CMAKE_SOURCE_DIR = /home/yousef/DBMS-Cuda
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nesma/CUDA-SQL/DBMS-Cuda/build
+CMAKE_BINARY_DIR = /home/yousef/DBMS-Cuda/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles /home/nesma/CUDA-SQL/DBMS-Cuda/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yousef/DBMS-Cuda/build/CMakeFiles /home/yousef/DBMS-Cuda/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yousef/DBMS-Cuda/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -201,6 +201,30 @@ kernels/get.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/get.cu.s
 .PHONY : kernels/get.cu.s
 
+kernels/join.o: kernels/join.cu.o
+.PHONY : kernels/join.o
+
+# target to build an object file
+kernels/join.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/join.cu.o
+.PHONY : kernels/join.cu.o
+
+kernels/join.i: kernels/join.cu.i
+.PHONY : kernels/join.i
+
+# target to preprocess a source file
+kernels/join.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/join.cu.i
+.PHONY : kernels/join.cu.i
+
+kernels/join.s: kernels/join.cu.s
+.PHONY : kernels/join.s
+
+# target to generate assembly for a file
+kernels/join.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/join.cu.s
+.PHONY : kernels/join.cu.s
+
 utilities/schema_utilities.o: utilities/schema_utilities.cpp.o
 .PHONY : utilities/schema_utilities.o
 
@@ -243,6 +267,9 @@ help:
 	@echo "... kernels/get.o"
 	@echo "... kernels/get.i"
 	@echo "... kernels/get.s"
+	@echo "... kernels/join.o"
+	@echo "... kernels/join.i"
+	@echo "... kernels/join.s"
 	@echo "... utilities/schema_utilities.o"
 	@echo "... utilities/schema_utilities.i"
 	@echo "... utilities/schema_utilities.s"

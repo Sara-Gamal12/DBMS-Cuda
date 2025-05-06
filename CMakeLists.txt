@@ -10,18 +10,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 # Include DuckDB headers
-include_directories(/home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include)
+include_directories(/home/yousef/duckdb/src/include)
 
 # Link to DuckDB library directory
-link_directories(/home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/build/release/src)
+link_directories(/home/yousef/duckdb/build/release/src)
 
 # Add the executable with both C++ and CUDA source files
-add_executable(execute_duckdb ../execute_duckdb.cu ./kernels/agg.cu ./kernels/get.cu ./utilities/schema_utilities.cpp )
+add_executable(execute_duckdb ../execute_duckdb.cu ./kernels/agg.cu ./kernels/get.cu ./kernels/join.cu ./utilities/schema_utilities.cpp )
 
 # Specify that the CUDA file should be compiled with NVCC
 set_source_files_properties(
     ./kernels/agg.cu
     ./kernels/get.cu
+    ./kernels/join.cu
     PROPERTIES
     LANGUAGE CUDA
 )

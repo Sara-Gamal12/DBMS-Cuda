@@ -46,7 +46,8 @@ void print_chunk(std::vector<char>chunk,std::string table_name){
 }
 }
 
-std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_bytes,int &row_size) {
+std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_bytes,int &row_size) 
+{
     
     if (schema.find(table_name) == schema.end()) {
         std::cout << "Table schema not found for: " << table_name << std::endl;
@@ -171,8 +172,8 @@ void create_tables_from_schema(duckdb::Connection& conn, const Schema& schema) {
 
 // Function to get the schema of the tables
 void get_schema(Schema &schema) {
-    int acc_col_size = 0;
     for (const auto& entry : std::filesystem::directory_iterator("../DB")) {
+        int acc_col_size = 0;
         if (entry.path().extension() == ".csv") {
             std::string file_path = entry.path().string();
             std::string table_name = entry.path().stem().string();

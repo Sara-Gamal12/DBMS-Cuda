@@ -34,6 +34,7 @@
 
 #include "./kernels/agg.cuh"
 #include "./kernels/get.cuh"
+#include "./kernels/join.cuh"
 #include "./utilities/schema_utilities.hpp"
 
 #include <fstream>
@@ -269,7 +270,8 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
 }
 
 
-void print_tree(std::shared_ptr<PlanNode> node, int indent = 0){
+void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
+{
     if (!node)
         return;
     std::cout << std::string(indent, ' ') << "- " << node->name << std::endl;
@@ -285,44 +287,79 @@ void print_tree(std::shared_ptr<PlanNode> node, int indent = 0){
 
 int main()
 {
-    using namespace duckdb;
-    //    Initialize DuckDB instance
     DuckDB db(nullptr);
     Connection con(db);
     ClientContext &context = *con.context;
     get_schema(schema);
     create_tables_from_schema(con, schema);
-    string query = "select * from student where age>=25 and name !='ddd' ;";
-    int row_size;
 
-    Parser parser;
-    parser.ParseQuery(query);
-    auto statements = std::move(parser.statements);
-    // Start a transaction
-    con.BeginTransaction(); // Start transaction using Connection
+    Join_Condition join_condition[1];
 
-    // Create a planner and plan the query
-    Planner planner(context);
-    planner.CreatePlan(std::move(statements[0]));
+    join_condition[0].col_index_a = 0;
+    join_condition[0].col_index_b = 0;
+    join_condition[0].op = OP_EQ;
+    join_condition[0].type = 0;
+    int row_size_a ;
+    int row_size_b ;
+    std::vector<char>table_a = read_csv_chunk("student", 0.5 * RAM, row_size_a);
+    std::vector<char>table_b = read_csv_chunk("course", 0.5 * RAM, row_size_b);
+    int *acc_col_size_a = new int[schema["student"].second.size()];
+    int *acc_col_size_b = new int[schema["course"].second.size()];
+    for (int i = 0; i < schema["student"].second.size(); ++i)
+    {
+        acc_col_size_a[i] = schema["student"].second[i].acc_col_size;
+    }
+    for (int i = 0; i < schema["course"].second.size(); ++i)
+    {
+        acc_col_size_b[i] = schema["course"].second[i].acc_col_size;
+    }
+    int resultCount = 0;
 
-    // Now you can proceed with further processing or optimization
-    cout << "Planning successful!" << endl;
-    cout << "Unoptimized Logical Plan:\n"
-        << planner.plan->ToString() << endl;
+    char *result = call_join_kernel(table_a.data(), 5, row_size_a, acc_col_size_a, table_b.data(),3, row_size_b, acc_col_size_b,resultCount, join_condition, 1,4,3);
+    std::cout << "Result Count: " << resultCount << std::endl;
+    std::cout << "Result Data: " << std::endl;
 
-    Optimizer optimizer(*planner.binder, context);
-    auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-    cout << "Optimized Logical Plan:\n";
-    cout << logical_plan->ToString() << endl;
+    resultCount = resultCount * (row_size_a + row_size_b);
 
-    auto tree_root = build_plan_tree(logical_plan.get());
-    print_tree(tree_root);
 
-    // Traverse the plan tree and launch kernels
-    std::vector<char> data_out =post_order_traverse_and_launch_kernel(tree_root);
+    // call_get_kernel
+    //  Initialize DuckDB instance
+    // DuckDB db(nullptr);
+    // Connection con(db);
+    // ClientContext &context = *con.context;
+    // get_schema(schema);
+    // create_tables_from_schema(con, schema);
+    // string query = "select * from  student s, course c where s.id == c.student_id and s.age >10;";
+    // int row_size;
 
-    print_chunk(data_out, "student");
-    // Commit the transaction after planning
-    con.Commit(); // Commit transaction using Connection
+    // Parser parser;
+    // parser.ParseQuery(query);
+    // auto statements = std::move(parser.statements);
+    // // Start a transaction
+    // con.BeginTransaction(); // Start transaction using Connection
+
+    // // Create a planner and plan the query
+    // Planner planner(context);
+    // planner.CreatePlan(std::move(statements[0]));
+
+    // // Now you can proceed with further processing or optimization
+    // cout << "Planning successful!" << endl;
+    // cout << "Unoptimized Logical Plan:\n"
+    //     << planner.plan->ToString() << endl;
+
+    // Optimizer optimizer(*planner.binder, context);
+    // auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+    // cout << "Optimized Logical Plan:\n";
+    // cout << logical_plan->ToString() << endl;
+
+    // auto tree_root = build_plan_tree(logical_plan.get());
+    // print_tree(tree_root);
+
+    // // Traverse the plan tree and launch kernels
+    // std::vector<char> data_out =post_order_traverse_and_launch_kernel(tree_root);
+
+    // print_chunk(data_out, "student");
+    // // Commit the transaction after planning
+    // con.Commit(); // Commit transaction using Connection
 }
 
