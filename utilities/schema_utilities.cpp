@@ -26,6 +26,7 @@ void print_chunk(std::vector<char>chunk,std::vector<ColumnInfo> cols){
                 std::cout << value;
                 offset += sizeof(double);
             } else if (col.type == "DateTime") {
+                
                 std::time_t time_value = *reinterpret_cast<std::time_t*>(data_ptr);
                 std::tm* tm = std::localtime(&time_value);
                 char buffer[20];
@@ -162,9 +163,6 @@ void create_tables_from_schema(duckdb::Connection& conn, const Schema& schema) {
 
     conn.Query(forign_key);
 
-    // print duckdb schema
-    // auto result = conn.Query("select*from student;");
-    // result->Print();
 }
 
 
@@ -184,8 +182,8 @@ std::string clean_column(const std::string& s) {
 
 // Function to get the schema of the tables
 void get_schema(Schema &schema) {
-    int acc_col_size = 0;
     for (const auto& entry : std::filesystem::directory_iterator("../DB")) {
+        int acc_col_size = 0;
         if (entry.path().extension() == ".csv") {
             std::string file_path = entry.path().string();
             std::string table_name = entry.path().stem().string();

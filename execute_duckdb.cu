@@ -34,6 +34,8 @@
 
 #include "./kernels/agg.cuh"
 #include "./kernels/get.cuh"
+#include "./kernels/project.cuh"
+
 #include "./utilities/schema_utilities.hpp"
 #include "./utilities/filter_utilities.hpp"
 
@@ -56,10 +58,10 @@ struct PlanNode
     std::vector<std::shared_ptr<PlanNode>> children;
 };
 
-
-struct return_node_type{
+struct return_node_type
+{
     std::vector<char> data;
-    std::vector <ColumnInfo> data_schema;
+    std::vector<ColumnInfo> data_schema;
     int num_row;
 };
 
@@ -72,7 +74,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     std::vector<return_node_type> child_results;
     for (auto &child : node->children)
     {
-        return_node_type data =post_order_traverse_and_launch_kernel(child);
+        return_node_type data = post_order_traverse_and_launch_kernel(child);
         child_results.push_back(data);
     }
 
@@ -84,38 +86,37 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     {
 
         string table_name = node->details[0];
-        int row_size ;
+        int row_size;
         std::vector<char> chunk = read_csv_chunk(table_name, 0.5 * RAM, row_size);
         if (node->details.size() > 1)
         {
-            
 
-            Condition *conditions=new Condition[node->details.size()-1];
-            std::vector<string> expr ;
+            Condition *conditions = new Condition[node->details.size() - 1];
+            std::vector<string> expr;
             for (size_t i = 1; i < node->details.size(); ++i)
             {
                 expr.push_back(node->details[i]);
-                if(i!= node->details.size()-1)
+                if (i != node->details.size() - 1)
                     expr.push_back("and");
             }
             int *acc_sums = new int[(schema[table_name].second.size())];
             std::vector<Token> tokens = tokenize(expr);
-            std::vector<std::string> postfix=infix_to_postfix(tokens);
-            std::vector<ConditionToken> condition_tokens = parse_postfix(postfix,schema[table_name].second,acc_sums);
-            
-            
+            std::vector<std::string> postfix = infix_to_postfix(tokens);
+            std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, schema[table_name].second, acc_sums);
+
             int n = chunk.size() / row_size;
             int output_counter = 0;
-            char*data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(),n,output_counter,schema[table_name].second.size());
+            char *data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), n, output_counter, schema[table_name].second.size());
             return_node_type return_data;
-            return_data.data= std::vector<char>(data, data + output_counter * row_size);
+            return_data.data = std::vector<char>(data, data + output_counter * row_size);
             return_data.num_row = output_counter;
             return_data.data_schema = schema[table_name].second;
             return return_data;
         }
-        else{
+        else
+        {
             return_node_type return_data;
-            return_data.data= chunk;
+            return_data.data = chunk;
             return_data.num_row = chunk.size() / row_size;
             return_data.data_schema = schema[table_name].second;
             return return_data;
@@ -123,28 +124,39 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
 
         // launch_get_kernel();  // Your kernel logic here
     }
-    
+
     else if (node->name == "FILTER")
     {
-        int row_size =child_results[0].data.size() / child_results[0].num_row;
-        Condition *conditions=new Condition[node->details.size()-1];
+        int row_size = child_results[0].data.size() / child_results[0].num_row;
+        Condition *conditions = new Condition[node->details.size() - 1];
         std::string expr = node->details[0];
-        expr = replace_operatirs(expr);
+        cout << "expr = " << expr << endl;
+        std::string to_remove = "::TIMESTAMP";
+        size_t pos = expr.find(to_remove);
+        if (pos != std::string::npos)
+        {
+            expr.erase(pos, to_remove.length());
+        }
 
+        expr = replace_operatirs(expr);
+        cout << "expr = " << expr << endl;
         int *acc_sums = new int[child_results[0].data_schema.size()];
-        std::vector<std::string> vector_expr=tokenizeExpression(expr);
+        std::vector<std::string> vector_expr = tokenizeExpression(expr);
+        for (int i = 0; i < vector_expr.size(); i++)
+        {
+            cout << "vector_expr[" << i << "] = " << vector_expr[i] << endl;
+        }
         std::vector<Token> tokens = tokenize(vector_expr);
-        std::vector<std::string> postfix=infix_to_postfix(tokens);
-        std::vector<ConditionToken> condition_tokens = parse_postfix(postfix,child_results[0].data_schema,acc_sums);
+        std::vector<std::string> postfix = infix_to_postfix(tokens);
+        std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
 
         int output_counter = 0;
-        char*data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(),child_results[0].num_row,output_counter,child_results[0].data_schema.size());
+        char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
         return_node_type return_data;
-        return_data.data= std::vector<char>(data, data + output_counter * row_size);
+        return_data.data = std::vector<char>(data, data + output_counter * row_size);
         return_data.num_row = output_counter;
         return_data.data_schema = child_results[0].data_schema;
         return return_data;
-        
     }
     else if (node->name == "JOIN")
     {
@@ -160,10 +172,12 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         string col_name = node->details[0].substr(node->details[0].find("(") + 1, node->details[0].find(")") - node->details[0].find("(") - 1);
         int acc_col_size;
         int row_size = 0;
+        int index;
         for (int i = 0; i < child_results[0].data_schema.size(); i++)
         {
             if (child_results[0].data_schema[i].name == col_name)
             {
+                index = i;
                 acc_col_size = child_results[0].data_schema[i].acc_col_size;
             }
             row_size += child_results[0].data_schema[i].size_in_bytes;
@@ -190,28 +204,63 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             op = "count";
         }
 
-        double result= call_agg_kernel(child_results[0].data.data(), row_size, acc_col_size, op, child_results[0].num_row);
-        const char* result_str = reinterpret_cast<const char*>(&result);
+        double result = call_agg_kernel(child_results[0].data.data(), row_size, acc_col_size, op, child_results[0].num_row);
+        const char *result_str = reinterpret_cast<const char *>(&result);
         return_node_type return_data;
-        return_data.data=std::vector<char>(result_str, result_str + sizeof(result));
+        return_data.data = std::vector<char>(result_str, result_str + sizeof(result));
         return_data.num_row = 1;
         ColumnInfo col_info;
-        col_info.type = "Numeric";
+        col_info.type = child_results[0].data_schema[index].type;
         col_info.size_in_bytes = sizeof(result);
         col_info.acc_col_size = 0;
         col_info.name = node->details[0];
         return_data.data_schema.push_back(col_info);
         return return_data;
     }
-    else if (node->name == "PROJECTION"){
-        return child_results[0];
+    else if (node->name == "PROJECTION")
+    {
+        std::cout<<node->details[0]<<std::endl;
+        int*acc_sums = new int[node->details.size()];
+        int *col_index = new int[node->details.size()];
+        int *sizes = new int[node->details.size()];
+        int new_row_size = 0;
+        std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
+        std::vector<ColumnInfo> new_schema ;
+
+
+        for(int i=0;i<node->details.size();i++)
+        {
+            std::string col_name = node->details[i];
+            for (int j = 0; j < child_results[0].data_schema.size(); j++)
+            {
+                if (child_results[0].data_schema[j].name == col_name)
+                {
+                    new_schema.push_back(child_results[0].data_schema[j]);
+                    col_index[i] = j;
+                    acc_sums[i] = child_results[0].data_schema[j].acc_col_size;
+                    sizes[i] = child_results[0].data_schema[j].size_in_bytes;
+                    new_row_size += child_results[0].data_schema[j].size_in_bytes;
+                }
+            }
+        }
+        
+        int row_size = child_results[0].data.size() / child_results[0].num_row;
+        
+        char *data = call_project_kernel(child_results[0].data.data(), new_row_size, row_size, col_index, acc_sums, child_results[0].num_row, node->details.size(), sizes);      
+        return_node_type return_data;
+        return_data.data = std::vector<char>(data, data + child_results[0].num_row * new_row_size);
+        return_data.num_row = child_results[0].num_row;
+        return_data.data_schema = new_schema;
+
+        
+        return return_data;
+
     }
     else
     {
         std::cout << "No matching kernel for: " << node->name << std::endl;
     }
 }
-
 
 std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
 {
@@ -237,7 +286,13 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
             case duckdb::TableFilterType::CONSTANT_COMPARISON:
             {
                 auto &f = static_cast<duckdb::ConstantFilter &>(*filter);
-                oss << ExpressionTypeToString(f.comparison_type) << " " << f.constant.ToString();
+                std::string constant_str = f.constant.ToString();
+                if (f.constant.type().id() == duckdb::LogicalTypeId::VARCHAR &&
+                    constant_str.front() != '\'' && constant_str.back() != '\'')
+                {
+                    constant_str = "'" + constant_str + "'";
+                }
+                oss << ExpressionTypeToString(f.comparison_type) << " " << constant_str;
                 break;
             }
             case duckdb::TableFilterType::IS_NULL:
@@ -256,7 +311,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
                 oss << "UNKNOWN";
                 break;
             }
-            node->details.push_back( oss.str());
+            node->details.push_back(oss.str());
         }
     }
 
@@ -284,7 +339,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
 
     for (auto &expr : op->expressions)
     {
-        node->details.push_back( expr->ToString());
+        node->details.push_back(expr->ToString());
     }
 
     // Recurse on children
@@ -296,8 +351,8 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
     return node;
 }
 
-
-void print_tree(std::shared_ptr<PlanNode> node, int indent = 0){
+void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
+{
     if (!node)
         return;
     std::cout << std::string(indent, ' ') << "- " << node->name << std::endl;
@@ -320,7 +375,7 @@ int main()
     ClientContext &context = *con.context;
     get_schema(schema);
     create_tables_from_schema(con, schema);
-    string query = "select max(age) from student where id<4 or age>20 ;";
+    string query = "select name from student where age>25 ;";
     int row_size;
 
     Parser parser;
@@ -336,7 +391,7 @@ int main()
     // Now you can proceed with further processing or optimization
     cout << "Planning successful!" << endl;
     cout << "Unoptimized Logical Plan:\n"
-        << planner.plan->ToString() << endl;
+         << planner.plan->ToString() << endl;
 
     Optimizer optimizer(*planner.binder, context);
     auto logical_plan = optimizer.Optimize(std::move(planner.plan));
@@ -347,12 +402,9 @@ int main()
     print_tree(tree_root);
 
     // Traverse the plan tree and launch kernels
-    return_node_type data_out =post_order_traverse_and_launch_kernel(tree_root);
+    return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
 
     print_chunk(data_out.data, data_out.data_schema);
     // Commit the transaction after planning
     con.Commit(); // Commit transaction using Connection
-
-    
 }
-

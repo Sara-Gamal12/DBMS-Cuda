@@ -1,12 +1,13 @@
 #include "filter_utilities.hpp"
 #include <iostream>
+#include <regex>
+#include <iomanip>
+#include <ctime>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <cctype>
 #include <algorithm>
-
-
 
 // Helper to determine if a token is an operator
 bool is_operator(const std::string &s)
@@ -22,7 +23,38 @@ int precedence(const std::string &op)
         return 2;
     return 0;
 }
+bool isNumeric(const std::string &value)
+{
 
+    // Handle empty or whitespace-only strings
+    if (value.empty() || std::all_of(value.begin(), value.end(), isspace))
+    {
+        return false;
+    }
+
+    // Try to parse as a number (integer or float)
+    try
+    {
+        std::size_t pos;
+        std::stod(value, &pos); // Try converting to double
+        // Ensure the entire string was consumed (no trailing non-numeric chars)
+        return pos == value.length();
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+bool isDate(const std::string &value)
+{
+    // Regex pattern for format: YYYY-M-D HH:MM:SS
+    std::regex pattern(R"(^\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2}$)");
+    if (!std::regex_match(value, pattern))
+    {
+        return false;
+    }
+}
 // Convert infix to postfix (RPN)
 std::vector<std::string> infix_to_postfix(const std::vector<Token> &tokens)
 {
@@ -76,7 +108,7 @@ std::vector<Token> tokenize(std::vector<std::string> expr)
     for (int i = 0; i < expr.size(); i++)
     {
         token = expr[i];
-        if (token == "AND" || token == "OR"||token == "and" || token == "or")
+        if (token == "AND" || token == "OR" || token == "and" || token == "or")
         {
             tokens.push_back({token, OPERATOR});
         }
@@ -96,7 +128,7 @@ std::vector<Token> tokenize(std::vector<std::string> expr)
     return tokens;
 }
 
-std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema,int * acc_sums)
+std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema, int *acc_sums)
 {
 
     std::vector<ConditionToken> stack;
@@ -117,33 +149,100 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             std::string condition_str = postfix[i];
             std::istringstream iss(condition_str);
             std::string column, op, value;
-            iss >> column >> op >> value;
-            
+            iss >> column >> op ;
+            std::getline(iss >> std::ws, value);
+
+            bool is_col = true;
+            if ((value[0] == '\'') && (value[value.size() - 1] == '\''))
+            {
+                value = value.substr(1, value.size() - 2);
+                is_col = false;
+            }
+            if (isNumeric(value))
+            {
+                is_col = false;
+            }
+            if (isDate(value))
+            {
+                is_col = false;
+            }
+
             for (int j = 0; j < schema.size(); ++j)
             {
-
-                if (schema[j].name== column)
+                if (schema[j].name == column || (is_col && schema[j].name == value))
                 {
-                    condition.col_index = j;
                     if (schema[j].type == "Numeric")
                     {
-                        condition.type = 0;
-                        condition.f_value = std::stof(value);
+                        if (schema[j].name == value)
+                        {
+                            condition.sec_col_index = j;
+                        }
+                        if (schema[j].name == column)
+                        {
+                            condition.col_index = j;
+                        }
+                        if (is_col)
+                        {
+                            condition.type = 2;
+                        }
+                        else
+                        {
+                            condition.type = 0;
+                            condition.f_value = std::stof(value);
+                        }
                     }
                     else if (schema[j].type == "Text")
                     {
-                        condition.type = 1;
-                        strncpy(condition.s_value, value.c_str(), sizeof(condition.s_value));
+                        if (schema[j].name == value)
+                        {
+                            condition.sec_col_index = j;
+                        }
+                        if (schema[j].name == column)
+                        {
+                            condition.col_index = j;
+                        }
+                        if (is_col)
+                        {
+                            condition.type = 3;
+                        }
+                        else
+                        {
+                            condition.type = 1;
+                            strncpy(condition.s_value, value.c_str(), sizeof(condition.s_value));
+                        }
                     }
-                    // else if (schema[table_name].second[j].type == "DateTime")
-                    // {
-                    //     conditions[i-1].type = 2;
-                    // }
+                    else if (schema[j].type == "DateTime")
+                    {
+                        if (schema[j].name == value)
+                        {
+                            condition.sec_col_index = j;
+                        }
+                        if (schema[j].name == column)
+                        {
+                            condition.col_index = j;
+                        }
+                        if (is_col)
+                        {
+                            condition.type = 2;
+                        }
+                        else
+                        {
+                            condition.type = 0;
+                            std::tm tm = {};
+                            std::istringstream ss(value);
+                            ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+                            std::time_t time_value = std::mktime(&tm);
+
+                            const char* ptr = reinterpret_cast<const char*>(&time_value);
+
+                            memcpy(&condition.f_value, ptr, sizeof(double));
+                        }
+                    }
                 }
                 acc_sums[j] = schema[j].acc_col_size;
             }
 
-            if (op == "EQUAL" )
+            if (op == "EQUAL")
             {
                 condition.op = OP_EQ;
             }
@@ -169,46 +268,56 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             }
 
             token.condition = condition;
+            // std::cout<<"condition.col_index: "<<condition.col_index<<std::endl;
+            // std::cout<<"condition.sec_col_index: "<<condition.sec_col_index<<std::endl;
+            // std::cout<<"condition.type: "<<condition.type<<std::endl;
+            // std::cout<<"condition.op: "<<condition.op<<std::endl;
         }
         stack.push_back(token);
     }
     return stack;
 }
 
-
-
-
-
-std::vector<std::string> tokenizeExpression(const std::string& input) {
+std::vector<std::string> tokenizeExpression(const std::string &input)
+{
     std::vector<std::string> tokens;
     std::string buffer;
     std::istringstream stream(input);
     char c;
 
-    auto flushBuffer = [&]() {
-        if (!buffer.empty()) {
+    auto flushBuffer = [&]()
+    {
+        if (!buffer.empty())
+        {
             std::string trimmed = buffer;
-            trimmed.erase(trimmed.begin(), std::find_if(trimmed.begin(), trimmed.end(), [](unsigned char ch) {
-                return !std::isspace(ch);
-            }));
-            trimmed.erase(std::find_if(trimmed.rbegin(), trimmed.rend(), [](unsigned char ch) {
-                return !std::isspace(ch);
-            }).base(), trimmed.end());
+            trimmed.erase(trimmed.begin(), std::find_if(trimmed.begin(), trimmed.end(), [](unsigned char ch)
+                                                    { return !std::isspace(ch); }));
+            trimmed.erase(std::find_if(trimmed.rbegin(), trimmed.rend(), [](unsigned char ch)
+                                    { return !std::isspace(ch); })
+                            .base(),
+                        trimmed.end());
 
-            if (trimmed == "AND" || trimmed == "OR" || trimmed == "and" || trimmed == "or") {
+            if (trimmed == "AND" || trimmed == "OR" || trimmed == "and" || trimmed == "or")
+            {
                 tokens.push_back(trimmed);
-            } else if (!trimmed.empty()) {
+            }
+            else if (!trimmed.empty())
+            {
                 tokens.push_back(trimmed);
             }
             buffer.clear();
         }
     };
 
-    while (stream.get(c)) {
-        if (c == '(' || c == ')') {
+    while (stream.get(c))
+    {
+        if (c == '(' || c == ')')
+        {
             flushBuffer();
             tokens.push_back(std::string(1, c));
-        } else {
+        }
+        else
+        {
             buffer += c;
         }
     }
@@ -217,9 +326,7 @@ std::vector<std::string> tokenizeExpression(const std::string& input) {
     return tokens;
 }
 
-
-
-std::string  replace_operatirs(std::string &input)
+std::string replace_operatirs(std::string &input)
 {
     std::string output;
     std::istringstream iss(input);
@@ -240,7 +347,7 @@ std::string  replace_operatirs(std::string &input)
         else if (token == "<=")
             output += " LESSTHANOREQUALTO ";
         else
-            output += token ;
+            output += token+" ";
     }
     return output;
 }

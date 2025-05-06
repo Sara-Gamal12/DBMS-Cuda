@@ -25,6 +25,8 @@ __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, dou
     }
     else
         partial_max[blockDim.x + t] = INT_MIN;
+
+    
     // loop to reduce the data in shared memory
     // each thread will be responsible for 2 elements
     for (unsigned int stride = blockDim.x; stride > 0; stride /= 2)

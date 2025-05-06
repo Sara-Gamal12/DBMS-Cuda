@@ -42,7 +42,7 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
             return *val <= cond.f_value;
         }
     }
-    else
+    else if(cond.type==1)
     { // float
         char *val = (char *)malloc(150);
         ;
@@ -53,6 +53,44 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
             return device_strcmp(val, cond.s_value) == 0;
         case OP_NEQ:
             return device_strcmp(val, cond.s_value) != 0;
+        }
+    }
+    else if(cond.type==2)
+    { // column 
+        char *col_ptr = row_ptr + acc_col_size[cond.sec_col_index];
+        double *val1 = (double *)malloc(sizeof(double));
+        memcpy(val1, field_ptr, sizeof(double));
+        double *val2 = (double *)malloc(sizeof(double));
+        memcpy(val2, col_ptr, sizeof(double));
+        switch (cond.op)
+        {
+        case OP_GT:
+            return *val1 > *val2;
+        case OP_LT:
+            return *val1 < *val2;
+        case OP_EQ:
+            return *val1 == *val2;
+        case OP_NEQ:
+            return *val1 != *val2;
+        case OP_GTE:
+            return *val1 >= *val2;
+        case OP_LTE:
+            return *val1 <= *val2;
+        }
+    }
+    else if(cond.type==3)
+    { // float
+        char *col_ptr = row_ptr + acc_col_size[cond.sec_col_index];
+        char *val1 = (char *)malloc(150);
+        char *val2 = (char *)malloc(150);
+        memcpy(val1, field_ptr, 150);
+        memcpy(val2, col_ptr, 150);
+        switch (cond.op)
+        {
+        case OP_EQ:
+            return device_strcmp(val1, val2) == 0;
+        case OP_NEQ:
+            return device_strcmp(val1, val2) != 0;
         }
     }
     return false;
@@ -177,3 +215,4 @@ __host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, st
     output_counter = *h_output_counter;
     return h_output_data;
 }
+

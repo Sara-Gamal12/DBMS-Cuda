@@ -17,10 +17,11 @@ enum Operator {
 struct Condition {
     int col_index;    // index into acc_col_size[]
     Operator op;      // operation
-    int type;         // 0 = numerical, 1 = string
+    int type;         // 0 = numerical, 1 = string ,2 col-numeric,3col-text
     union {
-        float f_value;
+        double f_value;
         char s_value[150];
+        int sec_col_index; // index into acc_col_size[]
     };
 };
 

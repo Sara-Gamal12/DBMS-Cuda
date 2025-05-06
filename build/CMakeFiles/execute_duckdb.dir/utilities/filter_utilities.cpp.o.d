@@ -601,4 +601,17 @@ CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: \
  /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
  /usr/include/c++/11/bits/locale_conv.h /usr/include/c++/11/iomanip \
  /usr/include/c++/11/bits/quoted_string.h /usr/include/c++/11/codecvt \
- /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h
+ /usr/include/c++/11/bits/fs_dir.h /usr/include/c++/11/bits/fs_ops.h \
+ /usr/include/c++/11/regex /usr/include/c++/11/iterator \
+ /usr/include/c++/11/bits/stream_iterator.h \
+ /usr/include/c++/11/bits/regex_constants.h \
+ /usr/include/c++/11/bits/regex_error.h \
+ /usr/include/c++/11/bits/regex_automaton.h \
+ /usr/include/c++/11/bits/regex_automaton.tcc \
+ /usr/include/c++/11/bits/regex_scanner.h \
+ /usr/include/c++/11/bits/regex_scanner.tcc \
+ /usr/include/c++/11/bits/regex_compiler.h \
+ /usr/include/c++/11/bits/regex_compiler.tcc \
+ /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
+ /usr/include/c++/11/bits/regex_executor.h \
+ /usr/include/c++/11/bits/regex_executor.tcc
