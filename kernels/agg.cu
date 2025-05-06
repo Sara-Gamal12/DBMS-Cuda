@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <algorithm>
 #include "agg.cuh"
+#include"get.cuh"
 
 __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, double *max_element, int n)
 {
@@ -13,7 +14,10 @@ __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, dou
     if (start + t < n)
     {
         char *data_ptr = &input_data[(start + t) * row_size + acc_col_size];
-        memcpy(&partial_max[t], data_ptr, sizeof(double));
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_max[t] = INT_MIN;
+        else
+            memcpy(&partial_max[t], data_ptr, sizeof(double));
     }
     else
         partial_max[t] = INT_MIN;
@@ -21,11 +25,17 @@ __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, dou
     if (start + blockDim.x + t < n)
     {
         char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
-        memcpy(&partial_max[blockDim.x + t], data_ptr, sizeof(double));
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_max[blockDim.x + t] = INT_MIN;
+        else
+            memcpy(&partial_max[blockDim.x + t], data_ptr, sizeof(double));
+
     }
     else
         partial_max[blockDim.x + t] = INT_MIN;
 
+    
+    
     
     // loop to reduce the data in shared memory
     // each thread will be responsible for 2 elements
@@ -53,17 +63,21 @@ __global__ void min_kernel(char *input_data, int row_size, int acc_col_size, dou
     if (start + t < n)
     {
         char *data_ptr = &input_data[(start + t) * row_size + acc_col_size];
-        memcpy(&partial_min[t], data_ptr, sizeof(double));
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_min[ t] = INT_MAX;
+        else
+            memcpy(&partial_min[t], data_ptr, sizeof(double));
     }
     else
         partial_min[t] = INT_MAX;
     // load 2nd element data into shared memory
     if (start + blockDim.x + t < n)
     {
-        {
-            char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
+        char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_min[blockDim.x + t] = INT_MAX;
+        else
             memcpy(&partial_min[blockDim.x + t], data_ptr, sizeof(double));
-        }
     }
     else
         partial_min[blockDim.x + t] = INT_MAX;
@@ -94,17 +108,23 @@ __global__ void sum_kernel(char *input_data, int row_size, int acc_col_size, dou
     if (start + t < n)
     {
         char *data_ptr = &input_data[(start + t) * row_size + acc_col_size];
-        memcpy(&partial_sum[t], data_ptr, sizeof(double));
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_sum[t] = 0;
+        else
+            memcpy(&partial_sum[t], data_ptr, sizeof(double));
     }
     else
         partial_sum[t] = 0;
     // load 2nd element data into shared memory
     if (start + blockDim.x + t < n)
     {
-        {
-            char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
+        
+        char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
+        if (device_strcmp(data_ptr, "NULL") == 0)
+            partial_sum[blockDim.x + t] = 0;
+        else
             memcpy(&partial_sum[blockDim.x + t], data_ptr, sizeof(double));
-        }
+        
     }
     else
         partial_sum[blockDim.x + t] = 0;

@@ -49,6 +49,7 @@ struct ColumnInfo
 
 typedef std::unordered_map<std::string, std::pair<std::shared_ptr<std::ifstream>, std::vector<ColumnInfo>>> Schema;
 
+std::string clean_column(const std::string &s);
 void get_schema(Schema &schema);
 void print_chunk(std::vector<char>chunk,std::vector<ColumnInfo> cols);
 std::string to_duckdb_type(const std::string &type);

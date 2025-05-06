@@ -940,7 +940,8 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
   /usr/include/c++/11/pstl/execution_defs.h \
-  ../kernels/agg.cuh
+  ../kernels/agg.cuh \
+  ../kernels/get.cuh
 
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu \
   /usr/include/stdc-predef.h \

@@ -222,4 +222,5 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda/
     /usr/include/c++/11/bits/stl_bvector.h \
     /usr/include/c++/11/bits/vector.tcc \
     /usr/include/c++/11/pstl/execution_defs.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cuh
+    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cuh \
+    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cuh

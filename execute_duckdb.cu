@@ -130,7 +130,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         int row_size = child_results[0].data.size() / child_results[0].num_row;
         Condition *conditions = new Condition[node->details.size() - 1];
         std::string expr = node->details[0];
-        cout << "expr = " << expr << endl;
         std::string to_remove = "::TIMESTAMP";
         size_t pos = expr.find(to_remove);
         if (pos != std::string::npos)
@@ -139,13 +138,9 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         }
 
         expr = replace_operatirs(expr);
-        cout << "expr = " << expr << endl;
         int *acc_sums = new int[child_results[0].data_schema.size()];
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
-        for (int i = 0; i < vector_expr.size(); i++)
-        {
-            cout << "vector_expr[" << i << "] = " << vector_expr[i] << endl;
-        }
+
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
@@ -219,16 +214,14 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     }
     else if (node->name == "PROJECTION")
     {
-        std::cout<<node->details[0]<<std::endl;
-        int*acc_sums = new int[node->details.size()];
+        int *acc_sums = new int[node->details.size()];
         int *col_index = new int[node->details.size()];
         int *sizes = new int[node->details.size()];
         int new_row_size = 0;
         std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
-        std::vector<ColumnInfo> new_schema ;
+        std::vector<ColumnInfo> new_schema;
 
-
-        for(int i=0;i<node->details.size();i++)
+        for (int i = 0; i < node->details.size(); i++)
         {
             std::string col_name = node->details[i];
             for (int j = 0; j < child_results[0].data_schema.size(); j++)
@@ -243,18 +236,16 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
                 }
             }
         }
-        
+
         int row_size = child_results[0].data.size() / child_results[0].num_row;
-        
-        char *data = call_project_kernel(child_results[0].data.data(), new_row_size, row_size, col_index, acc_sums, child_results[0].num_row, node->details.size(), sizes);      
+
+        char *data = call_project_kernel(child_results[0].data.data(), new_row_size, row_size, col_index, acc_sums, child_results[0].num_row, node->details.size(), sizes);
         return_node_type return_data;
         return_data.data = std::vector<char>(data, data + child_results[0].num_row * new_row_size);
         return_data.num_row = child_results[0].num_row;
         return_data.data_schema = new_schema;
 
-        
         return return_data;
-
     }
     else
     {
@@ -366,45 +357,58 @@ void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    // DuckDB
     using namespace duckdb;
-    //    Initialize DuckDB instance
     DuckDB db(nullptr);
     Connection con(db);
     ClientContext &context = *con.context;
-    get_schema(schema);
-    create_tables_from_schema(con, schema);
-    string query = "select name from student where age>25 ;";
-    int row_size;
 
-    Parser parser;
-    parser.ParseQuery(query);
-    auto statements = std::move(parser.statements);
-    // Start a transaction
-    con.BeginTransaction(); // Start transaction using Connection
+    while (true)
+    {
+        cout << "\nEnter SQL query (or type 'exit' to quit): ";
+        string query;
+        getline(cin, query);
 
-    // Create a planner and plan the query
-    Planner planner(context);
-    planner.CreatePlan(std::move(statements[0]));
+        if (query == "exit" || query == "quit")
+        {
+            cout << "Exiting CLI.\n";
+            break;
+        }
+        get_schema(schema);
+        create_tables_from_schema(con, schema);
+        // string query = "select * from course  where id=Sid ;";
+        // string query = "select sum(age) from student;";
 
-    // Now you can proceed with further processing or optimization
-    cout << "Planning successful!" << endl;
-    cout << "Unoptimized Logical Plan:\n"
-         << planner.plan->ToString() << endl;
+        Parser parser;
+        parser.ParseQuery(query);
+        auto statements = std::move(parser.statements);
+        // Start a transaction
+        con.BeginTransaction(); // Start transaction using Connection
 
-    Optimizer optimizer(*planner.binder, context);
-    auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-    cout << "Optimized Logical Plan:\n";
-    cout << logical_plan->ToString() << endl;
+        // Create a planner and plan the query
+        Planner planner(context);
+        planner.CreatePlan(std::move(statements[0]));
 
-    auto tree_root = build_plan_tree(logical_plan.get());
-    print_tree(tree_root);
+        // Now you can proceed with further processing or optimization
+        cout << "Planning successful!" << endl;
+        cout << "Unoptimized Logical Plan:\n"
+            << planner.plan->ToString() << endl;
 
-    // Traverse the plan tree and launch kernels
-    return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
+        Optimizer optimizer(*planner.binder, context);
+        auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+        cout << "Optimized Logical Plan:\n";
+        cout << logical_plan->ToString() << endl;
 
-    print_chunk(data_out.data, data_out.data_schema);
-    // Commit the transaction after planning
-    con.Commit(); // Commit transaction using Connection
+        auto tree_root = build_plan_tree(logical_plan.get());
+        print_tree(tree_root);
+
+        // Traverse the plan tree and launch kernels
+        return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
+
+        print_chunk(data_out.data, data_out.data_schema);
+        // Commit the transaction after planning
+        con.Commit(); // Commit transaction using Connection
+    }
 }

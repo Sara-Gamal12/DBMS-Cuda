@@ -36,8 +36,7 @@ struct ConditionToken {
     Condition condition; // valid if type == TOKEN_CONDITION
 };
 
-
-
+__device__ int device_strcmp(const char *s1, const char *s2);
 __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
                            char *output_data, int *output_counter,
                            ConditionToken *tokens, int token_count, int n);

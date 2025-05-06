@@ -943,6 +943,7 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
  /usr/include/c++/11/bits/vector.tcc
  /usr/include/c++/11/pstl/execution_defs.h
  /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cuh
+ /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cuh
 
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
  /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cu
