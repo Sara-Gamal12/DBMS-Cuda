@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o"
   "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d"
+  "CMakeFiles/execute_duckdb.dir/kernels/join.cu.o"
+  "CMakeFiles/execute_duckdb.dir/kernels/join.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o"
   "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o"

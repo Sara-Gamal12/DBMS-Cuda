@@ -1,7 +1,7 @@
-CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda/execute_duckdb.cu \
+CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/yousef/DBMS-Cuda/execute_duckdb.cu \
     /usr/include/stdc-predef.h \
-    /usr/include/cuda_runtime.h \
-    /usr/include/crt/host_config.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
     /usr/include/features.h \
     /usr/include/features-time64.h \
     /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -10,11 +10,11 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/long-double.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-    /usr/include/builtin_types.h \
-    /usr/include/device_types.h \
-    /usr/include/crt/host_defines.h \
-    /usr/include/driver_types.h \
-    /usr/include/vector_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/builtin_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/host_defines.h \
+    /usr/local/cuda/targets/x86_64-linux/include/driver_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_types.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
     /usr/include/limits.h \
@@ -27,41 +27,71 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
     /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
-    /usr/include/surface_types.h \
-    /usr/include/texture_types.h \
-    /usr/include/library_types.h \
-    /usr/include/channel_descriptor.h \
-    /usr/include/cuda_runtime_api.h \
-    /usr/include/cuda_device_runtime_api.h \
-    /usr/include/driver_functions.h \
-    /usr/include/vector_functions.h \
-    /usr/include/vector_functions.hpp \
-    /usr/include/crt/common_functions.h \
-    /usr/include/string.h \
-    /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
-    /usr/include/strings.h \
-    /usr/include/time.h \
-    /usr/include/x86_64-linux-gnu/bits/time.h \
-    /usr/include/x86_64-linux-gnu/bits/types.h \
-    /usr/include/x86_64-linux-gnu/bits/typesizes.h \
-    /usr/include/x86_64-linux-gnu/bits/time64.h \
-    /usr/include/x86_64-linux-gnu/bits/timex.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
-    /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
-    /usr/include/x86_64-linux-gnu/bits/endian.h \
-    /usr/include/x86_64-linux-gnu/bits/endianness.h \
-    /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
-    /usr/include/c++/11/new \
+    /usr/local/cuda/targets/x86_64-linux/include/surface_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/texture_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/library_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/channel_descriptor.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime_api.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_device_runtime_api.h \
+    /usr/include/c++/11/stdlib.h \
+    /usr/include/c++/11/cstdlib \
     /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
     /usr/include/c++/11/pstl/pstl_config.h \
+    /usr/include/stdlib.h \
+    /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+    /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+    /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+    /usr/include/x86_64-linux-gnu/sys/types.h \
+    /usr/include/x86_64-linux-gnu/bits/types.h \
+    /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+    /usr/include/x86_64-linux-gnu/bits/time64.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+    /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+    /usr/include/endian.h \
+    /usr/include/x86_64-linux-gnu/bits/endian.h \
+    /usr/include/x86_64-linux-gnu/bits/endianness.h \
+    /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+    /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
+    /usr/include/x86_64-linux-gnu/sys/select.h \
+    /usr/include/x86_64-linux-gnu/bits/select.h \
+    /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+    /usr/include/x86_64-linux-gnu/bits/select2.h \
+    /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+    /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+    /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+    /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+    /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+    /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
+    /usr/include/alloca.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+    /usr/include/c++/11/bits/std_abs.h \
+    /usr/local/cuda/targets/x86_64-linux/include/driver_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/common_functions.h \
+    /usr/include/string.h \
+    /usr/include/strings.h \
+    /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+    /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+    /usr/include/time.h \
+    /usr/include/x86_64-linux-gnu/bits/time.h \
+    /usr/include/x86_64-linux-gnu/bits/timex.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+    /usr/include/c++/11/new \
     /usr/include/c++/11/bits/exception.h \
     /usr/include/stdio.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
@@ -73,33 +103,10 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
     /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
     /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-    /usr/include/x86_64-linux-gnu/bits/floatn.h \
-    /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-    /usr/include/c++/11/stdlib.h \
-    /usr/include/c++/11/cstdlib \
-    /usr/include/stdlib.h \
-    /usr/include/x86_64-linux-gnu/bits/waitflags.h \
-    /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
-    /usr/include/x86_64-linux-gnu/sys/types.h \
-    /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-    /usr/include/endian.h \
-    /usr/include/x86_64-linux-gnu/bits/byteswap.h \
-    /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
-    /usr/include/x86_64-linux-gnu/sys/select.h \
-    /usr/include/x86_64-linux-gnu/bits/select.h \
-    /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
-    /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-    /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
-    /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
-    /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
-    /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
-    /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
-    /usr/include/alloca.h \
-    /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-    /usr/include/c++/11/bits/std_abs.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio2.h \
     /usr/include/assert.h \
-    /usr/include/crt/math_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/math_functions.h \
     /usr/include/c++/11/math.h \
     /usr/include/c++/11/cmath \
     /usr/include/c++/11/bits/cpp_type_traits.h \
@@ -143,44 +150,46 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/tr1/poly_hermite.tcc \
     /usr/include/c++/11/tr1/poly_laguerre.tcc \
     /usr/include/c++/11/tr1/riemann_zeta.tcc \
-    /usr/include/crt/math_functions.hpp \
-    /usr/include/cuda_surface_types.h \
-    /usr/include/cuda_texture_types.h \
-    /usr/include/crt/device_functions.h \
-    /usr/include/crt/device_functions.hpp \
-    /usr/include/device_atomic_functions.h \
-    /usr/include/device_atomic_functions.hpp \
-    /usr/include/crt/device_double_functions.h \
-    /usr/include/crt/device_double_functions.hpp \
-    /usr/include/sm_20_atomic_functions.h \
-    /usr/include/sm_20_atomic_functions.hpp \
-    /usr/include/sm_32_atomic_functions.h \
-    /usr/include/sm_32_atomic_functions.hpp \
-    /usr/include/sm_35_atomic_functions.h \
-    /usr/include/sm_60_atomic_functions.h \
-    /usr/include/sm_60_atomic_functions.hpp \
-    /usr/include/sm_20_intrinsics.h \
-    /usr/include/sm_20_intrinsics.hpp \
-    /usr/include/sm_30_intrinsics.h \
-    /usr/include/sm_30_intrinsics.hpp \
-    /usr/include/sm_32_intrinsics.h \
-    /usr/include/sm_32_intrinsics.hpp \
-    /usr/include/sm_35_intrinsics.h \
-    /usr/include/sm_61_intrinsics.h \
-    /usr/include/sm_61_intrinsics.hpp \
-    /usr/include/crt/sm_70_rt.h \
-    /usr/include/crt/sm_70_rt.hpp \
-    /usr/include/crt/sm_80_rt.h \
-    /usr/include/crt/sm_80_rt.hpp \
-    /usr/include/surface_functions.h \
-    /usr/include/texture_fetch_functions.h \
-    /usr/include/texture_indirect_functions.h \
-    /usr/include/surface_indirect_functions.h \
-    /usr/include/device_launch_parameters.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/connection.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/profiler_format.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/constants.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/math_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_double_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_double_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_35_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_60_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_60_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_30_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_30_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_35_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_61_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_61_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_70_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_70_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_80_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_80_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_90_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_90_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/texture_indirect_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/surface_indirect_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/cudacc_ext.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_launch_parameters.h \
+    /usr/include/c++/11/utility \
+    /usr/include/c++/11/bits/stl_relops.h \
+    /usr/include/c++/11/initializer_list \
+    /home/yousef/duckdb/src/include/duckdb.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/connection.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/profiler_format.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/constants.hpp \
     /usr/include/c++/11/memory \
     /usr/include/c++/11/bits/allocator.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
@@ -200,9 +209,6 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
     /usr/include/c++/11/bits/uses_allocator.h \
     /usr/include/c++/11/bits/unique_ptr.h \
-    /usr/include/c++/11/utility \
-    /usr/include/c++/11/bits/stl_relops.h \
-    /usr/include/c++/11/initializer_list \
     /usr/include/c++/11/tuple \
     /usr/include/c++/11/array \
     /usr/include/c++/11/bits/range_access.h \
@@ -219,6 +225,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/wchar.h \
     /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
     /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+    /usr/include/x86_64-linux-gnu/bits/wchar2.h \
     /usr/include/c++/11/bits/shared_ptr_base.h \
     /usr/include/c++/11/typeinfo \
     /usr/include/c++/11/bits/allocated_ptr.h \
@@ -247,7 +254,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/backward/auto_ptr.h \
     /usr/include/c++/11/pstl/glue_memory_defs.h \
     /usr/include/c++/11/pstl/execution_defs.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/string.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/string.hpp \
     /usr/include/c++/11/sstream \
     /usr/include/c++/11/istream \
     /usr/include/c++/11/ios \
@@ -300,18 +307,18 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/ostream.tcc \
     /usr/include/c++/11/bits/istream.tcc \
     /usr/include/c++/11/bits/sstream.tcc \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/winapi.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/unique_ptr.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/assert.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception_format_value.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/hugeint.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/typedefs.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/winapi.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/unique_ptr.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/assert.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception_format_value.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/hugeint.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/typedefs.hpp \
     /usr/include/c++/11/vector \
     /usr/include/c++/11/bits/stl_vector.h \
     /usr/include/c++/11/bits/stl_bvector.h \
     /usr/include/c++/11/bits/vector.tcc \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/unordered_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/unordered_map.hpp \
     /usr/include/c++/11/unordered_map \
     /usr/include/c++/11/bits/hashtable.h \
     /usr/include/c++/11/bits/hashtable_policy.h \
@@ -319,40 +326,40 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/node_handle.h \
     /usr/include/c++/11/bits/unordered_map.h \
     /usr/include/c++/11/bits/erase_if.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/likely.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/memory_safety.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/serializer/buffered_file_writer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/serializer/write_stream.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/common.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/helper.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/shared_ptr.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/shared_ptr_ipp.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/weak_ptr_ipp.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enable_shared_from_this_ipp.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/catalog_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/atomic.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/likely.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/memory_safety.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/serializer/buffered_file_writer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/serializer/write_stream.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/common.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/helper.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/shared_ptr.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/shared_ptr_ipp.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/weak_ptr_ipp.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enable_shared_from_this_ipp.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/catalog_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/atomic.hpp \
     /usr/include/c++/11/atomic \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/optional_ptr.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception/catalog_exception.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/query_error_context.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/optional_idx.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/value.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/uhugeint.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/timestamp.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/limits.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/string_util.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/numeric_utils.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/pair.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/set.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/optional_ptr.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception/catalog_exception.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/query_error_context.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/optional_idx.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/value.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/uhugeint.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/timestamp.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/limits.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/string_util.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/numeric_utils.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/pair.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/set.hpp \
     /usr/include/c++/11/set \
     /usr/include/c++/11/bits/stl_tree.h \
     /usr/include/c++/11/bits/stl_set.h \
     /usr/include/c++/11/bits/stl_multiset.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/complex_json.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/complex_json.hpp \
     /usr/include/c++/11/cstring \
     /usr/include/c++/11/functional \
     /usr/include/c++/11/bits/std_function.h \
@@ -360,22 +367,22 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/algorithmfwd.h \
     /usr/include/c++/11/bits/stl_heap.h \
     /usr/include/c++/11/bits/uniform_int_dist.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/date.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/string_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/hash.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/datetime.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/date.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/string_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/hash.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/datetime.hpp \
     /usr/include/c++/11/algorithm \
     /usr/include/c++/11/pstl/glue_algorithm_defs.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/interval.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_transaction.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/catalog_lookup_behavior.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/on_entry_not_found.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/error_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/interval.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_transaction.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/catalog_lookup_behavior.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/on_entry_not_found.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/error_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/map.hpp \
     /usr/include/c++/11/map \
     /usr/include/c++/11/bits/stl_map.h \
     /usr/include/c++/11/bits/stl_multimap.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/mutex.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/mutex.hpp \
     /usr/include/c++/11/mutex \
     /usr/include/c++/11/chrono \
     /usr/include/c++/11/ratio \
@@ -383,284 +390,284 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/parse_numbers.h \
     /usr/include/c++/11/bits/std_mutex.h \
     /usr/include/c++/11/bits/unique_lock.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/reference_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/unordered_set.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/reference_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/unordered_set.hpp \
     /usr/include/c++/11/unordered_set \
     /usr/include/c++/11/bits/unordered_set.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/entry_lookup_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/file_system.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/file_compression_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/file_buffer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/debug_initialize.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/file_glob_options.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/file_open_flags.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/open_file_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/udf_function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/scalar_function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_operations/binary_executor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/vector.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/bitset.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/entry_lookup_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/file_system.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/file_compression_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/file_buffer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/debug_initialize.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/file_glob_options.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/file_open_flags.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/open_file_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/udf_function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/scalar_function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_operations/binary_executor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/vector.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/bitset.hpp \
     /usr/include/c++/11/bitset \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/vector_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/selection_vector.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/allocator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_size.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/validity_mask.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/to_string.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/vector_buffer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/string_heap.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/arena_allocator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/buffer/buffer_handle.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/storage_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_operations/vector_operations.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/data_chunk.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/arrow/arrow_wrapper.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/arrow/arrow.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_operations/ternary_executor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_operations/unary_executor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/function_errors.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/expression_executor_state.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/named_parameter_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/case_insensitive_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/external_dependencies.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/column_definition.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/base_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/expression_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/qualified_name.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception/parser_exception.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/keyword_helper.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/simplified_token.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/binding_alias.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression_util.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/compression_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry/table_column_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/base_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/operator/comparison_operators.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/hugeint.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/type_util.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/numeric_stats.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/filter_propagate_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/numeric_stats_union.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/array_ptr.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/string_stats.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/aggregate_function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/array.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/vector_operations/aggregate_executor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/aggregate_state.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/node_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_result_modifier.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/result_modifier.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/order_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_statement.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/materialized_query_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/column/column_data_collection.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/column/column_data_collection_iterators.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/column/column_data_scan_states.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/query_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/statement_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/client_properties.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/pending_query_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/pending_execution_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/executor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/task_error_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/progress_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parallel/pipeline.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/physical_operator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/operator_result_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/physical_operator_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/explain_format.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/execution_context.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/join_node.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/join_relation.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/query_graph.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/relation_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/cardinality_estimator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/column_binding_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/column_binding.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/join_order/relation_statistics_helper.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/filter/conjunction_filter.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/table_filter.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/column_index.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/logical_operator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/logical_operator_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/logical_operator_visitor.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_tokens.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/logical_tokens.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/insertion_order_preserving_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/physical_operator_states.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parallel/interrupt.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parallel/task.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/vector_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/selection_vector.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/allocator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_size.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/validity_mask.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/to_string.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/vector_buffer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/string_heap.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/arena_allocator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/buffer/buffer_handle.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/storage_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_operations/vector_operations.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/data_chunk.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/arrow/arrow_wrapper.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/arrow/arrow.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_operations/ternary_executor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_operations/unary_executor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/function_errors.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/expression_executor_state.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/named_parameter_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/case_insensitive_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/external_dependencies.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/column_definition.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/base_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/expression_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/qualified_name.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception/parser_exception.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/keyword_helper.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/simplified_token.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/binding_alias.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression_util.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/compression_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry/table_column_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/base_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/operator/comparison_operators.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/hugeint.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/type_util.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/numeric_stats.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/filter_propagate_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/numeric_stats_union.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/array_ptr.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/string_stats.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/aggregate_function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/array.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/vector_operations/aggregate_executor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/aggregate_state.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/node_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_result_modifier.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/result_modifier.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/order_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_statement.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/materialized_query_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/column/column_data_collection.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/column/column_data_collection_iterators.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/column/column_data_scan_states.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/query_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/statement_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/client_properties.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/pending_query_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/pending_execution_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/executor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/task_error_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/progress_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parallel/pipeline.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/physical_operator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/operator_result_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/physical_operator_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/explain_format.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/execution_context.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/join_node.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/join_relation.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/query_graph.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/relation_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/cardinality_estimator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/column_binding_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/column_binding.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/join_order/relation_statistics_helper.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/filter/conjunction_filter.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/table_filter.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/column_index.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/logical_operator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/logical_operator_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/logical_operator_visitor.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_tokens.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/logical_tokens.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/insertion_order_preserving_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/physical_operator_states.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parallel/interrupt.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parallel/task.hpp \
     /usr/include/c++/11/condition_variable \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/partition_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/order_preservation_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table_function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/table_column.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/partition_stats.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception/binder_exception.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parallel/task_scheduler.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parallel/executor_task.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/prepared_statement.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression/bound_parameter_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/relation.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/join_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/relation_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/joinref_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/client_context.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry/schema_catalog_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_set.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/default/default_generator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/transaction/transaction.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry/sequence_catalog_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/standard_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/dependency_list.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/dependency.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/create_sequence_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/create_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/parse_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enum_util.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/on_create_conflict.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/alter_table_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/alter_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/constraint.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/transaction/transaction_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/similar_catalog_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/deque.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/partition_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/order_preservation_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table_function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/table_column.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/partition_stats.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception/binder_exception.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parallel/task_scheduler.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parallel/executor_task.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/prepared_statement.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression/bound_parameter_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/relation.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/join_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/relation_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/joinref_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/client_context.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry/schema_catalog_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_set.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/default/default_generator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/transaction/transaction.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry/sequence_catalog_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/standard_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/dependency_list.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/dependency.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/create_sequence_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/create_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/parse_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enum_util.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/on_create_conflict.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/alter_table_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/alter_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/constraint.hpp \
+    /home/yousef/duckdb/src/include/duckdb/transaction/transaction_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/similar_catalog_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/deque.hpp \
     /usr/include/c++/11/deque \
     /usr/include/c++/11/bits/stl_deque.h \
     /usr/include/c++/11/bits/deque.tcc \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/prepared_statement_mode.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/client_config.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/output_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/progress_bar/progress_bar.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb.h \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/prepared_statement_mode.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/client_config.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/output_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/progress_bar/progress_bar.hpp \
+    /home/yousef/duckdb/src/include/duckdb.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/profiler.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/chrono.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/progress_bar/progress_bar_display.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/profiling_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/metric_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/optimizer_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/client_context_state.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/exception/transaction_exception.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/config.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/arrow/arrow_type_extension.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/chunk_scan_state.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table/arrow/arrow_duck_schema.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table/arrow/arrow_type_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_type_info_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_datetime_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_variable_size_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/cgroups.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/encryption_state.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/access_mode.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/set_scope.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/window_aggregation_mode.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/index/index_type_set.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/index/index_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/physical_plan_generator.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/joinside.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/cast/default_casts.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/replacement_scan.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/optimizer_extension.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parser_extension.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/operator_extension.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/binder.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/query_node.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/common_table_expression_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/statement/select_statement.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/sql_statement.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/printer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/tableref.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/tableref_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/sample_options.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/cte_materialize.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/tableref/delimgetref.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/tokens.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bind_context.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/columnref_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/qualified_name_set.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression_binder.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/stack_checker.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/bound_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/lambdaref_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry_retriever.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_search_path.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression/bound_lambda_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/lambda_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/collation_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/table_binding.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression/bound_columnref_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/star_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_constraint.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/tableref/bound_delimgetref.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_tableref.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/compression/bitpacking.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/function/encoding_function.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/data_pointer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/block.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/table/row_group.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/table/chunk_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/segment_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/scan_options.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/column_list.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/table/segment_base.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/checkpoint_type.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/storage_index.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/logging/log_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/logging/logger.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/logging/logging.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/debug_vector_verification.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/valid_checker.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/transaction/meta_transaction.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/transaction/transaction_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/database_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parsed_data/attach_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/storage_options.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/settings.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/stream_query_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/queue.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/profiler.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/chrono.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/progress_bar/progress_bar_display.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/profiling_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/metric_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/optimizer_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/client_context_state.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/exception/transaction_exception.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/config.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/arrow/arrow_type_extension.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/chunk_scan_state.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table/arrow/arrow_duck_schema.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table/arrow/arrow_type_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_type_info_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_datetime_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/table/arrow/enum/arrow_variable_size_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/cgroups.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/encryption_state.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/access_mode.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/set_scope.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/window_aggregation_mode.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/index/index_type_set.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/index/index_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/physical_plan_generator.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/joinside.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/cast/default_casts.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/replacement_scan.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/optimizer_extension.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parser_extension.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/operator_extension.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/binder.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/query_node.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/common_table_expression_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/statement/select_statement.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/sql_statement.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/printer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/tableref.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/tableref_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/sample_options.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/cte_materialize.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/tableref/delimgetref.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/tokens.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bind_context.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/columnref_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/qualified_name_set.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression_binder.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/stack_checker.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/bound_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/lambdaref_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry_retriever.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_search_path.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression/bound_lambda_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/lambda_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/collation_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/table_binding.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression/bound_columnref_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/star_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_constraint.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/tableref/bound_delimgetref.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_tableref.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/compression/bitpacking.hpp \
+    /home/yousef/duckdb/src/include/duckdb/function/encoding_function.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/data_pointer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/block.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/table/row_group.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/table/chunk_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/segment_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/scan_options.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/column_list.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/table/segment_base.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/checkpoint_type.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/storage_index.hpp \
+    /home/yousef/duckdb/src/include/duckdb/logging/log_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/logging/logger.hpp \
+    /home/yousef/duckdb/src/include/duckdb/logging/logging.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/debug_vector_verification.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/valid_checker.hpp \
+    /home/yousef/duckdb/src/include/duckdb/transaction/meta_transaction.hpp \
+    /home/yousef/duckdb/src/include/duckdb/transaction/transaction_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/database_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parsed_data/attach_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/storage_options.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/settings.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/stream_query_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/queue.hpp \
     /usr/include/c++/11/queue \
     /usr/include/c++/11/bits/stl_queue.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/enums/stream_execution_result.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/buffered_data/simple_buffered_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/buffered_data/buffered_data.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/table_description.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/transaction/transaction_context.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/client_context_wrapper.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/statement/explain_statement.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/profiling_node.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/database.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/capi/extension_api.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/extension.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/extension_install_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/main/appender.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parser.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/parser_options.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/planner.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_parameter_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/optimizer.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/expression_rewriter.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/rule.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/expression_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/expression_type_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/set_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/type_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/function_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/optimizer/matcher/logical_operator_matcher.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/operator/logical_get.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/extra_operator_info.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/operator/logical_comparison_join.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/operator/logical_join.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/operator/join/join_filter_pushdown.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry/table_catalog_entry.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/table/table_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/execution/reservoir_sample.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/random_engine.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/enums/stream_execution_result.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/buffered_data/simple_buffered_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/buffered_data/buffered_data.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/table_description.hpp \
+    /home/yousef/duckdb/src/include/duckdb/transaction/transaction_context.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/client_context_wrapper.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/statement/explain_statement.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/profiling_node.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/database.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/capi/extension_api.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/extension.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/extension_install_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/main/appender.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parser.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/parser_options.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/planner.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_parameter_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/optimizer.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/expression_rewriter.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/rule.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/expression_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/expression_type_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/set_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/type_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/function_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/optimizer/matcher/logical_operator_matcher.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/operator/logical_get.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/extra_operator_info.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/operator/logical_comparison_join.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/operator/logical_join.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/operator/join/join_filter_pushdown.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry/table_catalog_entry.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/table/table_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/execution/reservoir_sample.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/random_engine.hpp \
     /usr/include/c++/11/random \
     /usr/include/c++/11/bits/random.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
@@ -668,29 +675,30 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/numeric \
     /usr/include/c++/11/bits/stl_numeric.h \
     /usr/include/c++/11/pstl/glue_numeric_defs.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/windows_undefs.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/column_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/storage/statistics/distinct_statistics.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/types/hyperloglog.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/bit_utils.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/catalog/catalog_entry/column_dependency_manager.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/stack.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/windows_undefs.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/column_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/storage/statistics/distinct_statistics.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/types/hyperloglog.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/bit_utils.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/algorithm.hpp \
+    /home/yousef/duckdb/src/include/duckdb/catalog/catalog_entry/column_dependency_manager.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/stack.hpp \
     /usr/include/c++/11/stack \
     /usr/include/c++/11/bits/stl_stack.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/common/index_map.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/parser/expression/constant_expression.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/filter/constant_filter.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/filter/null_filter.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/operator/logical_order.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/bound_query_node.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include/duckdb/planner/expression/bound_reference_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/common/index_map.hpp \
+    /home/yousef/duckdb/src/include/duckdb/parser/expression/constant_expression.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/filter/constant_filter.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/filter/null_filter.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/operator/logical_order.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/bound_query_node.hpp \
+    /home/yousef/duckdb/src/include/duckdb/planner/expression/bound_reference_expression.hpp \
     /usr/include/c++/11/iostream \
-    /usr/include/cuda.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/agg.cuh \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/get.cuh \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/project.cuh \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./kernels/sort.cuh \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/schema_utilities.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda.h \
+    /home/yousef/DBMS-Cuda/./kernels/agg.cuh \
+    /home/yousef/DBMS-Cuda/./kernels/get.cuh \
+    /home/yousef/DBMS-Cuda/./kernels/project.cuh \
+    /home/yousef/DBMS-Cuda/./kernels/sort.cuh \
+    /home/yousef/DBMS-Cuda/./utilities/schema_utilities.hpp \
     /usr/include/c++/11/fstream \
     /usr/include/c++/11/bits/codecvt.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
@@ -711,5 +719,5 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/codecvt \
     /usr/include/c++/11/bits/fs_dir.h \
     /usr/include/c++/11/bits/fs_ops.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/filter_utilities.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/../kernels/get.cuh
+    /home/yousef/DBMS-Cuda/./utilities/filter_utilities.hpp \
+    /home/yousef/DBMS-Cuda/./utilities/../kernels/get.cuh

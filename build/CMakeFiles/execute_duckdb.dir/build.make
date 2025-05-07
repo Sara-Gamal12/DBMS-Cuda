@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nesma/CUDA-SQL/DBMS-Cuda
+CMAKE_SOURCE_DIR = /home/yousef/DBMS-Cuda
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nesma/CUDA-SQL/DBMS-Cuda/build
+CMAKE_BINARY_DIR = /home/yousef/DBMS-Cuda/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/execute_duckdb.dir/depend.make
@@ -72,8 +72,8 @@ include CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu
 CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CUDA object CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o"
-	/usr/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o -MF CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o.d -x cu -dc /home/nesma/CUDA-SQL/DBMS-Cuda/execute_duckdb.cu -o CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CUDA object CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o -MF CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/execute_duckdb.cu -o CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o
 
 CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.i"
@@ -86,8 +86,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.s: cmake_force
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o"
-	/usr/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d -x cu -dc /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cu -o CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/kernels/agg.cu -o CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
 
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/kernels/agg.cu.i"
@@ -100,8 +100,8 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.s: cmake_force
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/get.cu.o"
-	/usr/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/get.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d -x cu -dc /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cu -o CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/get.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/get.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/kernels/get.cu -o CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
 
 CMakeFiles/execute_duckdb.dir/kernels/get.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/kernels/get.cu.i"
@@ -111,11 +111,25 @@ CMakeFiles/execute_duckdb.dir/kernels/get.cu.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CUDA source to assembly CMakeFiles/execute_duckdb.dir/kernels/get.cu.s"
 	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
 
+CMakeFiles/execute_duckdb.dir/kernels/join.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
+CMakeFiles/execute_duckdb.dir/kernels/join.cu.o: ../kernels/join.cu
+CMakeFiles/execute_duckdb.dir/kernels/join.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/join.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/join.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/join.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/kernels/join.cu -o CMakeFiles/execute_duckdb.dir/kernels/join.cu.o
+
+CMakeFiles/execute_duckdb.dir/kernels/join.cu.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/kernels/join.cu.i"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_PREPROCESSED_SOURCE
+
+CMakeFiles/execute_duckdb.dir/kernels/join.cu.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CUDA source to assembly CMakeFiles/execute_duckdb.dir/kernels/join.cu.s"
+	$(CMAKE_COMMAND) -E cmake_unimplemented_variable CMAKE_CUDA_CREATE_ASSEMBLY_SOURCE
+
 CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: ../kernels/project.cu
 CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/project.cu.o"
-	/usr/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/project.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/project.cu.o.d -x cu -dc /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/project.cu -o CMakeFiles/execute_duckdb.dir/kernels/project.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/project.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/project.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/project.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/kernels/project.cu -o CMakeFiles/execute_duckdb.dir/kernels/project.cu.o
 
 CMakeFiles/execute_duckdb.dir/kernels/project.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/kernels/project.cu.i"
@@ -128,8 +142,8 @@ CMakeFiles/execute_duckdb.dir/kernels/project.cu.s: cmake_force
 CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu
 CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o"
-	/usr/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o.d -x cu -dc /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/sort.cu -o CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CUDA object CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o"
+	/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler $(CUDA_DEFINES) $(CUDA_INCLUDES) $(CUDA_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o -MF CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o.d -x cu -dc /home/yousef/DBMS-Cuda/kernels/sort.cu -o CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o
 
 CMakeFiles/execute_duckdb.dir/kernels/sort.cu.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CUDA source to CMakeFiles/execute_duckdb.dir/kernels/sort.cu.i"
@@ -142,36 +156,37 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.s: cmake_force
 CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/schema_utilities.cpp
 CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o -MF CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o.d -o CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o -c /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/schema_utilities.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o -MF CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o.d -o CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o -c /home/yousef/DBMS-Cuda/utilities/schema_utilities.cpp
 
 CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/schema_utilities.cpp > CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yousef/DBMS-Cuda/utilities/schema_utilities.cpp > CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.i
 
 CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/schema_utilities.cpp -o CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yousef/DBMS-Cuda/utilities/schema_utilities.cpp -o CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.s
 
 CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: CMakeFiles/execute_duckdb.dir/flags.make
 CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: ../utilities/filter_utilities.cpp
 CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: CMakeFiles/execute_duckdb.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o -MF CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o.d -o CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o -c /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/filter_utilities.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o -MF CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o.d -o CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o -c /home/yousef/DBMS-Cuda/utilities/filter_utilities.cpp
 
 CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/filter_utilities.cpp > CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yousef/DBMS-Cuda/utilities/filter_utilities.cpp > CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.i
 
 CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nesma/CUDA-SQL/DBMS-Cuda/utilities/filter_utilities.cpp -o CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yousef/DBMS-Cuda/utilities/filter_utilities.cpp -o CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.s
 
 # Object files for target execute_duckdb
 execute_duckdb_OBJECTS = \
 "CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o" \
+"CMakeFiles/execute_duckdb.dir/kernels/join.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o" \
 "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o" \
@@ -183,13 +198,14 @@ execute_duckdb_EXTERNAL_OBJECTS =
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
+CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/kernels/join.cu.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/kernels/project.cu.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/build.make
 CMakeFiles/execute_duckdb.dir/cmake_device_link.o: CMakeFiles/execute_duckdb.dir/dlink.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CUDA device code CMakeFiles/execute_duckdb.dir/cmake_device_link.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CUDA device code CMakeFiles/execute_duckdb.dir/cmake_device_link.o"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/execute_duckdb.dir/dlink.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -201,6 +217,7 @@ execute_duckdb_OBJECTS = \
 "CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o" \
+"CMakeFiles/execute_duckdb.dir/kernels/join.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o" \
 "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o" \
 "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o" \
@@ -212,6 +229,7 @@ execute_duckdb_EXTERNAL_OBJECTS =
 execute_duckdb: CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/kernels/get.cu.o
+execute_duckdb: CMakeFiles/execute_duckdb.dir/kernels/join.cu.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/kernels/project.cu.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o
@@ -219,7 +237,7 @@ execute_duckdb: CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/build.make
 execute_duckdb: CMakeFiles/execute_duckdb.dir/cmake_device_link.o
 execute_duckdb: CMakeFiles/execute_duckdb.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable execute_duckdb"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yousef/DBMS-Cuda/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable execute_duckdb"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/execute_duckdb.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -231,6 +249,6 @@ CMakeFiles/execute_duckdb.dir/clean:
 .PHONY : CMakeFiles/execute_duckdb.dir/clean
 
 CMakeFiles/execute_duckdb.dir/depend:
-	cd /home/nesma/CUDA-SQL/DBMS-Cuda/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nesma/CUDA-SQL/DBMS-Cuda /home/nesma/CUDA-SQL/DBMS-Cuda /home/nesma/CUDA-SQL/DBMS-Cuda/build /home/nesma/CUDA-SQL/DBMS-Cuda/build /home/nesma/CUDA-SQL/DBMS-Cuda/build/CMakeFiles/execute_duckdb.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yousef/DBMS-Cuda/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yousef/DBMS-Cuda /home/yousef/DBMS-Cuda /home/yousef/DBMS-Cuda/build /home/yousef/DBMS-Cuda/build /home/yousef/DBMS-Cuda/build/CMakeFiles/execute_duckdb.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/execute_duckdb.dir/depend
 

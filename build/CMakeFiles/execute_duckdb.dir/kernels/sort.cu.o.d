@@ -1,7 +1,7 @@
-CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/sort.cu \
+CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/yousef/DBMS-Cuda/kernels/sort.cu \
     /usr/include/stdc-predef.h \
-    /usr/include/cuda_runtime.h \
-    /usr/include/crt/host_config.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/host_config.h \
     /usr/include/features.h \
     /usr/include/features-time64.h \
     /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -10,11 +10,11 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/x86_64-linux-gnu/bits/long-double.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs.h \
     /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
-    /usr/include/builtin_types.h \
-    /usr/include/device_types.h \
-    /usr/include/crt/host_defines.h \
-    /usr/include/driver_types.h \
-    /usr/include/vector_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/builtin_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/host_defines.h \
+    /usr/local/cuda/targets/x86_64-linux/include/driver_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_types.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
     /usr/include/limits.h \
@@ -27,41 +27,71 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
     /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
-    /usr/include/surface_types.h \
-    /usr/include/texture_types.h \
-    /usr/include/library_types.h \
-    /usr/include/channel_descriptor.h \
-    /usr/include/cuda_runtime_api.h \
-    /usr/include/cuda_device_runtime_api.h \
-    /usr/include/driver_functions.h \
-    /usr/include/vector_functions.h \
-    /usr/include/vector_functions.hpp \
-    /usr/include/crt/common_functions.h \
-    /usr/include/string.h \
-    /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
-    /usr/include/strings.h \
-    /usr/include/time.h \
-    /usr/include/x86_64-linux-gnu/bits/time.h \
-    /usr/include/x86_64-linux-gnu/bits/types.h \
-    /usr/include/x86_64-linux-gnu/bits/typesizes.h \
-    /usr/include/x86_64-linux-gnu/bits/time64.h \
-    /usr/include/x86_64-linux-gnu/bits/timex.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
-    /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
-    /usr/include/x86_64-linux-gnu/bits/endian.h \
-    /usr/include/x86_64-linux-gnu/bits/endianness.h \
-    /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
-    /usr/include/c++/11/new \
+    /usr/local/cuda/targets/x86_64-linux/include/surface_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/texture_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/library_types.h \
+    /usr/local/cuda/targets/x86_64-linux/include/channel_descriptor.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_runtime_api.h \
+    /usr/local/cuda/targets/x86_64-linux/include/cuda_device_runtime_api.h \
+    /usr/include/c++/11/stdlib.h \
+    /usr/include/c++/11/cstdlib \
     /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
     /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
     /usr/include/c++/11/pstl/pstl_config.h \
+    /usr/include/stdlib.h \
+    /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+    /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn.h \
+    /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+    /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+    /usr/include/x86_64-linux-gnu/sys/types.h \
+    /usr/include/x86_64-linux-gnu/bits/types.h \
+    /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+    /usr/include/x86_64-linux-gnu/bits/time64.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
+    /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+    /usr/include/endian.h \
+    /usr/include/x86_64-linux-gnu/bits/endian.h \
+    /usr/include/x86_64-linux-gnu/bits/endianness.h \
+    /usr/include/x86_64-linux-gnu/bits/byteswap.h \
+    /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
+    /usr/include/x86_64-linux-gnu/sys/select.h \
+    /usr/include/x86_64-linux-gnu/bits/select.h \
+    /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
+    /usr/include/x86_64-linux-gnu/bits/select2.h \
+    /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
+    /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
+    /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
+    /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
+    /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
+    /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
+    /usr/include/alloca.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+    /usr/include/c++/11/bits/std_abs.h \
+    /usr/local/cuda/targets/x86_64-linux/include/driver_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/vector_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/common_functions.h \
+    /usr/include/string.h \
+    /usr/include/strings.h \
+    /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+    /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+    /usr/include/time.h \
+    /usr/include/x86_64-linux-gnu/bits/time.h \
+    /usr/include/x86_64-linux-gnu/bits/timex.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+    /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+    /usr/include/c++/11/new \
     /usr/include/c++/11/bits/exception.h \
     /usr/include/stdio.h \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
@@ -73,33 +103,10 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
     /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
     /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-    /usr/include/x86_64-linux-gnu/bits/floatn.h \
-    /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
-    /usr/include/c++/11/stdlib.h \
-    /usr/include/c++/11/cstdlib \
-    /usr/include/stdlib.h \
-    /usr/include/x86_64-linux-gnu/bits/waitflags.h \
-    /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
-    /usr/include/x86_64-linux-gnu/sys/types.h \
-    /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-    /usr/include/endian.h \
-    /usr/include/x86_64-linux-gnu/bits/byteswap.h \
-    /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
-    /usr/include/x86_64-linux-gnu/sys/select.h \
-    /usr/include/x86_64-linux-gnu/bits/select.h \
-    /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
-    /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
-    /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-    /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
-    /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
-    /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
-    /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
-    /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
-    /usr/include/alloca.h \
-    /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-    /usr/include/c++/11/bits/std_abs.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio2.h \
     /usr/include/assert.h \
-    /usr/include/crt/math_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/math_functions.h \
     /usr/include/c++/11/math.h \
     /usr/include/c++/11/cmath \
     /usr/include/c++/11/bits/cpp_type_traits.h \
@@ -143,41 +150,43 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/c++/11/tr1/poly_hermite.tcc \
     /usr/include/c++/11/tr1/poly_laguerre.tcc \
     /usr/include/c++/11/tr1/riemann_zeta.tcc \
-    /usr/include/crt/math_functions.hpp \
-    /usr/include/cuda_surface_types.h \
-    /usr/include/cuda_texture_types.h \
-    /usr/include/crt/device_functions.h \
-    /usr/include/crt/device_functions.hpp \
-    /usr/include/device_atomic_functions.h \
-    /usr/include/device_atomic_functions.hpp \
-    /usr/include/crt/device_double_functions.h \
-    /usr/include/crt/device_double_functions.hpp \
-    /usr/include/sm_20_atomic_functions.h \
-    /usr/include/sm_20_atomic_functions.hpp \
-    /usr/include/sm_32_atomic_functions.h \
-    /usr/include/sm_32_atomic_functions.hpp \
-    /usr/include/sm_35_atomic_functions.h \
-    /usr/include/sm_60_atomic_functions.h \
-    /usr/include/sm_60_atomic_functions.hpp \
-    /usr/include/sm_20_intrinsics.h \
-    /usr/include/sm_20_intrinsics.hpp \
-    /usr/include/sm_30_intrinsics.h \
-    /usr/include/sm_30_intrinsics.hpp \
-    /usr/include/sm_32_intrinsics.h \
-    /usr/include/sm_32_intrinsics.hpp \
-    /usr/include/sm_35_intrinsics.h \
-    /usr/include/sm_61_intrinsics.h \
-    /usr/include/sm_61_intrinsics.hpp \
-    /usr/include/crt/sm_70_rt.h \
-    /usr/include/crt/sm_70_rt.hpp \
-    /usr/include/crt/sm_80_rt.h \
-    /usr/include/crt/sm_80_rt.hpp \
-    /usr/include/surface_functions.h \
-    /usr/include/texture_fetch_functions.h \
-    /usr/include/texture_indirect_functions.h \
-    /usr/include/surface_indirect_functions.h \
-    /usr/include/device_launch_parameters.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/sort.cuh \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/math_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_double_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/device_double_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_35_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_60_atomic_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_60_atomic_functions.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_20_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_30_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_30_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_32_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_35_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_61_intrinsics.h \
+    /usr/local/cuda/targets/x86_64-linux/include/sm_61_intrinsics.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_70_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_70_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_80_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_80_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_90_rt.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/sm_90_rt.hpp \
+    /usr/local/cuda/targets/x86_64-linux/include/texture_indirect_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/surface_indirect_functions.h \
+    /usr/local/cuda/targets/x86_64-linux/include/crt/cudacc_ext.h \
+    /usr/local/cuda/targets/x86_64-linux/include/device_launch_parameters.h \
+    /usr/include/c++/11/utility \
+    /usr/include/c++/11/bits/stl_relops.h \
+    /usr/include/c++/11/initializer_list \
+    /home/yousef/DBMS-Cuda/kernels/sort.cuh \
     /usr/include/c++/11/iostream \
     /usr/include/c++/11/ostream \
     /usr/include/c++/11/ios \
@@ -190,6 +199,7 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/x86_64-linux-gnu/bits/wchar.h \
     /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
     /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+    /usr/include/x86_64-linux-gnu/bits/wchar2.h \
     /usr/include/c++/11/exception \
     /usr/include/c++/11/bits/exception_ptr.h \
     /usr/include/c++/11/bits/cxxabi_init_exception.h \
@@ -231,7 +241,6 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/c++/11/bits/stl_function.h \
     /usr/include/c++/11/backward/binders.h \
     /usr/include/c++/11/bits/range_access.h \
-    /usr/include/c++/11/initializer_list \
     /usr/include/c++/11/bits/basic_string.h \
     /usr/include/c++/11/ext/alloc_traits.h \
     /usr/include/c++/11/bits/alloc_traits.h \
@@ -276,8 +285,6 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/c++/11/bits/stl_bvector.h \
     /usr/include/c++/11/bits/vector.tcc \
     /usr/include/c++/11/algorithm \
-    /usr/include/c++/11/utility \
-    /usr/include/c++/11/bits/stl_relops.h \
     /usr/include/c++/11/bits/stl_algo.h \
     /usr/include/c++/11/bits/algorithmfwd.h \
     /usr/include/c++/11/bits/stl_heap.h \
@@ -300,6 +307,6 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/c++/11/bits/unordered_map.h \
     /usr/include/c++/11/bits/erase_if.h \
     /usr/include/c++/11/pstl/execution_defs.h \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cuh \
+    /home/yousef/DBMS-Cuda/kernels/get.cuh \
     /usr/include/c++/11/cfloat \
     /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h
