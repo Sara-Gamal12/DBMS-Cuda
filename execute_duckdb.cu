@@ -125,7 +125,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
 
         // launch_get_kernel();  // Your kernel logic here
     }
-
     else if (node->name == "FILTER")
     {
         int row_size = child_results[0].data.size() / child_results[0].num_row;
@@ -398,10 +397,9 @@ int main(int argc, char *argv[])
             cout << "Exiting CLI.\n";
             break;
         }
+        auto start_time = std::chrono::high_resolution_clock::now();
         get_schema(schema);
         create_tables_from_schema(con, schema);
-        // string query = "select * from course  where id=Sid ;";
-        // string query = "select sum(age) from student;";
 
         Parser parser;
         parser.ParseQuery(query);
@@ -414,23 +412,34 @@ int main(int argc, char *argv[])
         planner.CreatePlan(std::move(statements[0]));
 
         // Now you can proceed with further processing or optimization
-        cout << "Planning successful!" << endl;
-        cout << "Unoptimized Logical Plan:\n"
-            << planner.plan->ToString() << endl;
+        // cout << "Planning successful!" << endl;
+        // cout << "Unoptimized Logical Plan:\n"
+        //     << planner.plan->ToString() << endl;
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-        cout << "Optimized Logical Plan:\n";
-        cout << logical_plan->ToString() << endl;
+        // cout << "Optimized Logical Plan:\n";
+        // cout << logical_plan->ToString() << endl;
 
         auto tree_root = build_plan_tree(logical_plan.get());
-        print_tree(tree_root);
+        // print_tree(tree_root);
 
-        // Traverse the plan tree and launch kernels
         return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
 
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_time = end_time - start_time;
+        std::cout << "Query execution time on GPU : " << elapsed_time.count() << " seconds" << std::endl;
         print_chunk(data_out.data, data_out.data_schema);
-        // Commit the transaction after planning
+
+
+        // auto start_time = std::chrono::high_resolution_clock::now();
+        // get_schema(schema);
+        // create_tables_from_schema(con, schema);
+        // con.BeginTransaction();
+        // con.Query(query);
+        // auto end_time = std::chrono::high_resolution_clock::now();
+        // std::chrono::duration<double> elapsed_time = end_time - start_time;
+        // std::cout << "Query execution time on CPU : " << elapsed_time.count() << " seconds" << std::endl;
         con.Commit(); // Commit transaction using Connection
     }
 }

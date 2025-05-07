@@ -299,4 +299,7 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o : /home/nesma/CUDA-SQL/DBMS-Cuda
     /usr/include/c++/11/bits/node_handle.h \
     /usr/include/c++/11/bits/unordered_map.h \
     /usr/include/c++/11/bits/erase_if.h \
-    /usr/include/c++/11/pstl/execution_defs.h
+    /usr/include/c++/11/pstl/execution_defs.h \
+    /home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cuh \
+    /usr/include/c++/11/cfloat \
+    /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h

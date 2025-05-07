@@ -1,4 +1,5 @@
 #include "sort.cuh"
+#include <cfloat>
 __device__ int co_rank(int k, const char *A, int m, const char *B, int n, int row_size, int acc_col_size, bool ascending)
 {
     int low = max(0, k - n);
@@ -11,18 +12,18 @@ __device__ int co_rank(int k, const char *A, int m, const char *B, int n, int ro
         int j = k - i;
         double a_i, b_j, a_i1, b_j1;
         if (device_strcmp(&A[i * row_size + acc_col_size], "NULL") == 0)
-            a_i = DOUBLE_MIN;
+            a_i = -DBL_MAX;
         else
             memcpy(&a_i, &A[i * row_size + acc_col_size], sizeof(double));
         if (device_strcmp(&B[j * row_size + acc_col_size], "NULL") == 0)
-            b_j = DOUBLE_MIN;
+            b_j = -DBL_MAX;
         else
             memcpy(&b_j, &B[j * row_size + acc_col_size], sizeof(double));
 
         if (i > 0 && j < n)
         {
             if (device_strcmp(&A[(i - 1) * row_size + acc_col_size], "NULL") == 0)
-                a_i1 = DOUBLE_MIN;
+                a_i1 = -DBL_MAX;
             else
                 memcpy(&a_i1, &A[(i - 1) * row_size + acc_col_size], sizeof(double));
             bool cond = ascending ? (a_i1 > b_j) : (a_i1 < b_j);
@@ -36,7 +37,7 @@ __device__ int co_rank(int k, const char *A, int m, const char *B, int n, int ro
         if (j > 0 && i < m)
         {
             if (device_strcmp(&B[(j - 1) * row_size + acc_col_size], "NULL") == 0)
-                b_j1 = DOUBLE_MIN;
+                b_j1 = -DBL_MAX;
             else
                 memcpy(&b_j1, &B[(j - 1) * row_size + acc_col_size], sizeof(double));
             bool cond = ascending ? (b_j1 > a_i) : (b_j1 < a_i);
@@ -101,12 +102,12 @@ __global__ void co_rank_merge_batch(const char *input, int row_size, char *outpu
     {
         double Aa, Bb;
         if (device_strcmp(&A[a * row_size + acc_col_size], "NULL") == 0)
-            Aa = DOUBLE_MIN;
+            Aa = -DBL_MAX;
         else
             memcpy(&Aa, &A[a * row_size + acc_col_size], sizeof(double));
 
         if (device_strcmp(&B[b * row_size + acc_col_size], "NULL") == 0)
-            Bb = DOUBLE_MIN;
+            Bb = -DBL_MAX;
         else
             memcpy(&Bb, &B[b * row_size + acc_col_size], sizeof(double));
         if (b >= nn || (a < m && (ascending ? Aa <= Bb : Aa >= Bb)))
