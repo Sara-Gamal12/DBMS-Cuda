@@ -181,7 +181,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         return return_data;
     }
     else if (node->name == "COMPARISON_JOIN")
-    else if (node->name == "COMPARISON_JOIN")
     {
         int row_size_a = child_results[0].data.size() / child_results[0].num_row;
         int row_size_b = child_results[1].data.size() / child_results[1].num_row;
