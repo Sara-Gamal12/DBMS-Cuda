@@ -26,6 +26,7 @@
 #include "duckdb/execution/task_error_manager.hpp"
 #include "duckdb/execution/progress_data.hpp"
 #include "duckdb/parallel/pipeline.hpp"
+#include "duckdb/execution/column_binding_resolver.hpp"
 
 #include <iostream>
 #include <cuda_runtime.h>
@@ -310,6 +311,22 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         {
             op = "sum";
         }
+        else if (node->details[0].find("count_star") != std::string::npos)
+        {
+            return_node_type return_data;
+            double rows=child_results[0].num_row;
+            return_data.data = std::vector<char>();
+            return_data.num_row = 1;
+            std::vector<ColumnInfo> col_info(1);
+            col_info[0].type = "Numeric";
+            col_info[0].size_in_bytes = sizeof(rows);
+            col_info[0].acc_col_size = 0;
+            col_info[0].name = "count_star()";
+            return_data.data_schema= col_info;
+            const char *data_ptr = reinterpret_cast<const char *>(&rows);
+            return_data.data.insert(return_data.data.end(), data_ptr, data_ptr + sizeof(rows));
+            return return_data;
+        }
         else if (node->details[0].find("count") != std::string::npos)
         {
             op = "count";
@@ -337,13 +354,13 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
         std::vector<ColumnInfo> new_schema;
         int acc = 0;
-
+        
         for (int i = 0; i < node->details.size(); i++)
         {
             std::string col_name = node->details[i];
             for (int j = 0; j < child_results[0].data_schema.size(); j++)
             {
-                if (child_results[0].data_schema[j].name == col_name)
+                if (child_results[0].data_schema[j].name == col_name )
                 {
                     ColumnInfo col_info = child_results[0].data_schema[j];
                     col_info.acc_col_size = acc;
@@ -353,6 +370,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
                     acc_sums[i] = child_results[0].data_schema[j].acc_col_size;
                     sizes[i] = child_results[0].data_schema[j].size_in_bytes;
                     new_row_size += child_results[0].data_schema[j].size_in_bytes;
+                    break;
                 }
             }
         }
@@ -386,9 +404,12 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
     auto node = std::make_shared<PlanNode>();
     node->name = LogicalOperatorToString(op->type);
 
+    ColumnBindingResolver res;
+    res.VisitOperator(*op);
     // Handle LogicalGet
     if (auto get_op = dynamic_cast<duckdb::LogicalGet *>(op))
     {
+
         if (get_op->GetTable())
         {
             node->details.push_back(get_op->GetTable()->name);
@@ -531,6 +552,16 @@ int main(int argc, char *argv[])
         std::unordered_map<std::string, std::string> alias_map = remove_AS(query);
         auto start_time = std::chrono::high_resolution_clock::now();
         get_schema(schema);
+
+        // Print the schema
+        for (const auto &table : schema)
+        {
+            cout << "Table: " << table.first << endl;
+            for (const auto &col : table.second.second)
+            {
+                cout << "  Column: " << col.name << ", Type: " << col.type << "is_primary_key: " << col.is_primary << "is_forign_key: " << col.foreign_table << endl;
+            }
+        }
         create_tables_from_schema(con, schema);
 
         Parser parser;
@@ -546,14 +577,13 @@ int main(int argc, char *argv[])
         // Now you can proceed with further processing or optimization
         cout << "Planning successful!" << endl;
         cout << "Unoptimized Logical Plan:\n"
-             << planner.plan->ToString() << endl;
+            << planner.plan->ToString() << endl;
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
         cout << "Optimized Logical Plan:\n";
         cout << logical_plan->ToString() << endl;
-        cout << "Optimized Logical Plan:\n";
-        cout << logical_plan->ToString() << endl;
+        
 
         auto tree_root = build_plan_tree(logical_plan.get());
         print_tree(tree_root);

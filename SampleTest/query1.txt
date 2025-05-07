@@ -1,1 +1,3 @@
 SELECT AVG(e.Salary) FROM Employees e, SalesOrders s WHERE e.Employees_id = s.Employees_id AND s.TotalAmount > 200;
+SELECT MAX(e.Salary) FROM Employees e, SalesOrders s WHERE e.Employees_id = s.Employees_id AND s.TotalAmount > 200;
+SELECT e.Salary FROM Employees e order by e.Salary;

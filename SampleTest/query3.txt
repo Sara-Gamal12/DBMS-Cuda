@@ -1,7 +1,5 @@
-SELECT e.Name, (
-    SELECT SUM(s.TotalAmount)
-    FROM SalesOrders s
-    WHERE s.Employees_id = e.Employees_id
-) AS TotalSales
-FROM Employees e
-ORDER BY TotalSales Desc;
+SELECT e.Name, ( SELECT SUM(s.TotalAmount) FROM SalesOrders s WHERE s.Employees_id = e.Employees_id) AS TotalSales FROM Employees e ORDER BY TotalSales Desc;
+
+select count(ids) from student;
+
+select * from student where ages=(select MAX(ages) from student)

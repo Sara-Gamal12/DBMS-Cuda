@@ -1,4 +1,4 @@
-idc(N)(P),namec(T),#student_Sidc(N)
+id(N)(P),cname(T),#student_Sid(N)
 1,Math,1
 2,English,3
 3,Arabic,4

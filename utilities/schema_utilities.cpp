@@ -37,7 +37,7 @@ void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols,std::unor
             if (col.type == "Numeric")
             {
                 double value = *reinterpret_cast<double *>(data_ptr);
-                std::cout << value;
+                std::cout << std::setprecision(17) << value;
                 offset += sizeof(double);
             }
             else if (col.type == "DateTime")
@@ -185,7 +185,7 @@ void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
         std::string sql = "CREATE TABLE " + table_name + " (";
 
         std::vector<std::string> col_defs;
-        std::string primary_key;
+        std::string primary_key="";
 
         for (const auto &col : columns)
         {
@@ -194,7 +194,11 @@ void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
 
             if (col.is_primary)
             {
-                primary_key = col.name;
+                if (!primary_key.empty())
+                {
+                    primary_key += ", ";
+                }
+                primary_key += col.name;
             }
 
             if (!col.foreign_table.empty())
@@ -288,7 +292,7 @@ void get_schema(Schema &schema)
                     size_t start = 1;
                     size_t end = col.name.rfind("_");
                     col.foreign_table = col.name.substr(start, end - start);
-                    col.name = col.name.substr(end + 1);
+                    col.name = col.name.substr(1);
                 }
 
                 // Detect column types
