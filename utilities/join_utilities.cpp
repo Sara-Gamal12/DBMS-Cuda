@@ -4,7 +4,6 @@ using namespace std;
 
 std::vector<JoinConditionToken> join_parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema_a, std::vector<ColumnInfo> schema_b, int *acc_sums_a, int *acc_sums_b)
 {
-    cout<<"Parsing postfix expression: ";
     std::vector<JoinConditionToken> stack;
     for (int i = 0; i < postfix.size(); i++)
     {

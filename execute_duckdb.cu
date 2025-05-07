@@ -176,48 +176,59 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             schema_merged[j].acc_col_size = accumulator;
             accumulator += schema_merged[j].size_in_bytes;
         }
+       
 
 
-        std::string expr = node->details[0];
-        std::string to_remove = "Join: ";
-        size_t pos = expr.find(to_remove);
-        if (pos != std::string::npos) {
-            expr.erase(pos, to_remove.length());
-        }
-
-        expr = replace_operatirs(expr);
-        // cout<<"the expr is "<<expr<<endl;
 
         int *acc_sums_a = new int[child_results[0].data_schema.size()];
         int *acc_sums_b = new int[child_results[1].data_schema.size()];
 
+
+        std::string expr = "";
+        for (size_t i = 0; i < node->details.size(); ++i)
+        {
+            expr +=  node->details[i] ;
+            if (i != node->details.size() - 1)
+                expr += " and ";
+        }
+        cout << "expr " << expr << endl;
+        expr = replace_operatirs(expr);
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
+        for (size_t i = 0; i < vector_expr.size(); ++i)
+        {
+            cout << "vector_expr " << vector_expr[i] << endl;
+        }
+
         std::vector<Token> tokens = tokenize(vector_expr);
+        for (auto pos : tokens)
+        {
+            cout << "tokens " << pos.value << endl;
+        }
         std::vector<std::string> postfix = infix_to_postfix(tokens);
-        // cout <<"postfix size: "<<postfix.size()<<endl;
-        // for(auto pos: postfix){
-        //     cout<<"postfixxx "<<pos<<endl;
-        // }
+
+        for(auto pos: postfix){
+            cout<<"postfixxx "<<pos<<endl;
+        }
         std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);;
-        // std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
-        // for(auto pos: condition_tokens){
-        //     std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
-        //     cout<<"the condition tokens sec_col_index is "<<pos.joinCond.col_index_b<<endl;
-        //     cout<<"the condition tokens op is "<<pos.joinCond.op<<endl;
-        //     cout<<"the condition tokens type is "<<pos.joinCond.type<<endl;
-        // }
+        std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
+        for(auto pos: condition_tokens){
+            std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
+            cout<<"the condition tokens sec_col_index is "<<pos.joinCond.col_index_b<<endl;
+            cout<<"the condition tokens op is "<<pos.joinCond.op<<endl;
+            cout<<"the condition tokens type is "<<pos.joinCond.type<<endl;
+        }
 
 
-        int output_counter = 0;
+        // int output_counter = 0;
         
-        char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
-        return_node_type return_data;
-        return_data.data = std::vector<char>(data, data + output_counter * (row_size_a + row_size_b));
-        return_data.num_row = output_counter;
-        return_data.data_schema = schema_merged;
-        cout<<"the output counter is "<<output_counter<<endl;
-        cout<<"the data size is "<<return_data.data.size()<<endl;
-        return return_data;
+        // char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
+        // return_node_type return_data;
+        // return_data.data = std::vector<char>(data, data + output_counter * (row_size_a + row_size_b));
+        // return_data.num_row = output_counter;
+        // return_data.data_schema = schema_merged;
+        // cout<<"the output counter is "<<output_counter<<endl;
+        // cout<<"the data size is "<<return_data.data.size()<<endl;
+        // return return_data;
     }
     else if (node->name == "ORDER_BY")
     {
@@ -394,7 +405,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
         auto &join_op = static_cast<duckdb::LogicalComparisonJoin &>(*op);
         for (auto &condition : join_op.conditions)
         {
-            node->details.push_back("Join: " + condition.left->ToString() + " " + ExpressionTypeToString(condition.comparison) + " " + condition.right->ToString());
+            node->details.push_back(condition.left->ToString() + " " + ExpressionTypeToString(condition.comparison) + " " + condition.right->ToString());
         }
     }
 
