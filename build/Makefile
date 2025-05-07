@@ -225,6 +225,30 @@ kernels/project.cu.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/project.cu.s
 .PHONY : kernels/project.cu.s
 
+kernels/sort.o: kernels/sort.cu.o
+.PHONY : kernels/sort.o
+
+# target to build an object file
+kernels/sort.cu.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o
+.PHONY : kernels/sort.cu.o
+
+kernels/sort.i: kernels/sort.cu.i
+.PHONY : kernels/sort.i
+
+# target to preprocess a source file
+kernels/sort.cu.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/sort.cu.i
+.PHONY : kernels/sort.cu.i
+
+kernels/sort.s: kernels/sort.cu.s
+.PHONY : kernels/sort.s
+
+# target to generate assembly for a file
+kernels/sort.cu.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/execute_duckdb.dir/build.make CMakeFiles/execute_duckdb.dir/kernels/sort.cu.s
+.PHONY : kernels/sort.cu.s
+
 utilities/filter_utilities.o: utilities/filter_utilities.cpp.o
 .PHONY : utilities/filter_utilities.o
 
@@ -294,6 +318,9 @@ help:
 	@echo "... kernels/project.o"
 	@echo "... kernels/project.i"
 	@echo "... kernels/project.s"
+	@echo "... kernels/sort.o"
+	@echo "... kernels/sort.i"
+	@echo "... kernels/sort.s"
 	@echo "... utilities/filter_utilities.o"
 	@echo "... utilities/filter_utilities.i"
 	@echo "... utilities/filter_utilities.s"

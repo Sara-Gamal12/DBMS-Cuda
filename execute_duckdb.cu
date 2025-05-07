@@ -35,6 +35,7 @@
 #include "./kernels/agg.cuh"
 #include "./kernels/get.cuh"
 #include "./kernels/project.cuh"
+#include "./kernels/sort.cuh"
 
 #include "./utilities/schema_utilities.hpp"
 #include "./utilities/filter_utilities.hpp"
@@ -157,9 +158,28 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     {
         // launch_join_kernel(); // Your kernel logic here
     }
-    else if (node->name == "ORDERBY")
+    else if (node->name == "ORDER_BY")
     {
-        // launch_order_kernel(); // Your kernel logic here
+        size_t lastDot = node->details[0].rfind('.');
+        size_t lastSpace = node->details[0].rfind(' ');
+
+        string col_name= node->details[0].substr(lastDot + 1, lastSpace - lastDot - 1);
+        string oredr_method= node->details[0].substr(lastSpace + 1);
+
+        std::cout<<"col_name: "<<col_name<<std::endl;
+        std::cout<<"oredr_method: "<<oredr_method<<std::endl;
+        int row_size = child_results[0].data.size() / child_results[0].num_row;
+        int i = 0;
+        while (child_results[0].data_schema[i].name != col_name){
+            i++;
+        }
+        int acc_sums = child_results[0].data_schema[i].acc_col_size;
+        char *data = call_sort_kernel(child_results[0].data.data(),row_size, child_results[0].num_row, acc_sums,(oredr_method=="ASC"));
+        return_node_type return_data;
+        return_data.data = std::vector<char>(data, data + child_results[0].num_row * row_size);
+        return_data.num_row = child_results[0].num_row;
+        return_data.data_schema = child_results[0].data_schema;
+        return return_data;
     }
     else if (node->name == "AGGREGATE")
     {
@@ -250,6 +270,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     else
     {
         std::cout << "No matching kernel for: " << node->name << std::endl;
+        return child_results[0]; // Return the first child's result as a fallback
     }
 }
 
@@ -364,6 +385,7 @@ int main(int argc, char *argv[])
     DuckDB db(nullptr);
     Connection con(db);
     ClientContext &context = *con.context;
+    con.Query("SET disabled_optimizers='filter_pushdown,statistics_propagation';");
 
     while (true)
     {

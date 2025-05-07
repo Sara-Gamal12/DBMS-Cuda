@@ -24,6 +24,12 @@ void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols)
             // Get pointer to this column's data within the row
             char *data_ptr = chunk.data() + row_start + offset;
 
+            if(strcmp(data_ptr, "NULL |") == 0)
+            {
+                std::cout << "NULL";
+                offset += col.size_in_bytes;
+                continue;
+            }
             if (col.type == "Numeric")
             {
                 double value = *reinterpret_cast<double *>(data_ptr);

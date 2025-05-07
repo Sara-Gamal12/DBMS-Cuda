@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/agg.cu" "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/get.cu" "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/project.cu" "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o.d"
+  "/home/nesma/CUDA-SQL/DBMS-Cuda/kernels/sort.cu" "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o" "gcc" "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/utilities/filter_utilities.cpp" "CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o" "gcc" "CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o.d"
   "/home/nesma/CUDA-SQL/DBMS-Cuda/utilities/schema_utilities.cpp" "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o" "gcc" "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o.d"
   )

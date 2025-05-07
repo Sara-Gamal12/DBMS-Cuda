@@ -1,154 +1,149 @@
-#include <cuda_runtime.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "sort.cuh"
+__device__ int co_rank(int k, const char *A, int m, const char *B, int n,int row_size, int acc_col_size, bool ascending)
+{
+    int low = max(0, k - n);
+    int high = min(k, m);
+    int i = low;
 
-// Error checking macro
-#define CUDA_CHECK(err) do { \
-    if (err != cudaSuccess) { \
-        fprintf(stderr, "CUDA Error: %s at line %d\n", cudaGetErrorString(err), __LINE__); \
-        exit(EXIT_FAILURE); \
-    } \
-} while (0)
+    while (low <= high)
+    {
+        i = (low + high) / 2;
+        int j = k - i;
+        double a_i, b_j, a_i1, b_j1;
 
-// Kernel to compute histogram (count occurrences of 4-bit digits)
-__global__ void histogramKernel(const unsigned int* input, int* counts, int n, int shift) {
-    extern __shared__ int localCounts[];
-    
-    // Initialize shared memory
-    int tid = threadIdx.x;
-    if (tid < 16) {
-        localCounts[tid] = 0;
-    }
-    __syncthreads();
+        memcpy(&a_i, &A[i * row_size + acc_col_size], sizeof(double));
+        memcpy(&b_j, &B[j * row_size + acc_col_size], sizeof(double));
 
-    // Compute global index
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < n) {
-        int digit = (input[idx] >> shift) & 0xF; // Extract 4-bit digit
-        atomicAdd(&localCounts[digit], 1);
-    }
-    __syncthreads();
-
-    // Aggregate to global counts
-    if (tid < 16 && localCounts[tid] > 0) {
-        atomicAdd(&counts[tid], localCounts[tid]);
-    }
-}
-
-// Kernel to compute global offsets for each digit
-__global__ void computeOffsetsKernel(int* counts, int* offsets, int n) {
-    int tid = threadIdx.x;
-    if (tid < 16) {
-        // Compute prefix sum (exclusive scan)
-        int sum = 0;
-        if (tid > 0) {
-            for (int i = 0; i < tid; i++) {
-                sum += counts[i];
+        if (i > 0 && j < n)
+        {
+            memcpy(&a_i1, &A[(i - 1) * row_size + acc_col_size], sizeof(double));
+            bool cond = ascending ? (a_i1 > b_j) : (a_i1 < b_j);
+            if (cond)
+            {
+                high = i - 1;
+                continue;
             }
         }
-        offsets[tid] = sum;
+
+        if (j > 0 && i < m)
+        {
+            memcpy(&b_j1, &B[(j - 1) * row_size + acc_col_size], sizeof(double));
+            bool cond = ascending ? (b_j1 > a_i) : (b_j1 < a_i);
+            if (cond)
+            {
+                low = i + 1;
+                continue;
+            }
+        }
+
+        return i;
     }
+    return i;
 }
 
-// Kernel to scatter elements based on offsets
-__global__ void scatterKernel(const unsigned int* input, unsigned int* output, int* offsets, int n, int shift) {
-    extern __shared__ int localOffsets[];
-    
-    // Copy global offsets to shared memory
+__global__ void co_rank_merge_batch(const char *input, int row_size,char *output, int n, int width,int acc_col_size, bool ascending)
+{
+    int merge_id = blockIdx.x;
+    int i = merge_id * 2 * width;
+    if (i >= n)
+        return;
+
+    int mid = min(i + width, n);
+    int end = min(i + 2 * width, n);
+
+    if (mid >= end)
+    {
+        if (i < n && threadIdx.x == 0)
+        {
+            for (int k = i; k < end; k++)
+            {
+                memcpy(&output[k * row_size], &input[k * row_size], row_size);
+            }
+        }
+        return;
+    }
+
+    const char *A = &input[i * row_size];
+    const char *B = &input[mid * row_size];
+    char *C = &output[i * row_size];
+
+    int m = mid - i;
+    int nn = end - mid;
+    int total = m + nn;
+
     int tid = threadIdx.x;
-    if (tid < 16) {
-        localOffsets[tid] = offsets[tid];
-    }
-    __syncthreads();
+    int num_threads = blockDim.x;
 
-    // Process elements
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < n) {
-        int digit = (input[idx] >> shift) & 0xF;
-        int pos = atomicAdd(&localOffsets[digit], 1);
-        output[pos] = input[idx];
+    int k_start = tid * total / num_threads;
+    int k_end = (tid + 1) * total / num_threads;
+    if (k_start >= total)
+        return;
+
+    int i_start = co_rank(k_start, A, m, B, nn, row_size, acc_col_size, ascending);
+    int j_start = k_start - i_start;
+
+    int i_end = co_rank(k_end, A, m, B, nn, row_size, acc_col_size, ascending);
+    int j_end = k_end - i_end;
+
+    int a = i_start, b = j_start, k = k_start;
+    while (k < k_end && k < total)
+    {
+        double Aa, Bb;
+        memcpy(&Aa, &A[a * row_size + acc_col_size], sizeof(double));
+        memcpy(&Bb, &B[b * row_size + acc_col_size], sizeof(double));
+
+        if (b >= nn || (a < m && (ascending ? Aa <= Bb : Aa >= Bb)))
+        {
+            memcpy(&C[k * row_size], &A[a * row_size], row_size);
+            a++;
+        }
+        else
+        {
+            memcpy(&C[k * row_size], &B[b * row_size], row_size);
+            b++;
+        }
+        k++;
     }
 }
 
-// Host function for Radix Sort
-void radixSort4BitCUDA(unsigned int* h_arr, int n) {
-    // Device arrays
-    unsigned int *d_input, *d_output;
-    int *d_counts, *d_offsets;
-    
-    // Allocate device memory
-    CUDA_CHECK(cudaMalloc(&d_input, n * sizeof(unsigned int)));
-    CUDA_CHECK(cudaMalloc(&d_output, n * sizeof(unsigned int)));
-    CUDA_CHECK(cudaMalloc(&d_counts, 16 * sizeof(int)));
-    CUDA_CHECK(cudaMalloc(&d_offsets, 16 * sizeof(int)));
+char *call_sort_kernel(char *h_input, int row_size, int n, int acc_col_size, bool ascending){
+    char *d_input;
+    char *d_temp;
+    if (n <= 1)
+        return h_input;
 
-    // Copy input to device
-    CUDA_CHECK(cudaMemcpy(d_input, h_arr, n * sizeof(unsigned int), cudaMemcpyHostToDevice));
+    cudaMalloc(&d_input, n * row_size * sizeof(char));
+    cudaMalloc(&d_temp, n * row_size * sizeof(char));
 
-    // Find max element (on host for simplicity)
-    unsigned int max = h_arr[0];
-    for (int i = 1; i < n; i++) {
-        if (h_arr[i] > max) max = h_arr[i];
+    cudaMemcpy(d_input, h_input, n * row_size * sizeof(char), cudaMemcpyHostToDevice);
+
+    for (int width = 1; width < n; width *= 2)
+    {
+        int num_merges = (n + 2 * width - 1) / (2 * width);
+        dim3 blocks(num_merges);
+        co_rank_merge_batch<<<blocks, 1>>>(d_input, row_size, d_temp, n, width, acc_col_size, ascending);
+
+        cudaDeviceSynchronize();
+
+        // 1. Check for *launch* errors
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess)
+        {
+            printf("Kernel launch failed: %s \n", cudaGetErrorString(err));
+        }
+
+        // 2. Check for *asynchronous* errors (e.g., during execution)
+        err = cudaDeviceSynchronize();
+        if (err != cudaSuccess)
+        {
+            printf("Kernel launch failed: %s \n", cudaGetErrorString(err));
+        }
+
+        std::swap(d_input, d_temp);
     }
 
-    // CUDA configuration
-    const int threadsPerBlock = 256;
-    const int blocks = (n + threadsPerBlock - 1) / threadsPerBlock;
-    const int sharedMemSize = 16 * sizeof(int); // For 16 bins
-
-    // Process 4 bits at a time
-    for (int shift = 0; (max >> shift) > 0; shift += 4) {
-        // Reset counts
-        CUDA_CHECK(cudaMemset(d_counts, 0, 16 * sizeof(int)));
-
-        // Step 1: Compute histogram
-        histogramKernel<<<blocks, threadsPerBlock, sharedMemSize>>>(d_input, d_counts, n, shift);
-        CUDA_CHECK(cudaDeviceSynchronize());
-
-        // Step 2: Compute offsets (prefix sums)
-        computeOffsetsKernel<<<1, 16>>>(d_counts, d_offsets, n);
-        CUDA_CHECK(cudaDeviceSynchronize());
-
-        // Step 3: Scatter elements
-        scatterKernel<<<blocks, threadsPerBlock, sharedMemSize>>>(d_input, d_output, d_offsets, n, shift);
-        CUDA_CHECK(cudaDeviceSynchronize());
-
-        // Swap input and output
-        unsigned int* temp = d_input;
-        d_input = d_output;
-        d_output = temp;
-    }
-
-    // Copy result back to host
-    CUDA_CHECK(cudaMemcpy(h_arr, d_input, n * sizeof(unsigned int), cudaMemcpyDeviceToHost));
-
-    // Free device memory
-    CUDA_CHECK(cudaFree(d_input));
-    CUDA_CHECK(cudaFree(d_output));
-    CUDA_CHECK(cudaFree(d_counts));
-    CUDA_CHECK(cudaFree(d_offsets));
-}
-
-// Example usage
-int main() {
-    // Example array
-    unsigned int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-    printf("Original array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%u ", arr[i]);
-    }
-    printf("\n");
-
-    radixSort4BitCUDA(arr, n);
-
-    printf("Sorted array: ");
-    for (int i = 0; i < n; i++) {
-        printf("%u ", arr[i]);
-    }
-    printf("\n");
-
-    return 0;
+    cudaMemcpy(h_input, d_input, n * row_size * sizeof(char), cudaMemcpyDeviceToHost);
+    cudaFree(d_input);
+    cudaFree(d_temp);
+    return h_input;
 }

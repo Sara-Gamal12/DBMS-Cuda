@@ -8,6 +8,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/execute_duckdb.dir/kernels/get.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o"
   "CMakeFiles/execute_duckdb.dir/kernels/project.cu.o.d"
+  "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o"
+  "CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o.d"
   "CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o"
   "CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o.d"
   "CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o"
