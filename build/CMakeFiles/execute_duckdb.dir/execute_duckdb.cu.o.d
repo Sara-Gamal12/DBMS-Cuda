@@ -698,6 +698,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/yousef/DBMS-Cuda/execu
     /home/yousef/DBMS-Cuda/./kernels/get.cuh \
     /home/yousef/DBMS-Cuda/./kernels/project.cuh \
     /home/yousef/DBMS-Cuda/./kernels/sort.cuh \
+    /home/yousef/DBMS-Cuda/./kernels/join.cuh \
     /home/yousef/DBMS-Cuda/./utilities/schema_utilities.hpp \
     /usr/include/c++/11/fstream \
     /usr/include/c++/11/bits/codecvt.h \

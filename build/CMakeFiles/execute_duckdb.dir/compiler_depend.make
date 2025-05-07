@@ -701,6 +701,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   ../kernels/get.cuh \
   ../kernels/project.cuh \
   ../kernels/sort.cuh \
+  ../kernels/join.cuh \
   ../utilities/schema_utilities.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/c++/11/bits/codecvt.h \

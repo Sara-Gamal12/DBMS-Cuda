@@ -35,6 +35,7 @@
 #include "./kernels/get.cuh"
 #include "./kernels/project.cuh"
 #include "./kernels/sort.cuh"
+#include "./kernels/join.cuh"
 
 #include "./utilities/schema_utilities.hpp"
 #include "./utilities/filter_utilities.hpp"
@@ -143,18 +144,9 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
 
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
-        cout<<"the postfix is "<<endl;
-        cout <<"postfix size: "<<postfix.size()<<endl;
-        for(auto pos: postfix){
-            cout<<"postfixxx "<<pos<<endl;
-        }
+
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
-        for(auto pos: condition_tokens){
-            std::cout<<"the condition tokens is "<<pos.condition.col_index<<endl;
-            cout<<"the condition tokens is "<<pos.condition.sec_col_index<<endl;
-            cout<<"the condition tokens is "<<pos.condition.op<<endl;
-            cout<<"the condition tokens is "<<pos.condition.type<<endl;
-        }
+
         int output_counter = 0;
         char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
         return_node_type return_data;
@@ -206,7 +198,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         // for(auto pos: postfix){
         //     cout<<"postfixxx "<<pos<<endl;
         // }
-        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);
+        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);;
         // std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
         // for(auto pos: condition_tokens){
         //     std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
@@ -216,12 +208,16 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         // }
 
 
-        // int output_counter = 0;
-        // char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
-        // char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
-        // return_node_type return_data;
-
-        // launch_join_kernel(); // Your kernel logic here
+        int output_counter = 0;
+        
+        char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
+        return_node_type return_data;
+        return_data.data = std::vector<char>(data, data + output_counter * (row_size_a + row_size_b));
+        return_data.num_row = output_counter;
+        return_data.data_schema = schema_merged;
+        cout<<"the output counter is "<<output_counter<<endl;
+        cout<<"the data size is "<<return_data.data.size()<<endl;
+        return return_data;
     }
     else if (node->name == "ORDER_BY")
     {
