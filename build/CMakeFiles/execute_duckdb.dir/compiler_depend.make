@@ -44,6 +44,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/time.h \
   /usr/include/x86_64-linux-gnu/bits/time.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -78,6 +80,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/cstdlib \
   /usr/include/stdlib.h \
@@ -92,6 +96,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -99,7 +104,9 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/assert.h \
   /usr/include/crt/math_functions.h \
@@ -222,6 +229,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/c++/11/bits/shared_ptr_base.h \
   /usr/include/c++/11/typeinfo \
   /usr/include/c++/11/bits/allocated_ptr.h \
@@ -715,7 +723,22 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/c++/11/bits/fs_dir.h \
   /usr/include/c++/11/bits/fs_ops.h \
   ../utilities/filter_utilities.hpp \
-  ../kernels/get.cuh
+  ../kernels/get.cuh \
+  /usr/include/c++/11/regex \
+  /usr/include/c++/11/iterator \
+  /usr/include/c++/11/bits/stream_iterator.h \
+  /usr/include/c++/11/bits/regex_constants.h \
+  /usr/include/c++/11/bits/regex_error.h \
+  /usr/include/c++/11/bits/regex_automaton.h \
+  /usr/include/c++/11/bits/regex_automaton.tcc \
+  /usr/include/c++/11/bits/regex_scanner.h \
+  /usr/include/c++/11/bits/regex_scanner.tcc \
+  /usr/include/c++/11/bits/regex_compiler.h \
+  /usr/include/c++/11/bits/regex_compiler.tcc \
+  /usr/include/c++/11/bits/regex.h \
+  /usr/include/c++/11/bits/regex.tcc \
+  /usr/include/c++/11/bits/regex_executor.h \
+  /usr/include/c++/11/bits/regex_executor.tcc
 
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/stdc-predef.h \
@@ -760,6 +783,8 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/time.h \
   /usr/include/x86_64-linux-gnu/bits/time.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -794,6 +819,8 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/cstdlib \
   /usr/include/stdlib.h \
@@ -808,6 +835,7 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -815,7 +843,9 @@ CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/assert.h \
   /usr/include/crt/math_functions.h \
@@ -987,6 +1017,8 @@ CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/time.h \
   /usr/include/x86_64-linux-gnu/bits/time.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -1021,6 +1053,8 @@ CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/cstdlib \
   /usr/include/stdlib.h \
@@ -1035,6 +1069,7 @@ CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -1042,7 +1077,9 @@ CMakeFiles/execute_duckdb.dir/kernels/get.cu.o: ../kernels/get.cu \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/assert.h \
   /usr/include/crt/math_functions.h \
@@ -1213,6 +1250,8 @@ CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: ../kernels/project.cu \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/time.h \
   /usr/include/x86_64-linux-gnu/bits/time.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -1247,6 +1286,8 @@ CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: ../kernels/project.cu \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/cstdlib \
   /usr/include/stdlib.h \
@@ -1261,6 +1302,7 @@ CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: ../kernels/project.cu \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -1268,7 +1310,9 @@ CMakeFiles/execute_duckdb.dir/kernels/project.cu.o: ../kernels/project.cu \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/assert.h \
   /usr/include/crt/math_functions.h \
@@ -1395,6 +1439,8 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/time.h \
   /usr/include/x86_64-linux-gnu/bits/time.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -1429,6 +1475,8 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/stdlib.h \
   /usr/include/c++/11/cstdlib \
   /usr/include/stdlib.h \
@@ -1443,6 +1491,7 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -1450,7 +1499,9 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/assert.h \
   /usr/include/crt/math_functions.h \
@@ -1544,6 +1595,7 @@ CMakeFiles/execute_duckdb.dir/kernels/sort.cu.o: ../kernels/sort.cu \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
   /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception_ptr.h \
   /usr/include/c++/11/bits/cxxabi_init_exception.h \
@@ -1695,6 +1747,7 @@ CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: ../utilities/fil
   /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception.h \
   /usr/include/c++/11/bits/exception_ptr.h \
@@ -1800,8 +1853,11 @@ CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: ../utilities/fil
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/c++/11/cstdio \
   /usr/include/stdio.h \
@@ -1810,6 +1866,8 @@ CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: ../utilities/fil
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/cerrno \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \
@@ -1937,6 +1995,8 @@ CMakeFiles/execute_duckdb.dir/utilities/filter_utilities.cpp.o: ../utilities/fil
   ../duckdb/src/include/duckdb/common/enable_shared_from_this_ipp.hpp \
   /usr/include/string.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   ../duckdb/src/include/duckdb/common/vector.hpp \
   ../duckdb/src/include/duckdb/common/enums/catalog_type.hpp \
   ../duckdb/src/include/duckdb/common/atomic.hpp \
@@ -2436,6 +2496,7 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/c++/11/bits/shared_ptr_base.h \
   /usr/include/c++/11/typeinfo \
   /usr/include/c++/11/bits/allocated_ptr.h \
@@ -2518,8 +2579,11 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/alloca.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/c++/11/bits/std_abs.h \
   /usr/include/c++/11/cstdio \
   /usr/include/stdio.h \
@@ -2528,6 +2592,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/c++/11/cerrno \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \
@@ -2592,6 +2658,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   ../duckdb/src/include/duckdb/common/enable_shared_from_this_ipp.hpp \
   /usr/include/string.h \
   /usr/include/strings.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   ../duckdb/src/include/duckdb/common/vector.hpp \
   ../duckdb/src/include/duckdb/common/enums/catalog_type.hpp \
   ../duckdb/src/include/duckdb/common/atomic.hpp \
@@ -2993,6 +3061,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
   /usr/include/c++/11/bits/fs_ops.h
 
 
+/usr/include/c++/11/cfloat:
+
 /usr/include/c++/11/bits/regex_executor.tcc:
 
 /usr/include/c++/11/bits/regex.tcc:
@@ -3004,8 +3074,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/bits/regex_automaton.h:
 
 /usr/include/c++/11/regex:
-
-/usr/include/c++/11/cfloat:
 
 /usr/include/c++/11/bits/fs_dir.h:
 
@@ -3179,10 +3247,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 ../duckdb/src/include/duckdb/execution/physical_plan_generator.hpp:
 
-../duckdb/src/include/duckdb/parser/common_table_expression_info.hpp:
-
-../duckdb/src/include/duckdb/execution/index/index_type_set.hpp:
-
 ../duckdb/src/include/duckdb/common/enums/window_aggregation_mode.hpp:
 
 /usr/include/c++/11/locale:
@@ -3213,25 +3277,23 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 ../duckdb/src/include/duckdb/common/profiler.hpp:
 
-/usr/include/c++/11/cstdint:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h:
 
-/usr/include/c++/11/istream:
+../duckdb/src/include/duckdb/common/progress_bar/progress_bar.hpp:
 
-/usr/include/c++/11/sstream:
+../duckdb/src/include/duckdb/common/enums/output_type.hpp:
 
-/usr/include/c++/11/bits/quoted_string.h:
+../duckdb/src/include/duckdb/main/client_config.hpp:
 
-../duckdb/src/include/duckdb/storage/storage_index.hpp:
+/usr/include/c++/11/bits/deque.tcc:
 
-../duckdb/src/include/duckdb/parser/expression/lambdaref_expression.hpp:
+../duckdb/src/include/duckdb/parser/column_list.hpp:
 
-../duckdb/src/include/duckdb/common/enums/logical_operator_type.hpp:
+/usr/include/c++/11/bits/stl_deque.h:
 
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
-
-../duckdb/src/include/duckdb/common/array_ptr.hpp:
 
 /usr/include/c++/11/exception:
 
@@ -3302,6 +3364,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/bits/stl_uninitialized.h:
 
 /usr/include/c++/11/memory:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 
 /usr/include/c++/11/iterator:
 
@@ -3391,12 +3455,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
 
-/usr/include/c++/11/bits/localefwd.h:
-
-../duckdb/src/include/duckdb/catalog/catalog_entry/column_dependency_manager.hpp:
-
-/usr/include/driver_types.h:
-
 /usr/include/c++/11/tr1/hypergeometric.tcc:
 
 /usr/include/c++/11/tr1/exp_integral.tcc:
@@ -3408,12 +3466,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/crt/sm_70_rt.h:
 
 ../duckdb/src/include/duckdb/common/atomic.hpp:
-
-../kernels/get.cu:
-
-/usr/include/crt/device_double_functions.hpp:
-
-../duckdb/src/include/duckdb/common/string.hpp:
 
 /usr/include/c++/11/filesystem:
 
@@ -3437,11 +3489,15 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/c++/11/debug/assertions.h:
 
-/usr/include/c++/11/bits/cxxabi_init_exception.h:
+../kernels/sort.cu:
 
-/usr/include/texture_fetch_functions.h:
+/usr/include/c++/11/bits/concept_check.h:
 
-/usr/include/string.h:
+/usr/include/sm_32_intrinsics.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
@@ -3462,6 +3518,22 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/tr1/modified_bessel_func.tcc:
 
 ../duckdb/src/include/duckdb/planner/bound_tokens.hpp:
+
+/usr/include/c++/11/ext/atomicity.h:
+
+../duckdb/src/include/duckdb/parser/parsed_data/sample_options.hpp:
+
+../duckdb/src/include/duckdb/main/materialized_query_result.hpp:
+
+../duckdb/src/include/duckdb/common/enum_util.hpp:
+
+/usr/include/c++/11/bits/stl_pair.h:
+
+../duckdb/src/include/duckdb/parser/query_node.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/select.h:
 
 /usr/include/sm_32_intrinsics.hpp:
 
@@ -3497,10 +3569,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 ../duckdb/src/include/duckdb/planner/table_filter.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-../duckdb/src/include/duckdb/common/enums/prepared_statement_mode.hpp:
-
 /usr/include/c++/11/bits/atomic_lockfree_defines.h:
 
 /usr/include/device_atomic_functions.hpp:
@@ -3511,7 +3579,15 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
 
+/usr/include/c++/11/bits/cxxabi_init_exception.h:
+
+/usr/include/texture_fetch_functions.h:
+
+/usr/include/string.h:
+
 /usr/include/c++/11/bits/locale_facets.tcc:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/vector_types.h:
 
@@ -3537,6 +3613,12 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/c++/11/chrono:
 
+../duckdb/src/include/duckdb/catalog/catalog_entry/column_dependency_manager.hpp:
+
+/usr/include/driver_types.h:
+
+/usr/include/c++/11/bits/localefwd.h:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
@@ -3549,9 +3631,11 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
-../duckdb/src/include/duckdb/parser/column_list.hpp:
+../duckdb/src/include/duckdb/parser/common_table_expression_info.hpp:
 
-/usr/include/c++/11/bits/stl_deque.h:
+../duckdb/src/include/duckdb/execution/index/index_type_set.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
 
 /usr/include/sched.h:
 
@@ -3561,9 +3645,17 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/c++/11/bits/postypes.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
+
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
 
 /usr/include/c++/11/tr1/special_function_util.h:
+
+../duckdb/src/include/duckdb/common/enums/prepared_statement_mode.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/11/cstdint:
 
 /usr/include/x86_64-linux-gnu/bits/long-double.h:
 
@@ -3587,6 +3679,10 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 ../duckdb/src/include/duckdb/common/types/string_type.hpp:
 
+/usr/include/c++/11/bits/cpp_type_traits.h:
+
+/usr/include/endian.h:
+
 /usr/include/stdint.h:
 
 ../duckdb/src/include/duckdb/common/extra_operator_info.hpp:
@@ -3603,9 +3699,15 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/c++/11/bits/stl_raw_storage_iter.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
+../duckdb/src/include/duckdb/function/table/arrow/enum/arrow_type_info_type.hpp:
 
-/usr/include/vector_functions.h:
+/usr/include/c++/11/bits/stl_iterator_base_funcs.h:
+
+/usr/include/c++/11/bits/streambuf.tcc:
+
+/usr/include/crt/host_config.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
@@ -3616,18 +3718,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/pthread.h:
-
-/usr/include/endian.h:
-
-/usr/include/c++/11/bits/cpp_type_traits.h:
-
-../duckdb/src/include/duckdb/function/table/arrow/enum/arrow_type_info_type.hpp:
-
-/usr/include/c++/11/bits/streambuf.tcc:
-
-/usr/include/crt/host_config.h:
-
-/usr/include/c++/11/bits/stl_iterator_base_funcs.h:
 
 /usr/include/sm_20_intrinsics.hpp:
 
@@ -3663,19 +3753,35 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/crt/host_defines.h:
 
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
+
 /usr/include/c++/11/bits/functexcept.h:
 
 ../duckdb/src/include/duckdb/common/vector_operations/binary_executor.hpp:
 
-/usr/include/sm_32_intrinsics.h:
+/usr/include/c++/11/tuple:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
+/usr/include/c++/11/type_traits:
 
-/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
+/usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
-../kernels/sort.cu:
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
 
-/usr/include/c++/11/bits/concept_check.h:
+/usr/include/c++/11/bits/fs_ops.h:
+
+../duckdb/src/include/duckdb/planner/bound_constraint.hpp:
+
+../duckdb/src/include/duckdb/common/file_open_flags.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
+
+../duckdb/src/include/duckdb/common/enums/function_errors.hpp:
+
+/usr/include/c++/11/cerrno:
+
+/usr/include/vector_functions.h:
 
 ../duckdb/src/include/duckdb/main/connection.hpp:
 
@@ -3739,10 +3845,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/channel_descriptor.h:
 
-/usr/include/x86_64-linux-gnu/sys/single_threaded.h:
-
-/usr/include/c++/11/type_traits:
-
 /usr/include/c++/11/bits/allocator.h:
 
 /usr/include/c++/11/cmath:
@@ -3764,24 +3866,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /usr/include/c++/11/bits/ostream_insert.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/c++/11/bits/fs_ops.h:
-
-../duckdb/src/include/duckdb/planner/bound_constraint.hpp:
-
-../duckdb/src/include/duckdb/common/file_open_flags.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
-../duckdb/src/include/duckdb/common/enums/function_errors.hpp:
-
-/usr/include/c++/11/cerrno:
 
 /usr/include/cuda_device_runtime_api.h:
 
@@ -3835,23 +3919,23 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
 /usr/include/c++/11/backward/binders.h:
 
-/usr/include/x86_64-linux-gnu/bits/select.h:
+../duckdb/src/include/duckdb/common/array_ptr.hpp:
 
-../duckdb/src/include/duckdb/parser/query_node.hpp:
+/usr/include/x86_64-linux-gnu/bits/select2.h:
 
-/usr/include/x86_64-linux-gnu/bits/time.h:
+../duckdb/src/include/duckdb/storage/compression/bitpacking.hpp:
+
+/usr/include/c++/11/cwchar:
+
+../duckdb/src/include/duckdb/planner/logical_tokens.hpp:
 
 /usr/include/c++/11/ext/new_allocator.h:
-
-/usr/include/libintl.h:
-
-/usr/include/c++/11/bits/char_traits.h:
-
-/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
 /usr/include/strings.h:
 
@@ -3883,6 +3967,10 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/assert.h:
 
+/usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
+
+/usr/include/crt/math_functions.h:
+
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
 /usr/include/c++/11/math.h:
@@ -3894,12 +3982,6 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 /usr/include/c++/11/ext/type_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
-
-../duckdb/src/include/duckdb/storage/compression/bitpacking.hpp:
-
-/usr/include/c++/11/cwchar:
-
-../duckdb/src/include/duckdb/planner/logical_tokens.hpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 
@@ -3913,31 +3995,39 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 ../duckdb/src/include/duckdb/common/helper.hpp:
 
+../duckdb/src/include/duckdb/common/mutex.hpp:
+
+/usr/include/c++/11/bits/specfun.h:
+
 /usr/include/sm_60_atomic_functions.h:
 
 /usr/include/c++/11/ctime:
 
 ../duckdb/src/include/duckdb/parser/column_definition.hpp:
 
-/usr/include/c++/11/ext/atomicity.h:
+../kernels/get.cu:
 
-/usr/include/c++/11/bits/specfun.h:
+/usr/include/crt/device_double_functions.hpp:
 
-../duckdb/src/include/duckdb/common/mutex.hpp:
+../duckdb/src/include/duckdb/common/string.hpp:
 
-../duckdb/src/include/duckdb/parser/parsed_data/sample_options.hpp:
+/usr/include/c++/11/sstream:
 
-../duckdb/src/include/duckdb/main/materialized_query_result.hpp:
+/usr/include/c++/11/bits/quoted_string.h:
 
-../duckdb/src/include/duckdb/common/enum_util.hpp:
+../duckdb/src/include/duckdb/storage/storage_index.hpp:
 
-/usr/include/c++/11/bits/stl_pair.h:
+../duckdb/src/include/duckdb/parser/expression/lambdaref_expression.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
+../duckdb/src/include/duckdb/common/enums/logical_operator_type.hpp:
 
-/usr/include/crt/math_functions.h:
+/usr/include/c++/11/istream:
 
-/usr/include/c++/11/tuple:
+/usr/include/libintl.h:
+
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+
+/usr/include/c++/11/bits/char_traits.h:
 
 /usr/include/library_types.h:
 
@@ -4281,6 +4371,8 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 
 /usr/include/sm_30_intrinsics.hpp:
 
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
 ../duckdb/src/include/duckdb/common/vector_operations/unary_executor.hpp:
 
 ../duckdb/src/include/duckdb/common/named_parameter_map.hpp:
@@ -4458,11 +4550,3 @@ CMakeFiles/execute_duckdb.dir/utilities/schema_utilities.cpp.o: ../utilities/sch
 ../duckdb/src/include/duckdb/transaction/transaction_data.hpp:
 
 /usr/include/c++/11/deque:
-
-/usr/include/c++/11/bits/deque.tcc:
-
-../duckdb/src/include/duckdb/main/client_config.hpp:
-
-../duckdb/src/include/duckdb/common/enums/output_type.hpp:
-
-../duckdb/src/include/duckdb/common/progress_bar/progress_bar.hpp:

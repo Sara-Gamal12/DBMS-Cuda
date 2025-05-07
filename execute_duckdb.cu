@@ -45,7 +45,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <regex>
 using namespace std;
 using namespace duckdb;
 
@@ -82,6 +82,9 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     // 2. Process current node (e.g., launch kernel)
     std::cout << "Launching kernel for operator: " << node->name << std::endl;
 
+    if(child_results.size()!=0 && child_results[0].num_row==0){
+        return child_results[0];
+    }
     // You can decide which CUDA kernel to call based on node->name
     if (node->name == "GET")
     {
@@ -144,6 +147,8 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
+
+        
 
         int output_counter = 0;
         char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
@@ -239,6 +244,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         int new_row_size = 0;
         std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
         std::vector<ColumnInfo> new_schema;
+        int acc = 0;
 
         for (int i = 0; i < node->details.size(); i++)
         {
@@ -247,7 +253,10 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             {
                 if (child_results[0].data_schema[j].name == col_name)
                 {
-                    new_schema.push_back(child_results[0].data_schema[j]);
+                    ColumnInfo col_info = child_results[0].data_schema[j];
+                    col_info.acc_col_size = acc;
+                    acc += child_results[0].data_schema[j].size_in_bytes;
+                    new_schema.push_back(col_info);
                     col_index[i] = j;
                     acc_sums[i] = child_results[0].data_schema[j].acc_col_size;
                     sizes[i] = child_results[0].data_schema[j].size_in_bytes;
@@ -256,13 +265,23 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             }
         }
 
+        
         int row_size = child_results[0].data.size() / child_results[0].num_row;
 
+        std::cout << "New schema after projection:" << std::endl;
         char *data = call_project_kernel(child_results[0].data.data(), new_row_size, row_size, col_index, acc_sums, child_results[0].num_row, node->details.size(), sizes);
         return_node_type return_data;
         return_data.data = std::vector<char>(data, data + child_results[0].num_row * new_row_size);
         return_data.num_row = child_results[0].num_row;
         return_data.data_schema = new_schema;
+
+        for (const auto &col : new_schema) {
+            std::cout << "Column Name: " << col.name 
+                      << ", Type: " << col.type 
+                      << ", Size in Bytes: " << col.size_in_bytes 
+                      << ", Accumulated Column Size: " << col.acc_col_size 
+                      << std::endl;
+        }
 
         return return_data;
     }
@@ -377,6 +396,31 @@ void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
     }
 }
 
+
+std::unordered_map<std::string, std::string> remove_AS(string &query)
+{
+    std::unordered_map<std::string, std::string> alias_map;
+
+    std::regex alias_pattern(R"(\b(\w+)\s+AS\s+(\w+))", std::regex::icase);
+    std::smatch match;
+    std::string::const_iterator searchStart(query.cbegin());
+
+    while (std::regex_search(searchStart, query.cend(), match, alias_pattern)) {
+        std::string original = match[1];
+        std::string alias = match[2];
+        alias_map[original] = alias;
+        searchStart = match.suffix().first;
+    }
+
+    for (const auto &pair : alias_map) {
+        std::string pattern = "\\b" + pair.second + "\\b";
+        query = std::regex_replace(query, std::regex(pattern), pair.first);
+    }
+
+    return alias_map;
+}
+
+
 int main(int argc, char *argv[])
 {
     // DuckDB
@@ -397,6 +441,8 @@ int main(int argc, char *argv[])
             cout << "Exiting CLI.\n";
             break;
         }
+
+        std::unordered_map<std::string, std::string> alias_map=remove_AS(query);
         auto start_time = std::chrono::high_resolution_clock::now();
         get_schema(schema);
         create_tables_from_schema(con, schema);
@@ -412,24 +458,24 @@ int main(int argc, char *argv[])
         planner.CreatePlan(std::move(statements[0]));
 
         // Now you can proceed with further processing or optimization
-        // cout << "Planning successful!" << endl;
-        // cout << "Unoptimized Logical Plan:\n"
-        //     << planner.plan->ToString() << endl;
+        cout << "Planning successful!" << endl;
+        cout << "Unoptimized Logical Plan:\n"
+            << planner.plan->ToString() << endl;
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-        // cout << "Optimized Logical Plan:\n";
-        // cout << logical_plan->ToString() << endl;
+        cout << "Optimized Logical Plan:\n";
+        cout << logical_plan->ToString() << endl;
 
         auto tree_root = build_plan_tree(logical_plan.get());
-        // print_tree(tree_root);
+        print_tree(tree_root);
 
         return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
 
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed_time = end_time - start_time;
         std::cout << "Query execution time on GPU : " << elapsed_time.count() << " seconds" << std::endl;
-        print_chunk(data_out.data, data_out.data_schema);
+        print_chunk(data_out.data, data_out.data_schema,alias_map);
 
 
         // auto start_time = std::chrono::high_resolution_clock::now();

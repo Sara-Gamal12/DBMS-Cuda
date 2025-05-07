@@ -1,0 +1,6 @@
+Products_id (N) (P),ProductName (T),Price (N),ReleaseDate (D)
+101,Widget A,20.99,2020-7-5 14:30:00
+102,Gadget B,99.99,2021-4-22 16:10:00
+103,Device C,15.5,2021-9-30 11:20:00
+104,Equipment D,45.75,2022-5-15 9:45:00
+105,Appliance E,30,2019-12-1 8:00:00

@@ -41,6 +41,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
     /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
     /usr/include/strings.h \
+    /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+    /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
     /usr/include/time.h \
     /usr/include/x86_64-linux-gnu/bits/time.h \
     /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -75,6 +77,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
     /usr/include/x86_64-linux-gnu/bits/floatn.h \
     /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio.h \
+    /usr/include/x86_64-linux-gnu/bits/stdio2.h \
     /usr/include/c++/11/stdlib.h \
     /usr/include/c++/11/cstdlib \
     /usr/include/stdlib.h \
@@ -89,6 +93,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/select.h \
     /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
     /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
+    /usr/include/x86_64-linux-gnu/bits/select2.h \
     /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
     /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
     /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
@@ -96,7 +101,9 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
     /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
     /usr/include/alloca.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
     /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+    /usr/include/x86_64-linux-gnu/bits/stdlib.h \
     /usr/include/c++/11/bits/std_abs.h \
     /usr/include/assert.h \
     /usr/include/crt/math_functions.h \
@@ -219,6 +226,7 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/wchar.h \
     /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
     /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
+    /usr/include/x86_64-linux-gnu/bits/wchar2.h \
     /usr/include/c++/11/bits/shared_ptr_base.h \
     /usr/include/c++/11/typeinfo \
     /usr/include/c++/11/bits/allocated_ptr.h \
@@ -712,4 +720,19 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/nesma/CUDA-SQL/DBMS-Cu
     /usr/include/c++/11/bits/fs_dir.h \
     /usr/include/c++/11/bits/fs_ops.h \
     /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/filter_utilities.hpp \
-    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/../kernels/get.cuh
+    /home/nesma/CUDA-SQL/DBMS-Cuda/./utilities/../kernels/get.cuh \
+    /usr/include/c++/11/regex \
+    /usr/include/c++/11/iterator \
+    /usr/include/c++/11/bits/stream_iterator.h \
+    /usr/include/c++/11/bits/regex_constants.h \
+    /usr/include/c++/11/bits/regex_error.h \
+    /usr/include/c++/11/bits/regex_automaton.h \
+    /usr/include/c++/11/bits/regex_automaton.tcc \
+    /usr/include/c++/11/bits/regex_scanner.h \
+    /usr/include/c++/11/bits/regex_scanner.tcc \
+    /usr/include/c++/11/bits/regex_compiler.h \
+    /usr/include/c++/11/bits/regex_compiler.tcc \
+    /usr/include/c++/11/bits/regex.h \
+    /usr/include/c++/11/bits/regex.tcc \
+    /usr/include/c++/11/bits/regex_executor.h \
+    /usr/include/c++/11/bits/regex_executor.tcc

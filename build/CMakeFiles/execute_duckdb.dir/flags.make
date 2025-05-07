@@ -7,11 +7,11 @@ CUDA_DEFINES =
 
 CUDA_INCLUDES = -I/home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include
 
-CUDA_FLAGS = -std=c++17
+CUDA_FLAGS = -O3 -DNDEBUG -std=c++17
 
 CXX_DEFINES = 
 
 CXX_INCLUDES = -I/home/nesma/CUDA-SQL/DBMS-Cuda/duckdb/src/include
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17
 

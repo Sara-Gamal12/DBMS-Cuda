@@ -49,11 +49,12 @@ bool isNumeric(const std::string &value)
 bool isDate(const std::string &value)
 {
     // Regex pattern for format: YYYY-M-D HH:MM:SS
-    std::regex pattern(R"(^\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}:\d{2}$)");
+    std::regex pattern(R"(^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$)");
     if (!std::regex_match(value, pattern))
     {
         return false;
     }
+    return true;
 }
 // Convert infix to postfix (RPN)
 std::vector<std::string> infix_to_postfix(const std::vector<Token> &tokens)
@@ -144,6 +145,7 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
         }
         else
         {
+
             token.type = TOKEN_CONDITION;
             Condition condition;
             std::string condition_str = postfix[i];
@@ -152,9 +154,11 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             iss >> column >> op ;
             std::getline(iss >> std::ws, value);
 
+
             bool is_col = true;
             if ((value[0] == '\'') && (value[value.size() - 1] == '\''))
             {
+                
                 value = value.substr(1, value.size() - 2);
                 is_col = false;
             }
@@ -162,11 +166,14 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             {
                 is_col = false;
             }
+
             if (isDate(value))
             {
                 is_col = false;
             }
 
+            
+            
             for (int j = 0; j < schema.size(); ++j)
             {
                 if (schema[j].name == column || (is_col && schema[j].name == value))

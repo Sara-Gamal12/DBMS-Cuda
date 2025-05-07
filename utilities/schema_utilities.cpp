@@ -2,7 +2,7 @@
 
 extern Schema schema; // External declaration of schema
 
-void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols)
+void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols,std::unordered_map<std::string, std::string> alias_map)
 {
 
     int row_size = 0;
@@ -19,6 +19,10 @@ void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols)
 
         for (auto &col : cols)
         {
+            if(alias_map.find(col.name) != alias_map.end())
+            {
+                col.name = alias_map[col.name];
+            }
             std::cout << "Column " << col.name << ": ";
 
             // Get pointer to this column's data within the row
