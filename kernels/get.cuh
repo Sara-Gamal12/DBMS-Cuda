@@ -2,6 +2,7 @@
 #ifndef GET_KERNELS_H
 #define GET_KERNELS_H
 #include <cuda_runtime.h>
+#include <vector>
 
 enum Operator {
     OP_GT,    // >
