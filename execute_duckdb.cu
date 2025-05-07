@@ -21,7 +21,6 @@
 #include "duckdb/common/common.hpp"
 #include "duckdb/common/enums/pending_execution_result.hpp"
 #include "duckdb/common/mutex.hpp"
-// #include "dukdb/common/pair.hpp"
 #include "duckdb/common/reference_map.hpp"
 #include "duckdb/main/query_result.hpp"
 #include "duckdb/execution/task_error_manager.hpp"
@@ -37,9 +36,11 @@
 #include "./kernels/project.cuh"
 #include "./kernels/sort.cuh"
 #include "./kernels/join.cuh"
+#include "./kernels/join.cuh"
 
 #include "./utilities/schema_utilities.hpp"
 #include "./utilities/filter_utilities.hpp"
+#include "./utilities/join_utilities.hpp"
 #include "./utilities/join_utilities.hpp"
 
 #include <fstream>
@@ -179,6 +180,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         return_data.data_schema = child_results[0].data_schema;
         return return_data;
     }
+    else if (node->name == "COMPARISON_JOIN")
     else if (node->name == "COMPARISON_JOIN")
     {
         int row_size_a = child_results[0].data.size() / child_results[0].num_row;
@@ -433,7 +435,7 @@ std::shared_ptr<PlanNode> build_plan_tree(LogicalOperator *op)
         auto &join_op = static_cast<duckdb::LogicalComparisonJoin &>(*op);
         for (auto &condition : join_op.conditions)
         {
-            node->details.push_back("Join: " + condition.left->ToString() + " " + ExpressionTypeToString(condition.comparison) + " " + condition.right->ToString());
+            node->details.push_back(condition.left->ToString() + " " + ExpressionTypeToString(condition.comparison) + " " + condition.right->ToString());
         }
     }
 
@@ -546,6 +548,8 @@ int main(int argc, char *argv[])
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+        cout << "Optimized Logical Plan:\n";
+        cout << logical_plan->ToString() << endl;
         cout << "Optimized Logical Plan:\n";
         cout << logical_plan->ToString() << endl;
 
