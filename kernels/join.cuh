@@ -11,8 +11,15 @@
 struct Join_Condition {
     int col_index_a;    
     int col_index_b;   
-    Operator op ; // default to equality  
+    Operator op ;  
     int type;        
+};
+
+
+
+struct JoinConditionToken {
+    ConditionTokenType type;
+    Join_Condition joinCond; // valid if type == TOKEN_CONDITION
 };
 
 // CUDA Kernel for Nested Loop Join without Shared Memory

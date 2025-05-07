@@ -18,7 +18,7 @@ include_directories(/home/yousef/duckdb/src/include)
 link_directories(/home/yousef/duckdb/build/release/src)
 
 # Add the executable with both C++ and CUDA source files
-add_executable(execute_duckdb ../execute_duckdb.cu ./kernels/agg.cu ./kernels/get.cu ./kernels/join.cu ./kernels/project.cu ./kernels/sort.cu ./utilities/schema_utilities.cpp ./utilities/filter_utilities.cpp )
+add_executable(execute_duckdb ../execute_duckdb.cu ./kernels/agg.cu ./kernels/get.cu ./kernels/join.cu ./kernels/project.cu ./kernels/sort.cu ./utilities/schema_utilities.cpp ./utilities/filter_utilities.cpp ./utilities/join_utilities.cpp)
 
 # Specify that the CUDA file should be compiled with NVCC
 set_source_files_properties(

@@ -128,6 +128,7 @@ std::vector<Token> tokenize(std::vector<std::string> expr)
     return tokens;
 }
 
+
 std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema, int *acc_sums)
 {
 

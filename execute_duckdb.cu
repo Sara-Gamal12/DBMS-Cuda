@@ -21,7 +21,6 @@
 #include "duckdb/common/common.hpp"
 #include "duckdb/common/enums/pending_execution_result.hpp"
 #include "duckdb/common/mutex.hpp"
-// #include "dukdb/common/pair.hpp"
 #include "duckdb/common/reference_map.hpp"
 #include "duckdb/main/query_result.hpp"
 #include "duckdb/execution/task_error_manager.hpp"
@@ -143,8 +142,18 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
 
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
+        cout<<"the postfix is "<<endl;
+        cout <<"postfix size: "<<postfix.size()<<endl;
+        for(auto pos: postfix){
+            cout<<"postfixxx "<<pos<<endl;
+        }
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
-
+        for(auto pos: condition_tokens){
+            std::cout<<"the condition tokens is "<<pos.condition.col_index<<endl;
+            cout<<"the condition tokens is "<<pos.condition.sec_col_index<<endl;
+            cout<<"the condition tokens is "<<pos.condition.op<<endl;
+            cout<<"the condition tokens is "<<pos.condition.type<<endl;
+        }
         int output_counter = 0;
         char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
         return_node_type return_data;
@@ -153,8 +162,70 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         return_data.data_schema = child_results[0].data_schema;
         return return_data;
     }
-    else if (node->name == "JOIN")
+    else if (node->name == "COMPARISON_JOIN")
     {
+        int row_size_a = child_results[0].data.size() / child_results[0].num_row;
+        int row_size_b = child_results[1].data.size() / child_results[1].num_row;
+        Condition *conditions = new Condition[node->details.size() - 1];
+        
+        std::vector<ColumnInfo> child_schema_a = child_results[0].data_schema;
+        std::vector<ColumnInfo> child_schema_b = child_results[1].data_schema;
+        std::vector<ColumnInfo> schema_merged;
+        
+        schema_merged.reserve(child_schema_a.size() + child_schema_b.size()); 
+        schema_merged.insert(schema_merged.end(), child_schema_a.begin(), child_schema_a.end());
+        schema_merged.insert(schema_merged.end(), child_schema_b.begin(), child_schema_b.end());
+    
+
+        int accumulator = 0;
+        for (int j = 0; j < schema_merged.size(); j++)
+        {
+            schema_merged[j].acc_col_size = accumulator;
+            accumulator += schema_merged[j].size_in_bytes;
+        }
+
+        
+        // for(auto pos: schema_merged){
+        //     cout<<"the schema_merged is "<<pos.name<<endl;
+        // }
+        // cout<<"condition_tokens.size()"<<node->details.size()<<endl;
+        std::string expr = node->details[0];
+
+
+        expr = replace_operatirs(expr);
+        cout<<"the expr is "<<expr<<endl;
+
+        int *acc_sums_a = new int[child_results[0].data_schema.size()];
+        int *acc_sums_b = new int[child_results[1].data_schema.size()];
+        // std::vector<column_info> child_schema_a = child_results[0].data_schema;
+        // for (int i = 0; i < child_results[0].data_schema.size(); i++)
+        // {
+        //     acc_sums_a[i] = child_results[0].data_schema[i].acc_col_size;
+        // }
+        std::vector<std::string> vector_expr = tokenizeExpression(expr);
+        std::vector<Token> tokens = tokenize(vector_expr);
+        std::vector<std::string> postfix = infix_to_postfix(tokens);
+        cout<<"the postfix is "<<endl;
+        cout <<"postfix size: "<<postfix.size()<<endl;
+        for(auto pos: postfix){
+            cout<<"postfixxx "<<pos<<endl;
+        }
+        std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums_a);
+        std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
+        for(auto pos: condition_tokens){
+            std::cout<<"the condition tokens col_index is "<<pos.condition.col_index<<endl;
+            cout<<"the condition tokens sec_col_index is "<<pos.condition.sec_col_index<<endl;
+            cout<<"the condition tokens op is "<<pos.condition.op<<endl;
+            cout<<"the condition tokens type is "<<pos.condition.type<<endl;
+        }
+
+        // std::vector<ConditionToken> condition_tokens_a = parse_postfix(postfix, child_results[0].data_schema, acc_sums_a);
+        // std::vector<ConditionToken> condition_tokens_b = parse_postfix(postfix, child_results[1].data_schema, acc_sums_b);
+
+        // int output_counter = 0;
+        // char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
+        // return_node_type return_data;
+
         // launch_join_kernel(); // Your kernel logic here
     }
     else if (node->name == "ORDER_BY")
@@ -418,8 +489,8 @@ int main(int argc, char *argv[])
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-        // cout << "Optimized Logical Plan:\n";
-        // cout << logical_plan->ToString() << endl;
+        cout << "Optimized Logical Plan:\n";
+        cout << logical_plan->ToString() << endl;
 
         auto tree_root = build_plan_tree(logical_plan.get());
         // print_tree(tree_root);
