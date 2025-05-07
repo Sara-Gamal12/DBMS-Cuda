@@ -1,7 +1,10 @@
+
+using namespace std;
 #include "join_utilities.hpp"
 
 std::vector<JoinConditionToken> join_parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema_a, std::vector<ColumnInfo> schema_b, int *acc_sums_a, int *acc_sums_b)
 {
+    cout<<"Parsing postfix expression: ";
     std::vector<JoinConditionToken> stack;
     for (int i = 0; i < postfix.size(); i++)
     {
@@ -21,12 +24,18 @@ std::vector<JoinConditionToken> join_parse_postfix(std::vector<std::string> post
             std::istringstream iss(condition_str);
             std::string column_a, op, column_b;
             iss >> column_a >> op>> column_b;
-            for (int j = 0; j < schema_a.size(); ++j)
+            cout << "schema_a.size() = " << schema_a.size() << " schema_b.size() = " << schema_b.size() << endl;
+            cout << "column_a = " << column_a << " op = " << op << " column_b = " << column_b << endl;
+             for (int j = 0; j < schema_a.size(); ++j)
             {
                 for (int k = 0; k < schema_b.size(); ++k)
                 {
                     if (schema_a[j].name == column_a && schema_b[k].name == column_b)
                     {
+                        cout << "Found schema_b[i].name: " << schema_a[j].name << " and schema_b[k].name " << schema_b[k].name << endl;
+                        cout << "Found schema_b[i].type: " << schema_a[j].type << " and schema_b[k].type " << schema_b[k].type << endl;
+                        cout<< " j = " << j << " k = " << k << endl;
+
                         if (schema_a[j].type == "Numeric" || schema_a[j].type == "DateTime")
                         {
                             condition.col_index_a = j;

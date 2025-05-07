@@ -38,6 +38,7 @@
 
 #include "./utilities/schema_utilities.hpp"
 #include "./utilities/filter_utilities.hpp"
+#include "./utilities/join_utilities.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -166,7 +167,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     {
         int row_size_a = child_results[0].data.size() / child_results[0].num_row;
         int row_size_b = child_results[1].data.size() / child_results[1].num_row;
-        Condition *conditions = new Condition[node->details.size() - 1];
+        Condition *conditions = new Condition[node->details.size()];
         
         std::vector<ColumnInfo> child_schema_a = child_results[0].data_schema;
         std::vector<ColumnInfo> child_schema_b = child_results[1].data_schema;
@@ -184,45 +185,39 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             accumulator += schema_merged[j].size_in_bytes;
         }
 
-        
-        // for(auto pos: schema_merged){
-        //     cout<<"the schema_merged is "<<pos.name<<endl;
-        // }
-        // cout<<"condition_tokens.size()"<<node->details.size()<<endl;
-        std::string expr = node->details[0];
 
+        std::string expr = node->details[0];
+        std::string to_remove = "Join: ";
+        size_t pos = expr.find(to_remove);
+        if (pos != std::string::npos) {
+            expr.erase(pos, to_remove.length());
+        }
 
         expr = replace_operatirs(expr);
-        cout<<"the expr is "<<expr<<endl;
+        // cout<<"the expr is "<<expr<<endl;
 
         int *acc_sums_a = new int[child_results[0].data_schema.size()];
         int *acc_sums_b = new int[child_results[1].data_schema.size()];
-        // std::vector<column_info> child_schema_a = child_results[0].data_schema;
-        // for (int i = 0; i < child_results[0].data_schema.size(); i++)
-        // {
-        //     acc_sums_a[i] = child_results[0].data_schema[i].acc_col_size;
-        // }
+
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
-        cout<<"the postfix is "<<endl;
-        cout <<"postfix size: "<<postfix.size()<<endl;
-        for(auto pos: postfix){
-            cout<<"postfixxx "<<pos<<endl;
-        }
-        std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums_a);
-        std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
-        for(auto pos: condition_tokens){
-            std::cout<<"the condition tokens col_index is "<<pos.condition.col_index<<endl;
-            cout<<"the condition tokens sec_col_index is "<<pos.condition.sec_col_index<<endl;
-            cout<<"the condition tokens op is "<<pos.condition.op<<endl;
-            cout<<"the condition tokens type is "<<pos.condition.type<<endl;
-        }
+        // cout <<"postfix size: "<<postfix.size()<<endl;
+        // for(auto pos: postfix){
+        //     cout<<"postfixxx "<<pos<<endl;
+        // }
+        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);
+        // std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
+        // for(auto pos: condition_tokens){
+        //     std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
+        //     cout<<"the condition tokens sec_col_index is "<<pos.joinCond.col_index_b<<endl;
+        //     cout<<"the condition tokens op is "<<pos.joinCond.op<<endl;
+        //     cout<<"the condition tokens type is "<<pos.joinCond.type<<endl;
+        // }
 
-        // std::vector<ConditionToken> condition_tokens_a = parse_postfix(postfix, child_results[0].data_schema, acc_sums_a);
-        // std::vector<ConditionToken> condition_tokens_b = parse_postfix(postfix, child_results[1].data_schema, acc_sums_b);
 
         // int output_counter = 0;
+        // char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
         // char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
         // return_node_type return_data;
 

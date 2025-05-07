@@ -723,7 +723,9 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o: ../execute_duckdb.cu \
   /usr/include/c++/11/bits/fs_dir.h \
   /usr/include/c++/11/bits/fs_ops.h \
   ../utilities/filter_utilities.hpp \
-  ../kernels/get.cuh
+  ../kernels/get.cuh \
+  ../utilities/join_utilities.hpp \
+  ../kernels/join.cuh
 
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o: ../kernels/agg.cu \
   /usr/include/stdc-predef.h \

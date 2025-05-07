@@ -725,6 +725,8 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o
  /usr/include/c++/11/bits/fs_ops.h
  /home/yousef/DBMS-Cuda/utilities/filter_utilities.hpp
  /home/yousef/DBMS-Cuda/kernels/get.cuh
+ /home/yousef/DBMS-Cuda/utilities/join_utilities.hpp
+ /home/yousef/DBMS-Cuda/kernels/join.cuh
 
 CMakeFiles/execute_duckdb.dir/kernels/agg.cu.o
  /home/yousef/DBMS-Cuda/kernels/agg.cu

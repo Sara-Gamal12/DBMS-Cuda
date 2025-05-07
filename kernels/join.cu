@@ -47,7 +47,40 @@ __device__ bool eval_join_condition(char *row_ptr_a, int *acc_col_size_a,char *r
     return false;
 }
 
-__global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, char *result, int *resultCount,Join_Condition *joinConds, int cond_count) 
+__device__ bool eval_condition_tokens(char *row_ptr_a,char *row_ptr_b, int *acc_col_size_a,int *acc_col_size_b, JoinConditionToken *tokens, int token_count)
+{
+    bool stack[16]; // adjust size if needed
+    int sp = 0;     // stack pointer
+
+    for (int i = 0; i < token_count; ++i)
+    {
+        if (tokens[i].type == TOKEN_CONDITION)
+        {
+            bool res = eval_join_condition(row_ptr_a, acc_col_size_a, row_ptr_b, acc_col_size_b, tokens[i].joinCond);
+            stack[sp++] = res;
+        }
+        else if (tokens[i].type == TOKEN_AND)
+        {
+            if (sp < 2)
+                return false; // stack underflow
+            bool b = stack[--sp];
+            bool a = stack[--sp];
+            stack[sp++] = a && b;
+        }
+        else if (tokens[i].type == TOKEN_OR)
+        {
+            if (sp < 2)
+                return false;
+            bool b = stack[--sp];
+            bool a = stack[--sp];
+            stack[sp++] = a || b;
+        }
+    }
+
+    return sp == 1 ? stack[0] : false;
+}
+
+__global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, char *result, int *resultCount,JoinConditionToken *joinConds, int cond_count) 
 {
     
     int aIdx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -56,15 +89,8 @@ __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *a
     for (int j = 0; j < size_b; ++j) {
         char *row_ptr_b = &table_b[j * row_size_b];
         printf("Thread %d processing row %d\n", threadIdx.x, j);
-        bool pass = true;
-        for (int i = 0; i < cond_count; ++i)
-        {
-            if (!eval_join_condition(row_ptr_a, acc_col_size_a, row_ptr_b, acc_col_size_b, joinConds[i]))
-            {
-                pass = false;
-                break;
-            }
-        }
+        bool pass = eval_condition_tokens(row_ptr_a,row_ptr_b, acc_col_size_a,acc_col_size_b, joinConds, cond_count);
+
         if (pass) {
             int index = atomicAdd(resultCount, 1);
             if (index < MAX_JOINED_ROWS) {
@@ -83,7 +109,7 @@ __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *a
     }
 }
 
-__host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, int& resultCount,Join_Condition *joinConds, int cond_count, int column_num_a, int column_num_b)
+__host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, int& resultCount,JoinConditionToken *joinConds, int cond_count, int column_num_a, int column_num_b)
 {
     int *h_output_counter = (int *)malloc(sizeof(int));
 
@@ -91,7 +117,7 @@ __host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *ac
 
     char *d_table_a, *d_table_b, *d_result;
     int *d_acc_col_size_a, *d_acc_col_size_b, *d_resultCount;
-    Join_Condition *d_joinConds;
+    JoinConditionToken *d_joinConds;
 
     cudaMalloc((void**)&d_table_a, size_a * row_size_a);
     cudaMalloc((void**)&d_table_b, size_b * row_size_b);
@@ -100,13 +126,13 @@ __host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *ac
     cudaMalloc((void**)&d_acc_col_size_a, sizeof(int) * column_num_a); 
     cudaMalloc((void**)&d_acc_col_size_b, sizeof(int) * column_num_b); 
     cudaMalloc((void**)&d_resultCount, sizeof(int));
-    cudaMalloc((void**)&d_joinConds, sizeof(Join_Condition) * cond_count);
+    cudaMalloc((void**)&d_joinConds, sizeof(JoinConditionToken) * cond_count);
 
     cudaMemcpy(d_table_a, table_a, size_a * row_size_a, cudaMemcpyHostToDevice);
     cudaMemcpy(d_table_b, table_b, size_b * row_size_b, cudaMemcpyHostToDevice);
     cudaMemcpy(d_acc_col_size_a, acc_col_size_a, sizeof(int) * column_num_a, cudaMemcpyHostToDevice);
     cudaMemcpy(d_acc_col_size_b, acc_col_size_b, sizeof(int) * column_num_b, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_joinConds, joinConds, sizeof(Join_Condition) * cond_count, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_joinConds, joinConds, sizeof(JoinConditionToken) * cond_count, cudaMemcpyHostToDevice);
     
     cudaMemset(d_resultCount, 0, sizeof(int));
     int blockSize = 256;

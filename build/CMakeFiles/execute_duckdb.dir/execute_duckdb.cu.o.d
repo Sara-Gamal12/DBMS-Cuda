@@ -720,4 +720,6 @@ CMakeFiles/execute_duckdb.dir/execute_duckdb.cu.o : /home/yousef/DBMS-Cuda/execu
     /usr/include/c++/11/bits/fs_dir.h \
     /usr/include/c++/11/bits/fs_ops.h \
     /home/yousef/DBMS-Cuda/./utilities/filter_utilities.hpp \
-    /home/yousef/DBMS-Cuda/./utilities/../kernels/get.cuh
+    /home/yousef/DBMS-Cuda/./utilities/../kernels/get.cuh \
+    /home/yousef/DBMS-Cuda/./utilities/join_utilities.hpp \
+    /home/yousef/DBMS-Cuda/./utilities/../kernels/join.cuh
