@@ -82,7 +82,8 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     // 2. Process current node (e.g., launch kernel)
     std::cout << "Launching kernel for operator: " << node->name << std::endl;
 
-    if(child_results.size()!=0 && child_results[0].num_row==0){
+    if (child_results.size() != 0 && child_results[0].num_row == 0)
+    {
         return child_results[0];
     }
     // You can decide which CUDA kernel to call based on node->name
@@ -131,15 +132,19 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     else if (node->name == "FILTER")
     {
         int row_size = child_results[0].data.size() / child_results[0].num_row;
-        Condition *conditions = new Condition[node->details.size() - 1];
-        std::string expr = node->details[0];
+        std::string expr = "";
+        for (size_t i = 0; i < node->details.size(); ++i)
+        {
+            expr += node->details[i];
+            if (i != node->details.size() - 1)
+                expr += " and ";
+        }
         std::string to_remove = "::TIMESTAMP";
-        size_t pos = expr.find(to_remove);
-        if (pos != std::string::npos)
+        size_t pos;
+        while ((pos = expr.find(to_remove)) != std::string::npos)
         {
             expr.erase(pos, to_remove.length());
         }
-
         expr = replace_operatirs(expr);
         int *acc_sums = new int[child_results[0].data_schema.size()];
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
@@ -147,8 +152,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
-
-        
 
         int output_counter = 0;
         char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
@@ -167,18 +170,19 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         size_t lastDot = node->details[0].rfind('.');
         size_t lastSpace = node->details[0].rfind(' ');
 
-        string col_name= node->details[0].substr(lastDot + 1, lastSpace - lastDot - 1);
-        string oredr_method= node->details[0].substr(lastSpace + 1);
+        string col_name = node->details[0].substr(lastDot + 1, lastSpace - lastDot - 1);
+        string oredr_method = node->details[0].substr(lastSpace + 1);
 
-        std::cout<<"col_name: "<<col_name<<std::endl;
-        std::cout<<"oredr_method: "<<oredr_method<<std::endl;
+        std::cout << "col_name: " << col_name << std::endl;
+        std::cout << "oredr_method: " << oredr_method << std::endl;
         int row_size = child_results[0].data.size() / child_results[0].num_row;
         int i = 0;
-        while (child_results[0].data_schema[i].name != col_name){
+        while (child_results[0].data_schema[i].name != col_name)
+        {
             i++;
         }
         int acc_sums = child_results[0].data_schema[i].acc_col_size;
-        char *data = call_sort_kernel(child_results[0].data.data(),row_size, child_results[0].num_row, acc_sums,(oredr_method=="ASC"));
+        char *data = call_sort_kernel(child_results[0].data.data(), row_size, child_results[0].num_row, acc_sums, (oredr_method == "ASC"));
         return_node_type return_data;
         return_data.data = std::vector<char>(data, data + child_results[0].num_row * row_size);
         return_data.num_row = child_results[0].num_row;
@@ -265,7 +269,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             }
         }
 
-        
         int row_size = child_results[0].data.size() / child_results[0].num_row;
 
         std::cout << "New schema after projection:" << std::endl;
@@ -274,14 +277,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         return_data.data = std::vector<char>(data, data + child_results[0].num_row * new_row_size);
         return_data.num_row = child_results[0].num_row;
         return_data.data_schema = new_schema;
-
-        for (const auto &col : new_schema) {
-            std::cout << "Column Name: " << col.name 
-                      << ", Type: " << col.type 
-                      << ", Size in Bytes: " << col.size_in_bytes 
-                      << ", Accumulated Column Size: " << col.acc_col_size 
-                      << std::endl;
-        }
 
         return return_data;
     }
@@ -396,7 +391,6 @@ void print_tree(std::shared_ptr<PlanNode> node, int indent = 0)
     }
 }
 
-
 std::unordered_map<std::string, std::string> remove_AS(string &query)
 {
     std::unordered_map<std::string, std::string> alias_map;
@@ -405,21 +399,22 @@ std::unordered_map<std::string, std::string> remove_AS(string &query)
     std::smatch match;
     std::string::const_iterator searchStart(query.cbegin());
 
-    while (std::regex_search(searchStart, query.cend(), match, alias_pattern)) {
+    while (std::regex_search(searchStart, query.cend(), match, alias_pattern))
+    {
         std::string original = match[1];
         std::string alias = match[2];
         alias_map[original] = alias;
         searchStart = match.suffix().first;
     }
 
-    for (const auto &pair : alias_map) {
+    for (const auto &pair : alias_map)
+    {
         std::string pattern = "\\b" + pair.second + "\\b";
         query = std::regex_replace(query, std::regex(pattern), pair.first);
     }
 
     return alias_map;
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -442,7 +437,7 @@ int main(int argc, char *argv[])
             break;
         }
 
-        std::unordered_map<std::string, std::string> alias_map=remove_AS(query);
+        std::unordered_map<std::string, std::string> alias_map = remove_AS(query);
         auto start_time = std::chrono::high_resolution_clock::now();
         get_schema(schema);
         create_tables_from_schema(con, schema);
@@ -460,7 +455,7 @@ int main(int argc, char *argv[])
         // Now you can proceed with further processing or optimization
         cout << "Planning successful!" << endl;
         cout << "Unoptimized Logical Plan:\n"
-            << planner.plan->ToString() << endl;
+             << planner.plan->ToString() << endl;
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
@@ -475,8 +470,7 @@ int main(int argc, char *argv[])
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed_time = end_time - start_time;
         std::cout << "Query execution time on GPU : " << elapsed_time.count() << " seconds" << std::endl;
-        print_chunk(data_out.data, data_out.data_schema,alias_map);
-
+        print_chunk(data_out.data, data_out.data_schema, alias_map);
 
         // auto start_time = std::chrono::high_resolution_clock::now();
         // get_schema(schema);
