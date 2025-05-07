@@ -1,3 +1,3 @@
-id(N)(P),name(T),#student_Sid(N)
+idsc(N)(P),namesc(T),#student_Sidsc(N)
 1,firstSchool,1
 2,SecondSchool,3

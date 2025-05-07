@@ -82,7 +82,6 @@ __device__ bool eval_condition_tokens(char *row_ptr_a,char *row_ptr_b, int *acc_
 
 __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, char *result, int *resultCount,JoinConditionToken *joinConds, int cond_count) 
 {
-    
     int aIdx = blockIdx.x * blockDim.x + threadIdx.x;
     if (aIdx >= size_a) return;
     char *row_ptr_a = &table_a[aIdx * row_size_a];
@@ -100,9 +99,9 @@ __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *a
                 {
                     out_ptr[i] = row_ptr_a[i];
                 }
-                for (int i = row_size_a; i < row_size_a+row_size_b; ++i)
+                for (int i = row_size_a; i <(row_size_a + row_size_b); ++i)
                 {
-                    out_ptr[i] = row_ptr_b[i];
+                    out_ptr[i] = row_ptr_b[i - row_size_a];
                 }
             }
         }
