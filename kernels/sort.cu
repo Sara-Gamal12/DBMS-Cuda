@@ -1,5 +1,5 @@
 #include "sort.cuh"
-__device__ int co_rank(int k, const char *A, int m, const char *B, int n,int row_size, int acc_col_size, bool ascending)
+__device__ int co_rank(int k, const char *A, int m, const char *B, int n, int row_size, int acc_col_size, bool ascending)
 {
     int low = max(0, k - n);
     int high = min(k, m);
@@ -10,13 +10,21 @@ __device__ int co_rank(int k, const char *A, int m, const char *B, int n,int row
         i = (low + high) / 2;
         int j = k - i;
         double a_i, b_j, a_i1, b_j1;
-
-        memcpy(&a_i, &A[i * row_size + acc_col_size], sizeof(double));
-        memcpy(&b_j, &B[j * row_size + acc_col_size], sizeof(double));
+        if (device_strcmp(&A[i * row_size + acc_col_size], "NULL") == 0)
+            a_i = DOUBLE_MIN;
+        else
+            memcpy(&a_i, &A[i * row_size + acc_col_size], sizeof(double));
+        if (device_strcmp(&B[j * row_size + acc_col_size], "NULL") == 0)
+            b_j = DOUBLE_MIN;
+        else
+            memcpy(&b_j, &B[j * row_size + acc_col_size], sizeof(double));
 
         if (i > 0 && j < n)
         {
-            memcpy(&a_i1, &A[(i - 1) * row_size + acc_col_size], sizeof(double));
+            if (device_strcmp(&A[(i - 1) * row_size + acc_col_size], "NULL") == 0)
+                a_i1 = DOUBLE_MIN;
+            else
+                memcpy(&a_i1, &A[(i - 1) * row_size + acc_col_size], sizeof(double));
             bool cond = ascending ? (a_i1 > b_j) : (a_i1 < b_j);
             if (cond)
             {
@@ -27,7 +35,10 @@ __device__ int co_rank(int k, const char *A, int m, const char *B, int n,int row
 
         if (j > 0 && i < m)
         {
-            memcpy(&b_j1, &B[(j - 1) * row_size + acc_col_size], sizeof(double));
+            if (device_strcmp(&B[(j - 1) * row_size + acc_col_size], "NULL") == 0)
+                b_j1 = DOUBLE_MIN;
+            else
+                memcpy(&b_j1, &B[(j - 1) * row_size + acc_col_size], sizeof(double));
             bool cond = ascending ? (b_j1 > a_i) : (b_j1 < a_i);
             if (cond)
             {
@@ -41,7 +52,7 @@ __device__ int co_rank(int k, const char *A, int m, const char *B, int n,int row
     return i;
 }
 
-__global__ void co_rank_merge_batch(const char *input, int row_size,char *output, int n, int width,int acc_col_size, bool ascending)
+__global__ void co_rank_merge_batch(const char *input, int row_size, char *output, int n, int width, int acc_col_size, bool ascending)
 {
     int merge_id = blockIdx.x;
     int i = merge_id * 2 * width;
@@ -89,9 +100,15 @@ __global__ void co_rank_merge_batch(const char *input, int row_size,char *output
     while (k < k_end && k < total)
     {
         double Aa, Bb;
-        memcpy(&Aa, &A[a * row_size + acc_col_size], sizeof(double));
-        memcpy(&Bb, &B[b * row_size + acc_col_size], sizeof(double));
+        if (device_strcmp(&A[a * row_size + acc_col_size], "NULL") == 0)
+            Aa = DOUBLE_MIN;
+        else
+            memcpy(&Aa, &A[a * row_size + acc_col_size], sizeof(double));
 
+        if (device_strcmp(&B[b * row_size + acc_col_size], "NULL") == 0)
+            Bb = DOUBLE_MIN;
+        else
+            memcpy(&Bb, &B[b * row_size + acc_col_size], sizeof(double));
         if (b >= nn || (a < m && (ascending ? Aa <= Bb : Aa >= Bb)))
         {
             memcpy(&C[k * row_size], &A[a * row_size], row_size);
@@ -106,7 +123,8 @@ __global__ void co_rank_merge_batch(const char *input, int row_size,char *output
     }
 }
 
-char *call_sort_kernel(char *h_input, int row_size, int n, int acc_col_size, bool ascending){
+char *call_sort_kernel(char *h_input, int row_size, int n, int acc_col_size, bool ascending)
+{
     char *d_input;
     char *d_temp;
     if (n <= 1)

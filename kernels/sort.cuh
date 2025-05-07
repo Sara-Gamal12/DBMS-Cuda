@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "get.cuh"
+
 
 __device__ int co_rank(int k, const char *A, int m, const char *B, int n, int row_size, int acc_col_size, bool ascending);
 
