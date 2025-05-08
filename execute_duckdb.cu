@@ -50,10 +50,11 @@
 #include <string>
 #include <vector>
 #include <regex>
+#include <cfloat>
 using namespace std;
 using namespace duckdb;
 
-long RAM = 4 * pow(1024, 3); // 4GB
+int RAM = 100 * pow(1024, 2); // 4GB
 Schema schema;
 
 struct PlanNode
@@ -93,52 +94,63 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     // You can decide which CUDA kernel to call based on node->name
     if (node->name == "GET")
     {
-
         string table_name = node->details[0];
         int row_size;
-        std::vector<char> chunk = read_csv_chunk(table_name, 0.5 * RAM, row_size);
-        if (node->details.size() > 1)
-        {
-
-            Condition *conditions = new Condition[node->details.size() - 1];
-            std::vector<string> expr;
-            for (size_t i = 1; i < node->details.size(); ++i)
+        return_node_type return_data;
+        return_data.data=std::vector<char>() ;
+        return_data.num_row = 0;
+        // 0.5 * RAM
+        std::vector<char> chunk = read_csv_chunk(table_name, RAM, row_size);
+        while (chunk.size() != 0)
+        {   
+            if (node->details.size() > 1)
             {
-                expr.push_back(node->details[i]);
-                if (i != node->details.size() - 1)
-                    expr.push_back("and");
+
+                std::vector<string> expr;
+                for (size_t i = 1; i < node->details.size(); ++i)
+                {
+                    expr.push_back(node->details[i]);
+                    if (i != node->details.size() - 1)
+                        expr.push_back("and");
+                }
+                int *acc_sums = new int[(schema[table_name].second.size())];
+                std::vector<Token> tokens = tokenize(expr);
+                std::vector<std::string> postfix = infix_to_postfix(tokens);
+                std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, schema[table_name].second, acc_sums);
+                tokens.clear();
+                postfix.clear();
+                int n = chunk.size() / row_size;
+                int output_counter = 0;
+                char *data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), n, output_counter, schema[table_name].second.size());
+
+                std::vector<char> vec_data(data, data + output_counter * row_size);
+                return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
+                vec_data.clear();
+                delete[] data;
+                return_data.num_row += output_counter;
+                return_data.data_schema = schema[table_name].second;
             }
-            int *acc_sums = new int[(schema[table_name].second.size())];
-            std::vector<Token> tokens = tokenize(expr);
-            std::vector<std::string> postfix = infix_to_postfix(tokens);
-            std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, schema[table_name].second, acc_sums);
-
-            int n = chunk.size() / row_size;
-            int output_counter = 0;
-            char *data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), n, output_counter, schema[table_name].second.size());
-            return_node_type return_data;
-            return_data.data = std::vector<char>(data, data + output_counter * row_size);
-            return_data.num_row = output_counter;
-            return_data.data_schema = schema[table_name].second;
-            return return_data;
+            else
+            {
+                return_data.data.insert(return_data.data.end(), chunk.begin(), chunk.end());
+                return_data.num_row += chunk.size() / row_size;
+                return_data.data_schema = schema[table_name].second;
+            }
+            chunk.clear();
+            chunk = read_csv_chunk(table_name, RAM, row_size);
         }
-        else
-        {
-            return_node_type return_data;
-            return_data.data = chunk;
-            return_data.num_row = chunk.size() / row_size;
-            return_data.data_schema = schema[table_name].second;
-            return return_data;
-        }
-
+        chunk.clear();
+        child_results.clear();
+        return return_data;
         // launch_get_kernel();  // Your kernel logic here
     }
     else if (node->name == "FILTER")
     {
-        if(node->details.size()==0){
-            for(auto i:child_results[0].data_schema)
+        if (node->details.size() == 0)
+        {
+            for (auto i : child_results[0].data_schema)
             {
-                cout<<"the FILTER return_data schema name is "<<i.name<<endl;
+                cout << "the FILTER return_data schema name is " << i.name << endl;
             }
             return child_results[0];
         }
@@ -160,35 +172,56 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         int *acc_sums = new int[child_results[0].data_schema.size()];
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
 
-
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
+      
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
+        return_node_type return_data;
+        tokens.clear();
+        postfix.clear();
 
         int output_counter = 0;
-        char *data = call_get_kernel(child_results[0].data.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), child_results[0].num_row, output_counter, child_results[0].data_schema.size());
-        return_node_type return_data;
-        return_data.data = std::vector<char>(data, data + output_counter * row_size);
-        return_data.num_row = output_counter;
+        int start = 0;
+        int read_ram = (RAM / row_size) * row_size;
+        int total_size = child_results[0].data.size();
+        return_data.num_row = 0;
         return_data.data_schema = child_results[0].data_schema;
+       
+        while (start < total_size)
+        {
+            int end = min(start + read_ram, total_size);
+            int num_row = (end - start) / row_size;
+            cout << "rows " <<num_row<< endl;
+           
+            char *data = call_get_kernel(child_results[0].data.data()+start , row_size, acc_sums, condition_tokens, condition_tokens.size(), num_row, output_counter, child_results[0].data_schema.size());
+
+            std::vector<char> vec_data(data, data + output_counter * row_size);
+            return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
+            return_data.num_row += output_counter;
+            vec_data.clear();
+            delete[] data;
+            start+= read_ram;
+        }
+        child_results.clear();
         return return_data;
     }
+   
+   
     else if (node->name == "COMPARISON_JOIN")
     {
         int row_size_a = child_results[0].data.size() / child_results[0].num_row;
         int row_size_b = child_results[1].data.size() / child_results[1].num_row;
-        Condition *conditions = new Condition[node->details.size()];
-        
+
         std::vector<ColumnInfo> child_schema_a = child_results[0].data_schema;
         std::vector<ColumnInfo> child_schema_b = child_results[1].data_schema;
         std::vector<ColumnInfo> schema_merged;
-        
-        schema_merged.reserve(child_schema_a.size() + child_schema_b.size()); 
+
+        schema_merged.reserve(child_schema_a.size() + child_schema_b.size());
         schema_merged.insert(schema_merged.end(), child_schema_a.begin(), child_schema_a.end());
         schema_merged.insert(schema_merged.end(), child_schema_b.begin(), child_schema_b.end());
-        for(auto i:schema_merged)
+        for (auto i : schema_merged)
         {
-            cout<<"the schema name is "<<i.name<<endl;
+            cout << "the schema name is " << i.name << endl;
         }
         int accumulator = 0;
         for (int j = 0; j < schema_merged.size(); j++)
@@ -197,15 +230,13 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             accumulator += schema_merged[j].size_in_bytes;
         }
 
-
         int *acc_sums_a = new int[child_results[0].data_schema.size()];
         int *acc_sums_b = new int[child_results[1].data_schema.size()];
-
 
         std::string expr = "";
         for (size_t i = 0; i < node->details.size(); ++i)
         {
-            expr += "(" + node->details[i] + ")" ;
+            expr += "(" + node->details[i] + ")";
             if (i != node->details.size() - 1)
                 expr += " and ";
         }
@@ -227,7 +258,8 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         // for(auto pos: postfix){
         //     cout<<"postfixxx "<<pos<<endl;
         // }
-        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);;
+        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);
+        ;
         // std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
         // for(auto pos: condition_tokens){
         //     std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
@@ -236,22 +268,22 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         //     cout<<"the condition tokens type is "<<pos.joinCond.type<<endl;
         // }
 
-
         int output_counter = 0;
-        
+
         char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
         return_node_type return_data;
         return_data.data = std::vector<char>(data, data + output_counter * (row_size_a + row_size_b));
         return_data.num_row = output_counter;
         return_data.data_schema = schema_merged;
-        cout<<"the join garbage data"<<endl;
+        cout << "the join garbage data" << endl;
         print_chunk(return_data.data, return_data.data_schema, std::unordered_map<std::string, std::string>());
-        for(auto i:return_data.data_schema)
+        for (auto i : return_data.data_schema)
         {
-            cout<<"the return_data schema name is "<<i.name<<endl;
+            cout << "the return_data schema name is " << i.name << endl;
         }
-        cout<<"the output counter is "<<output_counter<<endl;
-        cout<<"the data size is "<<return_data.data.size()<<endl;
+        cout << "the output counter is " << output_counter << endl;
+        cout << "the data size is " << return_data.data.size() << endl;
+        child_results.clear();
         return return_data;
     }
     else if (node->name == "ORDER_BY")
@@ -271,122 +303,209 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             i++;
         }
         int acc_sums = child_results[0].data_schema[i].acc_col_size;
+        int start=0;
+        int total_size = child_results[0].data.size();
+        int read_ram = (RAM / row_size) * row_size;
         char *data = call_sort_kernel(child_results[0].data.data(), row_size, child_results[0].num_row, acc_sums, (oredr_method == "ASC"));
         return_node_type return_data;
         return_data.data = std::vector<char>(data, data + child_results[0].num_row * row_size);
         return_data.num_row = child_results[0].num_row;
         return_data.data_schema = child_results[0].data_schema;
+        child_results.clear();
         return return_data;
     }
     else if (node->name == "AGGREGATE")
     {
-        char *op;
-        string col_name = node->details[0].substr(node->details[0].find("(") + 1, node->details[0].find(")") - node->details[0].find("(") - 1);
+
+        int total_size = child_results[0].data.size();
+        int row_size = total_size / child_results[0].num_row;
+        int start = 0;
+        int read_ram = (RAM / row_size) * row_size;
         int acc_col_size;
-        int row_size = 0;
         int index;
-        for (int i = 0; i < child_results[0].data_schema.size(); i++)
-        {
-            if (child_results[0].data_schema[i].name == col_name)
-            {
-                index = i;
-                acc_col_size = child_results[0].data_schema[i].acc_col_size;
-            }
-            row_size += child_results[0].data_schema[i].size_in_bytes;
-        }
-
-        if (node->details[0].find("max") != std::string::npos)
-        {
-            op = "max";
-        }
-        else if (node->details[0].find("min") != std::string::npos)
-        {
-            op = "min";
-        }
-        else if (node->details[0].find("avg") != std::string::npos)
-        {
-            op = "avg";
-        }
-        else if (node->details[0].find("sum") != std::string::npos)
-        {
-            op = "sum";
-        }
-        else if (node->details[0].find("count_star") != std::string::npos)
-        {
-            return_node_type return_data;
-            double rows=child_results[0].num_row;
-            return_data.data = std::vector<char>();
-            return_data.num_row = 1;
-            std::vector<ColumnInfo> col_info(1);
-            col_info[0].type = "Numeric";
-            col_info[0].size_in_bytes = sizeof(rows);
-            col_info[0].acc_col_size = 0;
-            col_info[0].name = "count_star()";
-            return_data.data_schema= col_info;
-            const char *data_ptr = reinterpret_cast<const char *>(&rows);
-            return_data.data.insert(return_data.data.end(), data_ptr, data_ptr + sizeof(rows));
-            return return_data;
-        }
-        else if (node->details[0].find("count") != std::string::npos)
-        {
-            op = "count";
-        }
-
-        double result = call_agg_kernel(child_results[0].data.data(), row_size, acc_col_size, op, child_results[0].num_row);
-        const char *result_str = reinterpret_cast<const char *>(&result);
         return_node_type return_data;
-        return_data.data = std::vector<char>(result_str, result_str + sizeof(result));
         return_data.num_row = 1;
+        string col_name = node->details[0].substr(node->details[0].find("(") + 1, node->details[0].find(")") - node->details[0].find("(") - 1);
+        char *op;
+        double *final_result = NULL;
+        double *curr_result = NULL;
+        int num_batches = 0;
+
+        while (start < total_size)
+        {
+            num_batches++;
+            int end = min(start + read_ram, total_size);
+            int num_row = (end - start) / row_size;
+            if (start == 0)
+            {
+                for (int i = 0; i < child_results[0].data_schema.size(); i++)
+                {
+                    if (child_results[0].data_schema[i].name == col_name)
+                    {
+                        index = i;
+                        acc_col_size = child_results[0].data_schema[i].acc_col_size;
+                        break;
+                    }
+                }
+            }
+
+            if (node->details[0].find("max") != std::string::npos)
+            {
+                if (final_result == NULL)
+                {
+                    final_result = new double(-DBL_MAX);
+                }
+                if (curr_result != NULL)
+                {
+                    *final_result = max(*curr_result, *final_result);
+                }
+                op = "max";
+            }
+            else if (node->details[0].find("min") != std::string::npos)
+            {
+                if (final_result == NULL)
+                {
+                    final_result = new double(DBL_MAX);
+                }
+                if (curr_result != NULL)
+                {
+                    *final_result = min(*curr_result, *final_result);
+                }
+                op = "min";
+            }
+            else if (node->details[0].find("avg") != std::string::npos)
+            {
+                if (final_result == NULL)
+                {
+                    final_result = new double(0);
+                }
+                if (curr_result != NULL)
+                {
+                    *final_result += *curr_result;
+                }
+                op = "avg";
+            }
+            else if (node->details[0].find("sum") != std::string::npos)
+            {
+                if (final_result == NULL)
+                {
+                    final_result = new double(0);
+                }
+                if (curr_result != NULL)
+                {
+                    *final_result += *curr_result;
+                }
+                op = "sum";
+            }
+            else if (node->details[0].find("count_star()") != std::string::npos)
+            {
+                if (final_result == NULL)
+                {
+                    final_result = new double(0);
+                }
+                *final_result += num_row;
+                op = "count_star";
+            }
+            else if (node->details[0].find("count") != std::string::npos)
+            {
+                op = "count";
+            }
+
+            if (curr_result == NULL)
+                curr_result = new double();
+            *curr_result = call_agg_kernel(child_results[0].data.data() + start, row_size, acc_col_size, op, num_row);
+            start += read_ram;
+        }
+        if (op == "avg")
+        {
+            *final_result += *curr_result;
+            *final_result /= num_batches;
+        }
+        else if (op == "count")
+        {
+            *final_result = child_results[0].num_row;
+        }
+        else if (op == "sum")
+        {
+            *final_result += *curr_result;
+        }
+        else if (op == "min")
+        {
+            *final_result = min(*curr_result, *final_result);
+        }
+        else if (op == "max")
+        {
+            *final_result = max(*curr_result, *final_result);
+        }
+
+        const char *result_str = reinterpret_cast<const char *>(final_result);
         ColumnInfo col_info;
         col_info.type = child_results[0].data_schema[index].type;
-        col_info.size_in_bytes = sizeof(result);
+        col_info.size_in_bytes = sizeof(double);
         col_info.acc_col_size = 0;
         col_info.name = node->details[0];
+        if (op == "count_star" || op == "count")
+        {
+            col_info.type = "Numeric";
+        }
         return_data.data_schema.push_back(col_info);
+        return_data.data = std::vector<char>(result_str, result_str + sizeof(double));
         return return_data;
     }
     else if (node->name == "PROJECTION")
     {
+        int total_size = child_results[0].data.size();
+        int row_size = total_size / child_results[0].num_row;
+        int start = 0;
+        int read_ram = (RAM / row_size) * row_size;
+        return_node_type return_data;
+        int new_row_size = 0;
+        int acc = 0;
+        std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
         int *acc_sums = new int[node->details.size()];
         int *col_index = new int[node->details.size()];
         int *sizes = new int[node->details.size()];
-        int new_row_size = 0;
-        std::vector<ColumnInfo> child_schema = child_results[0].data_schema;
         std::vector<ColumnInfo> new_schema;
-        int acc = 0;
-        
-        for (int i = 0; i < node->details.size(); i++)
-        {
-            std::string col_name = node->details[i];
-            for (int j = 0; j < child_results[0].data_schema.size(); j++)
-            {
-                if (child_results[0].data_schema[j].name == col_name )
-                {
-                    ColumnInfo col_info = child_results[0].data_schema[j];
-                    col_info.acc_col_size = acc;
-                    acc += child_results[0].data_schema[j].size_in_bytes;
-                    new_schema.push_back(col_info);
-                    col_index[i] = j;
-                    acc_sums[i] = child_results[0].data_schema[j].acc_col_size;
-                    sizes[i] = child_results[0].data_schema[j].size_in_bytes;
-                    new_row_size += child_results[0].data_schema[j].size_in_bytes;
-                    break;
-                }
-            }
-        }
 
-        int row_size = child_results[0].data.size() / child_results[0].num_row;
-
-        std::cout << "New schema after projection:" << std::endl;
-        char *data = call_project_kernel(child_results[0].data.data(), new_row_size, row_size, col_index, acc_sums, child_results[0].num_row, node->details.size(), sizes);
-        return_node_type return_data;
-        return_data.data = std::vector<char>(data, data + child_results[0].num_row * new_row_size);
+        return_data.data = std::vector<char>();
         return_data.num_row = child_results[0].num_row;
-        return_data.data_schema = new_schema;
-        for (auto i : return_data.data_schema)
+
+        while (start < total_size)
         {
-            cout << "the projection return_data schema name is " << i.name << endl;
+            int end = min(start + read_ram, total_size);
+
+            if (start == 0)
+            {
+                for (int i = 0; i < node->details.size(); i++)
+                {
+                    std::string col_name = node->details[i];
+                    for (int j = 0; j < child_results[0].data_schema.size(); j++)
+                    {
+                        if (child_results[0].data_schema[j].name == col_name)
+                        {
+                            ColumnInfo col_info = child_results[0].data_schema[j];
+                            col_info.acc_col_size = acc;
+                            acc += child_results[0].data_schema[j].size_in_bytes;
+                            new_schema.push_back(col_info);
+                            col_index[i] = j;
+                            acc_sums[i] = child_results[0].data_schema[j].acc_col_size;
+                            sizes[i] = child_results[0].data_schema[j].size_in_bytes;
+                            new_row_size += child_results[0].data_schema[j].size_in_bytes;
+                            break;
+                        }
+                    }
+                }
+                return_data.data_schema = new_schema;
+            }
+
+            int num_row = (end - start) / row_size;
+
+            char *data = call_project_kernel(child_results[0].data.data() + start, new_row_size, row_size, col_index, acc_sums, num_row, node->details.size(), sizes);
+
+            return_data.data.insert(return_data.data.end(), data, data + num_row * new_row_size);
+            start += read_ram;
         }
+        child_results.clear();
         return return_data;
     }
     else
@@ -553,15 +672,6 @@ int main(int argc, char *argv[])
         auto start_time = std::chrono::high_resolution_clock::now();
         get_schema(schema);
 
-        // Print the schema
-        for (const auto &table : schema)
-        {
-            cout << "Table: " << table.first << endl;
-            for (const auto &col : table.second.second)
-            {
-                cout << "  Column: " << col.name << ", Type: " << col.type << "is_primary_key: " << col.is_primary << "is_forign_key: " << col.foreign_table << endl;
-            }
-        }
         create_tables_from_schema(con, schema);
 
         Parser parser;
@@ -577,13 +687,12 @@ int main(int argc, char *argv[])
         // Now you can proceed with further processing or optimization
         cout << "Planning successful!" << endl;
         cout << "Unoptimized Logical Plan:\n"
-            << planner.plan->ToString() << endl;
+             << planner.plan->ToString() << endl;
 
         Optimizer optimizer(*planner.binder, context);
         auto logical_plan = optimizer.Optimize(std::move(planner.plan));
         cout << "Optimized Logical Plan:\n";
         cout << logical_plan->ToString() << endl;
-        
 
         auto tree_root = build_plan_tree(logical_plan.get());
         print_tree(tree_root);
@@ -593,16 +702,10 @@ int main(int argc, char *argv[])
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed_time = end_time - start_time;
         std::cout << "Query execution time on GPU : " << elapsed_time.count() << " seconds" << std::endl;
-        print_chunk(data_out.data, data_out.data_schema, alias_map);
 
-        // auto start_time = std::chrono::high_resolution_clock::now();
-        // get_schema(schema);
-        // create_tables_from_schema(con, schema);
-        // con.BeginTransaction();
-        // con.Query(query);
-        // auto end_time = std::chrono::high_resolution_clock::now();
-        // std::chrono::duration<double> elapsed_time = end_time - start_time;
-        // std::cout << "Query execution time on CPU : " << elapsed_time.count() << " seconds" << std::endl;
+        cout << "num of rows" << data_out.num_row << endl;
+        write_csv("output.csv", data_out.data, data_out.data_schema, alias_map);
+      
         con.Commit(); // Commit transaction using Connection
     }
 }
