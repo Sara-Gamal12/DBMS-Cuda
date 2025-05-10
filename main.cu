@@ -54,7 +54,7 @@
 using namespace std;
 using namespace duckdb;
 
-int RAM = 100 * pow(1024, 2); // 4GB
+int RAM = 50 * pow(1024, 2); // 4GB
 Schema schema;
 
 struct PlanNode
@@ -85,7 +85,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     }
 
     // 2. Process current node (e.g., launch kernel)
-    std::cout << "Launching kernel for operator: " << node->name << std::endl;
 
     if (child_results.size() != 0 && child_results[0].num_row == 0)
     {
@@ -97,38 +96,39 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         string table_name = node->details[0];
         int row_size;
         return_node_type return_data;
-        return_data.data=std::vector<char>() ;
+        return_data.data = std::vector<char>();
         return_data.num_row = 0;
         // 0.5 * RAM
         std::vector<char> chunk = read_csv_chunk(table_name, RAM, row_size);
         while (chunk.size() != 0)
-        {   
+        {
             if (node->details.size() > 1)
             {
 
-                std::vector<string> expr;
-                for (size_t i = 1; i < node->details.size(); ++i)
-                {
-                    expr.push_back(node->details[i]);
-                    if (i != node->details.size() - 1)
-                        expr.push_back("and");
-                }
-                int *acc_sums = new int[(schema[table_name].second.size())];
-                std::vector<Token> tokens = tokenize(expr);
-                std::vector<std::string> postfix = infix_to_postfix(tokens);
-                std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, schema[table_name].second, acc_sums);
-                tokens.clear();
-                postfix.clear();
-                int n = chunk.size() / row_size;
-                int output_counter = 0;
-                char *data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), n, output_counter, schema[table_name].second.size());
+                // std::vector<string> expr;
+                // for (size_t i = 1; i < node->details.size(); ++i)
+                // {
+                //     expr.push_back(node->details[i]);
+                //     if (i != node->details.size() - 1)
+                //         expr.push_back("and");
+                // }
+                // int *acc_sums = new int[(schema[table_name].second.size())];
+                // std::vector<Token> tokens = tokenize(expr);
+                // std::vector<std::string> postfix = infix_to_postfix(tokens);
+                // std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, schema[table_name].second, acc_sums);
+                // tokens.clear();
+                // postfix.clear();
+                // int n = chunk.size() / row_size;
+                // int output_counter = 0;
 
-                std::vector<char> vec_data(data, data + output_counter * row_size);
-                return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
-                vec_data.clear();
-                delete[] data;
-                return_data.num_row += output_counter;
-                return_data.data_schema = schema[table_name].second;
+                // char *data = call_get_kernel(chunk.data(), row_size, acc_sums, condition_tokens, condition_tokens.size(), n, output_counter, schema[table_name].second.size());
+
+                // std::vector<char> vec_data(data, data + output_counter * row_size);
+                // return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
+                // vec_data.clear();
+                // delete[] data;
+                // return_data.num_row += output_counter;
+                // return_data.data_schema = schema[table_name].second;
             }
             else
             {
@@ -148,10 +148,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     {
         if (node->details.size() == 0)
         {
-            for (auto i : child_results[0].data_schema)
-            {
-                cout << "the FILTER return_data schema name is " << i.name << endl;
-            }
+
             return child_results[0];
         }
         int row_size = child_results[0].data.size() / child_results[0].num_row;
@@ -174,7 +171,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
 
         std::vector<Token> tokens = tokenize(vector_expr);
         std::vector<std::string> postfix = infix_to_postfix(tokens);
-      
+
         std::vector<ConditionToken> condition_tokens = parse_postfix(postfix, child_results[0].data_schema, acc_sums);
         return_node_type return_data;
         tokens.clear();
@@ -186,43 +183,56 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         int total_size = child_results[0].data.size();
         return_data.num_row = 0;
         return_data.data_schema = child_results[0].data_schema;
-       
+
         while (start < total_size)
         {
             int end = min(start + read_ram, total_size);
             int num_row = (end - start) / row_size;
-            cout << "rows " <<num_row<< endl;
-           
-            char *data = call_get_kernel(child_results[0].data.data()+start , row_size, acc_sums, condition_tokens, condition_tokens.size(), num_row, output_counter, child_results[0].data_schema.size());
+
+            // Create a  stream for each batch
+            cudaStream_t batch_stream;
+            cudaStreamCreate(&batch_stream);
+
+            char *data = call_get_kernel(child_results[0].data.data() + start, row_size, acc_sums, condition_tokens, condition_tokens.size(), num_row, output_counter, child_results[0].data_schema.size(), batch_stream);
+
+            //  Sync this stream only (non-blocking for others)
+            cudaStreamSynchronize(batch_stream);
+            cudaStreamDestroy(batch_stream); // Clean up
 
             std::vector<char> vec_data(data, data + output_counter * row_size);
             return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
             return_data.num_row += output_counter;
             vec_data.clear();
             delete[] data;
-            start+= read_ram;
+            start += read_ram;
         }
         child_results.clear();
         return return_data;
     }
-   
-   
     else if (node->name == "COMPARISON_JOIN")
     {
-        int row_size_a = child_results[0].data.size() / child_results[0].num_row;
-        int row_size_b = child_results[1].data.size() / child_results[1].num_row;
+        // Determine which table is smaller by byte size
+        int idx_a = 0;
+        int idx_b = 1;
 
-        std::vector<ColumnInfo> child_schema_a = child_results[0].data_schema;
-        std::vector<ColumnInfo> child_schema_b = child_results[1].data_schema;
-        std::vector<ColumnInfo> schema_merged;
+        // Prepare schemas and sizes
+        int row_size_a = child_results[idx_a].data.size() / child_results[idx_a].num_row;
+        int row_size_b = child_results[idx_b].data.size() / child_results[idx_b].num_row;
+        
+ 
 
-        schema_merged.reserve(child_schema_a.size() + child_schema_b.size());
-        schema_merged.insert(schema_merged.end(), child_schema_a.begin(), child_schema_a.end());
-        schema_merged.insert(schema_merged.end(), child_schema_b.begin(), child_schema_b.end());
-        for (auto i : schema_merged)
-        {
-            cout << "the schema name is " << i.name << endl;
-        }
+
+        
+        // Get data and schema
+        std::vector<ColumnInfo> schema_a = child_results[idx_a].data_schema;
+        std::vector<ColumnInfo> schema_b = child_results[idx_b].data_schema;
+        
+        // Merge schema
+        std::vector<ColumnInfo> schema_merged=schema_a;
+        schema_merged.insert(schema_merged.end(), schema_b.begin(), schema_b.end());
+
+
+        // Compute accumulated column sizes
         int accumulator = 0;
         for (int j = 0; j < schema_merged.size(); j++)
         {
@@ -230,8 +240,8 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             accumulator += schema_merged[j].size_in_bytes;
         }
 
-        int *acc_sums_a = new int[child_results[0].data_schema.size()];
-        int *acc_sums_b = new int[child_results[1].data_schema.size()];
+        int *acc_sums_a = new int[child_results[idx_a].data_schema.size()];
+        int *acc_sums_b = new int[child_results[idx_b].data_schema.size()];
 
         std::string expr = "";
         for (size_t i = 0; i < node->details.size(); ++i)
@@ -240,49 +250,48 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             if (i != node->details.size() - 1)
                 expr += " and ";
         }
-        // cout << "expr " << expr << endl;
+
         expr = replace_operatirs(expr);
         std::vector<std::string> vector_expr = tokenizeExpression(expr);
-        // for (size_t i = 0; i < vector_expr.size(); ++i)
-        // {
-        //     cout << "vector_expr " << vector_expr[i] << endl;
-        // }
-
         std::vector<Token> tokens = tokenize(vector_expr);
-        // for (auto pos : tokens)
-        // {
-        //     cout << "tokens " << pos.value << endl;
-        // }
         std::vector<std::string> postfix = infix_to_postfix(tokens);
 
-        // for(auto pos: postfix){
-        //     cout<<"postfixxx "<<pos<<endl;
-        // }
-        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix, child_results[0].data_schema, child_results[1].data_schema, acc_sums_a, acc_sums_b);
-        ;
-        // std::cout<<"the condition tokens size is  "<<condition_tokens.size()<<endl;
-        // for(auto pos: condition_tokens){
-        //     std::cout<<"the condition tokens col_index is "<<pos.joinCond.col_index_a<<endl;
-        //     cout<<"the condition tokens sec_col_index is "<<pos.joinCond.col_index_b<<endl;
-        //     cout<<"the condition tokens op is "<<pos.joinCond.op<<endl;
-        //     cout<<"the condition tokens type is "<<pos.joinCond.type<<endl;
-        // }
+
+        std::vector<JoinConditionToken> condition_tokens = join_parse_postfix(postfix,child_results[idx_a].data_schema, child_results[idx_b].data_schema, acc_sums_a, acc_sums_b);
+
+
+        // --------- Batching over table B ---------
+        return_node_type return_data;
 
         int output_counter = 0;
-
-        char *data = call_join_kernel(child_results[0].data.data(), child_results[0].num_row, row_size_a, acc_sums_a, child_results[1].data.data(), child_results[1].num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), child_results[0].data_schema.size(), child_results[1].data_schema.size());
-        return_node_type return_data;
-        return_data.data = std::vector<char>(data, data + output_counter * (row_size_a + row_size_b));
-        return_data.num_row = output_counter;
+        int start = 0;
+        int read_ram = (RAM / row_size_b) * row_size_b;
+        int total_size = child_results[idx_b].data.size();
+        return_data.num_row = 0;
         return_data.data_schema = schema_merged;
-        cout << "the join garbage data" << endl;
-        print_chunk(return_data.data, return_data.data_schema, std::unordered_map<std::string, std::string>());
-        for (auto i : return_data.data_schema)
+
+        while (start < total_size)
         {
-            cout << "the return_data schema name is " << i.name << endl;
+            int end = min(start + read_ram, total_size);
+            int num_row = (end - start) / row_size_b;
+
+            // Create a stream for each batch
+            cudaStream_t batch_stream;
+            cudaStreamCreate(&batch_stream);
+
+            char *data = call_join_kernel(child_results[idx_a].data.data(), child_results[idx_a].num_row, row_size_a, acc_sums_a, child_results[idx_b].data.data() + start, num_row, row_size_b, acc_sums_b, output_counter, condition_tokens.data(), condition_tokens.size(), schema_a.size(), schema_b.size(), batch_stream);
+
+            // Sync this stream only (non-blocking for others)
+            cudaStreamSynchronize(batch_stream);
+            cudaStreamDestroy(batch_stream); // Clean up
+            std::vector<char> vec_data(data, data + output_counter * (row_size_a + row_size_b));
+            return_data.data.insert(return_data.data.end(), vec_data.begin(), vec_data.end());
+            return_data.num_row += output_counter;
+            vec_data.clear();
+            delete[] data;
+            start += read_ram;
+            
         }
-        cout << "the output counter is " << output_counter << endl;
-        cout << "the data size is " << return_data.data.size() << endl;
         child_results.clear();
         return return_data;
     }
@@ -294,8 +303,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         string col_name = node->details[0].substr(lastDot + 1, lastSpace - lastDot - 1);
         string oredr_method = node->details[0].substr(lastSpace + 1);
 
-        std::cout << "col_name: " << col_name << std::endl;
-        std::cout << "oredr_method: " << oredr_method << std::endl;
         int row_size = child_results[0].data.size() / child_results[0].num_row;
         int i = 0;
         while (child_results[0].data_schema[i].name != col_name)
@@ -303,7 +310,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             i++;
         }
         int acc_sums = child_results[0].data_schema[i].acc_col_size;
-        int start=0;
+        int start = 0;
         int total_size = child_results[0].data.size();
         int read_ram = (RAM / row_size) * row_size;
         char *data = call_sort_kernel(child_results[0].data.data(), row_size, child_results[0].num_row, acc_sums, (oredr_method == "ASC"));
@@ -408,6 +415,14 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
             }
             else if (node->details[0].find("count") != std::string::npos)
             {
+                if (final_result == NULL)
+                {
+                    final_result = new double(0);
+                }
+                if (curr_result != NULL)
+                {
+                    *final_result += *curr_result;
+                }
                 op = "count";
             }
 
@@ -423,7 +438,7 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
         }
         else if (op == "count")
         {
-            *final_result = child_results[0].num_row;
+            *final_result = *curr_result;
         }
         else if (op == "sum")
         {
@@ -510,7 +525,6 @@ return_node_type post_order_traverse_and_launch_kernel(std::shared_ptr<PlanNode>
     }
     else
     {
-        std::cout << "No matching kernel for: " << node->name << std::endl;
         return child_results[0]; // Return the first child's result as a fallback
     }
 }
@@ -649,6 +663,30 @@ std::unordered_map<std::string, std::string> remove_AS(string &query)
 
 int main(int argc, char *argv[])
 {
+    if (argc != 3)
+    {
+        return 1; // Invalid usage
+    }
+
+    std::string data_path = argv[1];
+    std::string query_file_path = argv[2];
+
+    // Read query from file
+    std::ifstream query_file(query_file_path);
+    if (!query_file.is_open())
+    {
+        return 1;
+    }
+
+    std::string query((std::istreambuf_iterator<char>(query_file)),
+                      std::istreambuf_iterator<char>());
+    query_file.close();
+
+    // Get filename without path to name the output
+    std::string query_filename = query_file_path.substr(query_file_path.find_last_of("/") + 1);
+    std::string output_filename = "../Team14_" + query_filename.substr(0, query_filename.find_last_of('.')) + ".csv";
+    
+
     // DuckDB
     using namespace duckdb;
     DuckDB db(nullptr);
@@ -656,56 +694,36 @@ int main(int argc, char *argv[])
     ClientContext &context = *con.context;
     con.Query("SET disabled_optimizers='filter_pushdown,statistics_propagation';");
 
-    while (true)
-    {
-        cout << "\nEnter SQL query (or type 'exit' to quit): ";
-        string query;
-        getline(cin, query);
+    std::unordered_map<std::string, std::string> alias_map = remove_AS(query);
+    auto start = std::chrono::high_resolution_clock::now();
+    get_schema(schema,data_path);
 
-        if (query == "exit" || query == "quit")
-        {
-            cout << "Exiting CLI.\n";
-            break;
-        }
+    create_tables_from_schema(con, schema,data_path);
 
-        std::unordered_map<std::string, std::string> alias_map = remove_AS(query);
-        auto start_time = std::chrono::high_resolution_clock::now();
-        get_schema(schema);
+    Parser parser;
+    parser.ParseQuery(query);
+    auto statements = std::move(parser.statements);
+    // Start a transaction
+    con.BeginTransaction(); // Start transaction using Connection
+    // Create a planner and plan the query
+    Planner planner(context);
+    planner.CreatePlan(std::move(statements[0]));
 
-        create_tables_from_schema(con, schema);
+    Optimizer optimizer(*planner.binder, context);
+    auto logical_plan = optimizer.Optimize(std::move(planner.plan));
+  
+    auto tree_root = build_plan_tree(logical_plan.get());
 
-        Parser parser;
-        parser.ParseQuery(query);
-        auto statements = std::move(parser.statements);
-        // Start a transaction
-        con.BeginTransaction(); // Start transaction using Connection
+    return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
 
-        // Create a planner and plan the query
-        Planner planner(context);
-        planner.CreatePlan(std::move(statements[0]));
+    auto end = std::chrono::high_resolution_clock::now();
 
-        // Now you can proceed with further processing or optimization
-        cout << "Planning successful!" << endl;
-        cout << "Unoptimized Logical Plan:\n"
-             << planner.plan->ToString() << endl;
+    std::chrono::duration<double> duration = end - start;
 
-        Optimizer optimizer(*planner.binder, context);
-        auto logical_plan = optimizer.Optimize(std::move(planner.plan));
-        cout << "Optimized Logical Plan:\n";
-        cout << logical_plan->ToString() << endl;
+    std::cout << "Query execution time on GPU : " << duration.count() << " seconds" << std::endl;
 
-        auto tree_root = build_plan_tree(logical_plan.get());
-        print_tree(tree_root);
+    // print_chunk(data_out.data, data_out.data_schema,  std::unordered_map<std::string, std::string>());
+    write_csv(output_filename, data_out.data, data_out.data_schema, alias_map);
 
-        return_node_type data_out = post_order_traverse_and_launch_kernel(tree_root);
-
-        auto end_time = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed_time = end_time - start_time;
-        std::cout << "Query execution time on GPU : " << elapsed_time.count() << " seconds" << std::endl;
-
-        cout << "num of rows" << data_out.num_row << endl;
-        write_csv("output.csv", data_out.data, data_out.data_schema, alias_map);
-      
-        con.Commit(); // Commit transaction using Connection
-    }
+    con.Commit(); // Commit transaction using Connection
 }

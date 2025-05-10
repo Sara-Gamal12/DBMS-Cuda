@@ -129,7 +129,6 @@ std::vector<Token> tokenize(std::vector<std::string> expr)
     return tokens;
 }
 
-
 std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std::vector<ColumnInfo> schema, int *acc_sums)
 {
 
@@ -152,14 +151,13 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             std::string condition_str = postfix[i];
             std::istringstream iss(condition_str);
             std::string column, op, value;
-            iss >> column >> op ;
+            iss >> column >> op;
             std::getline(iss >> std::ws, value);
-
 
             bool is_col = true;
             if ((value[0] == '\'') && (value[value.size() - 1] == '\''))
             {
-                
+
                 value = value.substr(1, value.size() - 2);
                 is_col = false;
             }
@@ -173,8 +171,6 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
                 is_col = false;
             }
 
-            
-            
             for (int j = 0; j < schema.size(); ++j)
             {
                 if (schema[j].name == column || (is_col && schema[j].name == value))
@@ -241,7 +237,7 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
                             ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
                             std::time_t time_value = std::mktime(&tm);
 
-                            const char* ptr = reinterpret_cast<const char*>(&time_value);
+                            const char *ptr = reinterpret_cast<const char *>(&time_value);
 
                             memcpy(&condition.f_value, ptr, sizeof(double));
                         }
@@ -276,7 +272,7 @@ std::vector<ConditionToken> parse_postfix(std::vector<std::string> postfix, std:
             }
 
             token.condition = condition;
-            // std::cout<<"condition.col_index: "<<condition.col_index<<std::endl;
+            // std::cout<<"condition.s_value: "<<condition.s_value<<std::endl;
             // std::cout<<"condition.sec_col_index: "<<condition.sec_col_index<<std::endl;
             // std::cout<<"condition.type: "<<condition.type<<std::endl;
             // std::cout<<"condition.op: "<<condition.op<<std::endl;
@@ -299,11 +295,11 @@ std::vector<std::string> tokenizeExpression(const std::string &input)
         {
             std::string trimmed = buffer;
             trimmed.erase(trimmed.begin(), std::find_if(trimmed.begin(), trimmed.end(), [](unsigned char ch)
-                                                    { return !std::isspace(ch); }));
+                                                        { return !std::isspace(ch); }));
             trimmed.erase(std::find_if(trimmed.rbegin(), trimmed.rend(), [](unsigned char ch)
-                                    { return !std::isspace(ch); })
-                            .base(),
-                        trimmed.end());
+                                       { return !std::isspace(ch); })
+                              .base(),
+                          trimmed.end());
 
             if (trimmed == "AND" || trimmed == "OR" || trimmed == "and" || trimmed == "or")
             {
@@ -355,7 +351,7 @@ std::string replace_operatirs(std::string &input)
         else if (token == "<=")
             output += " LESSTHANOREQUALTO ";
         else
-            output += token+" ";
+            output += token + " ";
     }
     return output;
 }

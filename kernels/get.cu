@@ -28,28 +28,27 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
 
     if (cond.type == 0)
     { // int
-        double *val = (double *)malloc(sizeof(double));
-        memcpy(val, field_ptr, sizeof(double));
+        double val;
+        memcpy(&val, field_ptr, sizeof(double));
         switch (cond.op)
         {
         case OP_GT:
-            return *val > cond.f_value;
+            return val > cond.f_value;
         case OP_LT:
-            return *val < cond.f_value;
+            return val < cond.f_value;
         case OP_EQ:
-            return *val == cond.f_value;
+            return val == cond.f_value;
         case OP_NEQ:
-            return *val != cond.f_value;
+            return val != cond.f_value;
         case OP_GTE:
-            return *val >= cond.f_value;
+            return val >= cond.f_value;
         case OP_LTE:
-            return *val <= cond.f_value;
+            return val <= cond.f_value;
         }
     }
     else if (cond.type == 1)
     { // float
-        char *val = (char *)malloc(150);
-        ;
+        char val[150];
         memcpy(val, field_ptr, 150);
         switch (cond.op)
         {
@@ -66,24 +65,24 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
         {
             return false;
         }
-        double *val1 = (double *)malloc(sizeof(double));
-        memcpy(val1, field_ptr, sizeof(double));
-        double *val2 = (double *)malloc(sizeof(double));
-        memcpy(val2, col_ptr, sizeof(double));
+        double val1;
+        memcpy(&val1, field_ptr, sizeof(double));
+        double val2;
+        memcpy(&val2, col_ptr, sizeof(double));
         switch (cond.op)
         {
         case OP_GT:
-            return *val1 > *val2;
+            return val1 > val2;
         case OP_LT:
-            return *val1 < *val2;
+            return val1 < val2;
         case OP_EQ:
-            return *val1 == *val2;
+            return val1 == val2;
         case OP_NEQ:
-            return *val1 != *val2;
+            return val1 != val2;
         case OP_GTE:
-            return *val1 >= *val2;
+            return val1 >= val2;
         case OP_LTE:
-            return *val1 <= *val2;
+            return val1 <= val2;
         }
     }
     else if (cond.type == 3)
@@ -93,8 +92,8 @@ __device__ bool eval_condition(char *row_ptr, int *acc_col_size, const Condition
         {
             return false;
         }
-        char *val1 = (char *)malloc(150);
-        char *val2 = (char *)malloc(150);
+        char val1[150];
+        char val2[150];
         memcpy(val1, field_ptr, 150);
         memcpy(val2, col_ptr, 150);
         switch (cond.op)
@@ -165,7 +164,7 @@ __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
     }
 }
 
-__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, std::vector<ConditionToken> condition_tokens, int cond_count, int n, int &output_counter, int column_num)
+__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, std::vector<ConditionToken> condition_tokens, int cond_count, int n, int &output_counter, int column_num,cudaStream_t stream)
 {
 
     int *h_output_counter = (int *)malloc(sizeof(int));
@@ -176,22 +175,23 @@ __host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, st
     ConditionToken *d_conditions;
     ConditionToken *conditions = condition_tokens.data();
 
-    cudaMalloc(&d_input_data, n * row_size);
-    cudaMalloc(&d_output_data, n * row_size);
-    cudaMalloc(&d_acc_col_size, sizeof(int) * column_num);
-    cudaMalloc(&d_output_counter, sizeof(int));
-    cudaMalloc(&d_conditions, sizeof(ConditionToken) * cond_count);
+    // Allocate device memory
+    cudaMallocAsync(&d_input_data, n * row_size,stream);
+    cudaMallocAsync(&d_output_data, n * row_size, stream);
+    cudaMallocAsync(&d_acc_col_size, sizeof(int) * column_num, stream);
+    cudaMallocAsync(&d_output_counter, sizeof(int), stream);
+    cudaMallocAsync(&d_conditions, sizeof(ConditionToken) * cond_count, stream);
+    // Async copy to device
+    cudaMemcpyAsync(d_input_data, input_data, n * row_size, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_acc_col_size, acc_sums, sizeof(int) * column_num, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_conditions, conditions, sizeof(ConditionToken) * cond_count, cudaMemcpyHostToDevice, stream);
 
-    cudaMemcpy(d_input_data, input_data, n * row_size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_acc_col_size, acc_sums, sizeof(int) * column_num, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_conditions, conditions, sizeof(ConditionToken) * cond_count, cudaMemcpyHostToDevice);
-
-    cudaMemset(d_output_counter, 0, sizeof(int));
+    cudaMemsetAsync(d_output_counter, 0, sizeof(int), stream);
 
     int blockSize = 256;
     int numBlocks = (n + blockSize - 1) / blockSize;
 
-    get_kernel<<<numBlocks, blockSize>>>(d_input_data, row_size,
+    get_kernel<<<numBlocks, blockSize,0,stream>>>(d_input_data, row_size,
                                          d_acc_col_size,
                                          d_output_data,
                                          d_output_counter,
@@ -213,17 +213,23 @@ __host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, st
         printf("Kernel launch failed: %s \n", cudaGetErrorString(err));
     }
 
-    cudaMemcpy(h_output_counter, d_output_counter, sizeof(int), cudaMemcpyDeviceToHost);
+    // Sync for output counter
+    cudaMemcpyAsync(h_output_counter, d_output_counter, sizeof(int), cudaMemcpyDeviceToHost, stream);
+    cudaStreamSynchronize(stream);  // Ensure h_output_counter is valid before using
+    
+    // Copy output rows back
     char *h_output_data = (char *)malloc(*h_output_counter * row_size * sizeof(char));
-    cudaMemcpy(h_output_data, d_output_data, *h_output_counter * row_size, cudaMemcpyDeviceToHost);
-
+    cudaMemcpyAsync(h_output_data, d_output_data, *h_output_counter * row_size, cudaMemcpyDeviceToHost, stream);
+    
+    cudaStreamSynchronize(stream);  // Ensure all memory is copied back before returning
     // Free device memory
-    cudaFree(d_input_data);
-    cudaFree(d_output_data);
-    cudaFree(d_acc_col_size);
-    cudaFree(d_output_counter);
-    cudaFree(d_conditions);
+    cudaFreeAsync(d_input_data,stream);
+    cudaFreeAsync(d_output_data,stream);
+    cudaFreeAsync(d_acc_col_size,stream);
+    cudaFreeAsync(d_output_counter,stream);
+    cudaFreeAsync(d_conditions,stream);
 
     output_counter = *h_output_counter;
+    free(h_output_counter);
     return h_output_data;
 }

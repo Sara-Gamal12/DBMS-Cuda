@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <algorithm>
 #include "agg.cuh"
-#include"get.cuh"
+#include "get.cuh"
 
 __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, double *max_element, int n)
 {
@@ -29,14 +29,10 @@ __global__ void max_kernel(char *input_data, int row_size, int acc_col_size, dou
             partial_max[blockDim.x + t] = INT_MIN;
         else
             memcpy(&partial_max[blockDim.x + t], data_ptr, sizeof(double));
-
     }
     else
         partial_max[blockDim.x + t] = INT_MIN;
 
-    
-    
-    
     // loop to reduce the data in shared memory
     // each thread will be responsible for 2 elements
     for (unsigned int stride = blockDim.x; stride > 0; stride /= 2)
@@ -64,7 +60,7 @@ __global__ void min_kernel(char *input_data, int row_size, int acc_col_size, dou
     {
         char *data_ptr = &input_data[(start + t) * row_size + acc_col_size];
         if (device_strcmp(data_ptr, "NULL") == 0)
-            partial_min[ t] = INT_MAX;
+            partial_min[t] = INT_MAX;
         else
             memcpy(&partial_min[t], data_ptr, sizeof(double));
     }
@@ -98,7 +94,7 @@ __global__ void min_kernel(char *input_data, int row_size, int acc_col_size, dou
     }
 }
 
-__global__ void sum_kernel(char *input_data, int row_size, int acc_col_size, double *sum_element, int n)
+__global__ void sum_kernel(char *input_data, int row_size, int acc_col_size, double *sum_element, int n, int *num_rows)
 {
     extern __shared__ double partial_sum[];
     unsigned int t = threadIdx.x;
@@ -111,20 +107,25 @@ __global__ void sum_kernel(char *input_data, int row_size, int acc_col_size, dou
         if (device_strcmp(data_ptr, "NULL") == 0)
             partial_sum[t] = 0;
         else
+        {
+            atomicAdd(num_rows, 1);
             memcpy(&partial_sum[t], data_ptr, sizeof(double));
+        }
     }
     else
         partial_sum[t] = 0;
     // load 2nd element data into shared memory
     if (start + blockDim.x + t < n)
     {
-        
+
         char *data_ptr = &input_data[(start + blockDim.x + t) * row_size + acc_col_size];
         if (device_strcmp(data_ptr, "NULL") == 0)
             partial_sum[blockDim.x + t] = 0;
         else
+        {
+            atomicAdd(num_rows, 1);
             memcpy(&partial_sum[blockDim.x + t], data_ptr, sizeof(double));
-        
+        }
     }
     else
         partial_sum[blockDim.x + t] = 0;
@@ -145,11 +146,25 @@ __global__ void sum_kernel(char *input_data, int row_size, int acc_col_size, dou
     }
 }
 
+__global__ void count_kernel(char *input_data, int row_size, int acc_col_size, int n, int *num_rows)
+{
+    unsigned int t = threadIdx.x + blockIdx.x * blockDim.x;
+    if (t < n)
+    {
+        char *data_ptr = &input_data[(t)*row_size + acc_col_size];
+        if (device_strcmp(data_ptr, "NULL") != 0)
+        {
+            atomicAdd(&num_rows[blockIdx.x], 1);
+        }
+    }
+}
+
 __host__ double call_agg_kernel(char *input_data, int row_size, int acc_col_size, char *op, int n)
 {
     char *d_input_data;
     double *d_output_data;
     double *h_output_data;
+    int *d_num_rows;
 
     // Allocate device memory
     cudaMalloc((void **)&d_input_data, n * row_size * sizeof(char));
@@ -161,14 +176,26 @@ __host__ double call_agg_kernel(char *input_data, int row_size, int acc_col_size
     h_output_data = (double *)malloc(numBlocks * sizeof(double));
     cudaMalloc((void **)&d_output_data, numBlocks * sizeof(double));
 
-
-    size_t shared=2 * blockSize * sizeof(double); ;
+    size_t shared = 2 * blockSize * sizeof(double);
+    ;
     if (strcmp(op, "max") == 0)
         max_kernel<<<numBlocks, blockSize, shared>>>(d_input_data, row_size, acc_col_size, d_output_data, n);
     else if (strcmp(op, "min") == 0)
-        min_kernel<<<numBlocks, blockSize,shared>>>(d_input_data, row_size, acc_col_size, d_output_data, n);
+        min_kernel<<<numBlocks, blockSize, shared>>>(d_input_data, row_size, acc_col_size, d_output_data, n);
     else if (strcmp(op, "sum") == 0 || strcmp(op, "avg") == 0)
-        sum_kernel<<<numBlocks, blockSize, shared>>>(d_input_data, row_size, acc_col_size, d_output_data, n);
+
+    {
+        cudaMalloc((void **)&d_num_rows, sizeof(int));
+        cudaMemset(d_num_rows, 0, sizeof(int));
+        sum_kernel<<<numBlocks, blockSize, shared>>>(d_input_data, row_size, acc_col_size, d_output_data, n, d_num_rows);
+    }
+    else if (strcmp(op, "count") == 0)
+    {
+        numBlocks = (n + (blockSize) - 1) / (blockSize);
+        cudaMalloc((void **)&d_num_rows, numBlocks*sizeof(int));
+        cudaMemset(d_num_rows, 0, numBlocks*sizeof(int));
+        count_kernel<<<numBlocks, blockSize>>>(d_input_data, row_size, acc_col_size, n, d_num_rows);
+    }
 
     // copy back the data
     cudaMemcpy(h_output_data, d_output_data, numBlocks * sizeof(double), cudaMemcpyDeviceToHost);
@@ -207,12 +234,26 @@ __host__ double call_agg_kernel(char *input_data, int row_size, int acc_col_size
             result += h_output_data[i];
 
         if (strcmp(op, "avg") == 0)
-            result /= n;
+        {
+            int num_rows = 0;
+            cudaMemcpy(&num_rows, d_num_rows, sizeof(int), cudaMemcpyDeviceToHost);
+            result /= num_rows;
+        }
+    }
+    else if (strcmp(op, "count") == 0)
+    {
+        int * num_rows=new int[numBlocks];
+        cudaMemcpy(num_rows, d_num_rows, numBlocks*sizeof(int), cudaMemcpyDeviceToHost);
+        result = 0;
+        for (int i = 0; i < numBlocks; i++)
+            result += num_rows[i];
     }
 
     // Cleanup
     cudaFree(d_input_data);
     cudaFree(d_output_data);
+    cudaFree(d_num_rows);
+    free(h_output_data);
 
     return result;
 }

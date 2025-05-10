@@ -42,6 +42,7 @@ __global__ void get_kernel(char *input_data, int row_size, int *acc_col_size,
                            char *output_data, int *output_counter,
                            ConditionToken *tokens, int token_count, int n);
 
-__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, std::vector<ConditionToken> conditions, int cond_count, int n, int &output_counter,int column_num);
+__host__ char *call_get_kernel(char *input_data, int row_size, int *acc_sums, std::vector<ConditionToken> condition_tokens, int cond_count, int n, int &output_counter, int column_num,cudaStream_t stream);
+
 
 #endif // GET_KERNELS_H

@@ -7,33 +7,31 @@ __device__ bool eval_join_condition(char *row_ptr_a, int *acc_col_size_a,char *r
     char *field_ptr_b = row_ptr_b + acc_col_size_b[cond.col_index_b];
     if (cond.type == 0)
     { // numerical
-        double *val1 = (double *)malloc(sizeof(double));
-        double *val2 = (double *)malloc(sizeof(double));
+        double val1;
+        double val2;
         
-        memcpy(val1, field_ptr_a, sizeof(double));
-        memcpy(val2, field_ptr_b, sizeof(double));
-        printf("val1: %f, val2: %f\n", *val1, *val2);
+        memcpy(&val1, field_ptr_a, sizeof(double));
+        memcpy(&val2, field_ptr_b, sizeof(double));
         switch (cond.op)
         {
         case OP_GT:
-            return *val1 > *val2;
+            return val1 > val2;
         case OP_LT:
-            return *val1 < *val2;
+            return val1 < val2;
         case OP_EQ:
-            return *val1 == *val2;
+            return val1 == val2;
         case OP_NEQ:
-            return *val1 != *val2;
+            return val1 != val2;
         case OP_GTE:
-            return *val1 >= *val2;
+            return val1 >= val2;
         case OP_LTE:
-            return *val1 <= *val2;
+            return val1 <= val2;
         }
     }
     else
     { // text
-        char *val1 = (char *)malloc(150);
-        char *val2 = (char *)malloc(150);
-        
+        char val1[150];
+        char val2[150];
         memcpy(val1, field_ptr_a, 150);
         memcpy(val2, field_ptr_b, 150);
         switch (cond.op)
@@ -87,7 +85,6 @@ __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *a
     char *row_ptr_a = &table_a[aIdx * row_size_a];
     for (int j = 0; j < size_b; ++j) {
         char *row_ptr_b = &table_b[j * row_size_b];
-        printf("Thread %d processing row %d\n", threadIdx.x, j);
         bool pass = eval_condition_tokens(row_ptr_a,row_ptr_b, acc_col_size_a,acc_col_size_b, joinConds, cond_count);
 
         if (pass) {
@@ -108,7 +105,8 @@ __global__ void nested_loop_join(char* table_a, int size_a,int row_size_a,int *a
     }
 }
 
-__host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, int& resultCount,JoinConditionToken *joinConds, int cond_count, int column_num_a, int column_num_b)
+
+__host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *acc_col_size_a,char *table_b, int size_b,int row_size_b,int *acc_col_size_b, int& resultCount,JoinConditionToken *joinConds, int cond_count, int column_num_a, int column_num_b, cudaStream_t stream)
 {
     int *h_output_counter = (int *)malloc(sizeof(int));
 
@@ -118,44 +116,49 @@ __host__ char *call_join_kernel(char* table_a, int size_a,int row_size_a,int *ac
     int *d_acc_col_size_a, *d_acc_col_size_b, *d_resultCount;
     JoinConditionToken *d_joinConds;
 
-    cudaMalloc((void**)&d_table_a, size_a * row_size_a);
-    cudaMalloc((void**)&d_table_b, size_b * row_size_b);
-    cudaMalloc((void**)&d_result, MAX_JOINED_ROWS * (row_size_a + row_size_b));
+    cudaMallocAsync((void**)&d_table_a, size_a * row_size_a,stream);
+    cudaMallocAsync((void**)&d_table_b, size_b * row_size_b,stream);
+    cudaMallocAsync((void**)&d_result, MAX_JOINED_ROWS * (row_size_a + row_size_b),stream);
 
-    cudaMalloc((void**)&d_acc_col_size_a, sizeof(int) * column_num_a); 
-    cudaMalloc((void**)&d_acc_col_size_b, sizeof(int) * column_num_b); 
-    cudaMalloc((void**)&d_resultCount, sizeof(int));
-    cudaMalloc((void**)&d_joinConds, sizeof(JoinConditionToken) * cond_count);
+    cudaMallocAsync((void**)&d_acc_col_size_a, sizeof(int) * column_num_a,stream); 
+    cudaMallocAsync((void**)&d_acc_col_size_b, sizeof(int) * column_num_b,stream); 
+    cudaMallocAsync((void**)&d_resultCount, sizeof(int),stream);
+    cudaMallocAsync((void**)&d_joinConds, sizeof(JoinConditionToken) * cond_count,stream);
 
-    cudaMemcpy(d_table_a, table_a, size_a * row_size_a, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_table_b, table_b, size_b * row_size_b, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_acc_col_size_a, acc_col_size_a, sizeof(int) * column_num_a, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_acc_col_size_b, acc_col_size_b, sizeof(int) * column_num_b, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_joinConds, joinConds, sizeof(JoinConditionToken) * cond_count, cudaMemcpyHostToDevice);
+    cudaMemcpyAsync(d_table_a, table_a, size_a * row_size_a, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_table_b, table_b, size_b * row_size_b, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_acc_col_size_a, acc_col_size_a, sizeof(int) * column_num_a, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_acc_col_size_b, acc_col_size_b, sizeof(int) * column_num_b, cudaMemcpyHostToDevice, stream);
+    cudaMemcpyAsync(d_joinConds, joinConds, sizeof(JoinConditionToken) * cond_count, cudaMemcpyHostToDevice, stream);
     
-    cudaMemset(d_resultCount, 0, sizeof(int));
-    int blockSize = 256;
-    int numBlocks = (size_a + blockSize - 1) / blockSize;
+    cudaMemsetAsync(d_resultCount, 0, sizeof(int), stream);
 
-    nested_loop_join<<<numBlocks, blockSize>>>(d_table_a,size_a,row_size_a,d_acc_col_size_a,d_table_b,size_b,row_size_b,d_acc_col_size_b,d_result,d_resultCount,d_joinConds,cond_count);
+    int numBlocks = (size_a + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
-    cudaMemcpy(h_output_counter,d_resultCount,sizeof(int),cudaMemcpyDeviceToHost);
+    nested_loop_join<<<numBlocks, BLOCK_SIZE,0, stream>>>(d_table_a,size_a,row_size_a,d_acc_col_size_a,d_table_b,size_b,row_size_b,d_acc_col_size_b,d_result,d_resultCount,d_joinConds,cond_count);
+    // nested_loop_join_shared<<<numBlocks, BLOCK_SIZE, (BLOCK_SIZE * row_size_b), stream>>>(d_table_a,size_a,row_size_a,d_acc_col_size_a,d_table_b,size_b,row_size_b,d_acc_col_size_b,d_result,d_resultCount,d_joinConds,cond_count);
+
+    cudaMemcpyAsync(h_output_counter,d_resultCount,sizeof(int),cudaMemcpyDeviceToHost,stream);
+    cudaStreamSynchronize(stream);
     
     char *h_output_data = (char *)malloc(*h_output_counter * (row_size_a + row_size_b) * sizeof(char));
 
 
-    cudaMemcpy(h_output_data,d_result, (*h_output_counter * (row_size_a + row_size_b)),cudaMemcpyDeviceToHost);
+    cudaMemcpyAsync(h_output_data,d_result, (*h_output_counter * (row_size_a + row_size_b)),cudaMemcpyDeviceToHost,stream);
+    cudaStreamSynchronize(stream);
+
+
+    // Free device memory
+    cudaFreeAsync(d_table_a,stream);
+    cudaFreeAsync(d_table_b,stream);
+    cudaFreeAsync(d_result,stream);
+    cudaFreeAsync(d_acc_col_size_a,stream);
+    cudaFreeAsync(d_acc_col_size_b,stream);
+    cudaFreeAsync(d_resultCount,stream);
+    cudaFreeAsync(d_joinConds,stream);
 
     resultCount = *h_output_counter;
-    // Free device memory
-    cudaFree(d_table_a);
-    cudaFree(d_table_b);
-    cudaFree(d_result);
-    cudaFree(d_acc_col_size_a);
-    cudaFree(d_acc_col_size_b);
-    cudaFree(d_resultCount);
-    cudaFree(d_joinConds);
-
+    free(h_output_counter);
     return h_output_data;
 
 }

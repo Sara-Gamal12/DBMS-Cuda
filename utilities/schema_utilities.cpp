@@ -2,7 +2,7 @@
 
 extern Schema schema; // External declaration of schema
 
-void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols,std::unordered_map<std::string, std::string> alias_map)
+void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols, std::unordered_map<std::string, std::string> alias_map)
 {
 
     int row_size = 0;
@@ -19,7 +19,7 @@ void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols,std::unor
 
         for (auto &col : cols)
         {
-            if(alias_map.find(col.name) != alias_map.end())
+            if (alias_map.find(col.name) != alias_map.end())
             {
                 col.name = alias_map[col.name];
             }
@@ -28,7 +28,7 @@ void print_chunk(std::vector<char> chunk, std::vector<ColumnInfo> cols,std::unor
             // Get pointer to this column's data within the row
             char *data_ptr = chunk.data() + row_start + offset;
 
-            if(strcmp(data_ptr, "NULL") == 0)
+            if (strcmp(data_ptr, "NULL") == 0)
             {
                 std::cout << "NULL |";
                 offset += col.size_in_bytes;
@@ -69,7 +69,6 @@ std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_byte
 
     if (schema.find(table_name) == schema.end())
     {
-        std::cout << "Table schema not found for: " << table_name << std::endl;
         return {};
     }
 
@@ -95,7 +94,7 @@ std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_byte
         for (const auto &col : cols)
         {
             std::getline(ss, token, ',');
-            token=clean_column(token);
+            token = clean_column(token);
             if (col.type == "Numeric")
             {
                 if (token == "")
@@ -145,8 +144,8 @@ std::vector<char> read_csv_chunk(std::string table_name, long chunk_size_in_byte
                     chunk.insert(chunk.end(), fixed.begin(), fixed.end());
                 }
             }
-            total_size_in_bytes += row_size;
         }
+        total_size_in_bytes += row_size;
     }
     // print_chunk(chunk, table_name);
     return chunk;
@@ -176,7 +175,7 @@ std::string join(const std::vector<std::string> &vec, const std::string &sep)
     return oss.str();
 }
 
-void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
+void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema,std::string data_path)
 {
     std::string forign_key = "";
     for (const auto &[table_name, pair] : schema)
@@ -185,7 +184,7 @@ void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
         std::string sql = "CREATE TABLE " + table_name + " (";
 
         std::vector<std::string> col_defs;
-        std::string primary_key="";
+        std::string primary_key = "";
 
         for (const auto &col : columns)
         {
@@ -218,7 +217,7 @@ void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
 
         conn.Query(sql);
 
-        std::string insert_sql = "INSERT INTO " + table_name + " SELECT * FROM read_csv_auto('../DB/" + table_name + ".csv', HEADER=true);";
+        std::string insert_sql = "INSERT INTO " + table_name + " SELECT * FROM read_csv_auto('+" +data_path + table_name + ".csv', HEADER=true);";
         conn.Query(insert_sql);
     }
 
@@ -228,9 +227,8 @@ void create_tables_from_schema(duckdb::Connection &conn, const Schema &schema)
 std::string clean_column(const std::string &s)
 {
     std::string result = s;
-    result.erase(remove_if(result.begin(), result.end(), ::isspace), result.end()); // remove spaces
-    result.erase(remove(result.begin(), result.end(), '\r'), result.end());         // remove \r
-    result.erase(remove(result.begin(), result.end(), '\n'), result.end());         // remove \n
+    result.erase(remove(result.begin(), result.end(), '\r'), result.end()); // remove \r
+    result.erase(remove(result.begin(), result.end(), '\n'), result.end()); // remove \n
 
     if ((unsigned char)result[0] == 0xEF &&
         (unsigned char)result[1] == 0xBB &&
@@ -241,10 +239,105 @@ std::string clean_column(const std::string &s)
     return result;
 }
 
-// Function to get the schema of the tables
-void get_schema(Schema &schema)
+void write_csv(const std::string &filename,
+               const std::vector<char> &chunk,
+               std::vector<ColumnInfo> cols,
+               const std::unordered_map<std::string, std::string> &alias_map,
+               bool append)
 {
-    for (const auto &entry : std::filesystem::directory_iterator("../DB"))
+    std::ofstream out;
+
+    if (append)
+        out.open(filename, std::ios::app);
+    else
+        out.open(filename, std::ios::out);
+
+    if (!out.is_open())
+    {
+        std::cerr << "Failed to open file for writing: " << filename << std::endl;
+        return;
+    }
+
+    // Write header only if not appending
+    if (!append)
+    {
+        for (size_t i = 0; i < cols.size(); ++i)
+        {
+            std::string col_name = alias_map.count(cols[i].name) ? alias_map.at(cols[i].name) : cols[i].name;
+            out << "\"" << col_name << "\"";
+            if (i < cols.size() - 1)
+                out << ",";
+        }
+        out << "\n";
+    }
+
+    // Calculate row size
+    int row_size = 0;
+    for (const auto &col : cols)
+    {
+        row_size += col.size_in_bytes;
+    }
+
+    // Write rows
+    for (size_t i = 0; i < chunk.size() / row_size; ++i)
+    {
+        size_t row_start = i * row_size;
+        size_t offset = 0;
+
+        for (size_t j = 0; j < cols.size(); ++j)
+        {
+            const auto &col = cols[j];
+            char *data_ptr = const_cast<char *>(chunk.data()) + row_start + offset;
+
+            std::string cell_value;
+            if (std::strncmp(data_ptr, "NULL", 4) == 0)
+            {
+                cell_value = "NULL";
+            }
+            else if (col.type == "Numeric")
+            {
+                double value = *reinterpret_cast<double *>(data_ptr);
+                std::ostringstream oss;
+                oss << std::setprecision(17) << value;
+                cell_value = oss.str();
+            }
+            else if (col.type == "DateTime")
+            {
+                std::time_t time_value = *reinterpret_cast<std::time_t *>(data_ptr);
+                std::tm *tm = std::localtime(&time_value);
+                char buffer[20];
+                std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+                cell_value = buffer;
+            }
+            else if (col.type == "Text")
+            {
+                std::string text(data_ptr, col.size_in_bytes);
+                cell_value = text.c_str(); // clean null-terminated
+            }
+
+            // Escape quotes in CSV
+            for (size_t pos = 0; (pos = cell_value.find('"', pos)) != std::string::npos; pos += 2)
+            {
+                cell_value.insert(pos, "\"");
+            }
+
+            out << "\"" << cell_value << "\"";
+            if (j < cols.size() - 1)
+                out << ",";
+
+            offset += col.size_in_bytes;
+        }
+
+        out << "\n";
+    }
+
+    out.close();
+}
+
+// Function to get the schema of the tables
+void get_schema(Schema &schema,std::string data_path)
+{
+    for (const auto &entry : std::filesystem::directory_iterator(data_path))
     {
         int acc_col_size = 0;
         if (entry.path().extension() == ".csv")
