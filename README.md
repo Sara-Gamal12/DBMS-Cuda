@@ -3,6 +3,14 @@
   <img src="https://github.com/user-attachments/assets/74c0faa0-0400-41fc-89a7-c255a0ad587d" alt="Design Visualization" width="500">
 </p>
 
+## Table of Contents
+- [Overview](#overview)
+- [Pipeline](#pipeline)
+- [Features](#features)
+- [Performance](#performance)
+- [Installation](#installation)
+- [License](#license)
+
 ## Overview
 A CUDA-based database query engine for efficient processing of large datasets using GPU parallelism. Supports filtering, aggregation, projection, sorting, and joins.
 
