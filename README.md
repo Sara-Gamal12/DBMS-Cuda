@@ -6,16 +6,16 @@
 ## Overview
 A CUDA-based database query engine for efficient processing of large datasets using GPU parallelism. Supports filtering, aggregation, projection, sorting, and joins.
 
+## Pipeline
+Large datasets are split into batches, processed in parallel on the GPU, and merged on the CPU.
+<img width="912" height="452" alt="image" src="https://github.com/user-attachments/assets/a54a5d62-1dac-4090-8b47-5817a103a69f" />
+
 ## Features
 - **Filter Kernel**: Stack-based condition evaluation, NULL handling.
 - **Aggregate Kernel**: Shared memory reductions, thread synchronization.
 - **Project Kernel**: Coalesced memory access, precomputed offsets.
 - **Order By Kernel**: Iterative merge sort with co-ranking, double buffering.
 - **Join Kernel**: Nested loop joins with stack-based condition evaluation, shared memory tiling.
-
-## Pipeline
-Large datasets are split into batches, processed in parallel on the GPU, and merged on the CPU.
-<img width="912" height="452" alt="image" src="https://github.com/user-attachments/assets/a54a5d62-1dac-4090-8b47-5817a103a69f" />
 
 
 ## Performance
