@@ -38,7 +38,7 @@ Large datasets are split into batches, processed in parallel on the GPU, and mer
 **Observations**: CPU outperforms for simple/small queries; GPU excels for complex/large datasets.
 
 ## Installation
-1. Clone: `git clone https://github.com/your-repo/gpu-query-engine.git`
+1. Clone: `https://github.com/Sara-Gamal12/GPU-Accelerated-Database-Query-Engine`
 2. Install CUDA toolkit and C++ compiler.
 3. Build: `make`
 4. Run: `./main`
